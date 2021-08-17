@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    tools:context=".signUpActivity.SignUpActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#6936A8">
+        <TextView
+            android:id="@+id/signupTEXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/kanit_black"
+            android:text="Sign Up"
+            android:textColor="#FFFFFF"
+            android:textSize="50sp"
+            android:layout_marginRight="430dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Your Account"
+            android:id="@+id/detailstext"
+            app:layout_constraintTop_toBottomOf="@id/signupTEXT"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textStyle="bold"
+            android:textColor="#100F0F"
+            />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/scrollView"
+            android:scrollbars="none"
+            android:layout_marginTop="17dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailstext">
+            <LinearLayout
+                android:id="@+id/cardview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_CircularImage"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    app:civ_border_width="9dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="80dp"
+                    android:src="@drawable/ic_baseline_image_24"
+                    app:civ_border_color="#880E4F"
+                    app:civ_border_overlay="true"/>
+                     <LinearLayout
+                         android:layout_weight="1"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+                <EditText
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Name"
+                    android:hint="Name"
+                    android:paddingLeft="14dp"
+                    android:keyboardNavigationCluster="false"
+                    android:inputType="textPersonName"/>
+
+                <EditText
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Last Name"
+                    android:id="@+id/Lastname"
+                    android:layout_marginTop="10dp"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="14dp"/>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textinputlayoutemail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+
+                    android:layout_below="@id/Lastname"
+                    >
+
+
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter a new Email"
+                        android:inputType="textEmailAddress"
+                        android:background="@drawable/shape" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textinputlayoutpassword"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    >
+                    <!--  android:layout_marginTop="140dp"
+                        android:layout_marginLeft="40dp"-->
+
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape"
+                        android:hint="Enter Password"
+                        android:inputType="textPassword" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textinputlayout_Confirm_password"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape"
+                        android:hint="Confirm Password"
+                        android:inputType="textPassword" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+
+                <Button
+                    android:id="@+id/signupbutton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:text="Sign up"
+                    android:textAllCaps="false"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+               </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:indeterminateTint="#F4F4F4"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="@id/scrollView"
+            app:layout_constraintBottom_toBottomOf="@id/scrollView"
+            app:layout_constraintLeft_toLeftOf="@id/scrollView"
+            app:layout_constraintRight_toRightOf="@id/scrollView"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

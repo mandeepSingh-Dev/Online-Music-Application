@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+
+        <item>@font/armata</item>
+        <item>@font/atomic_age</item>
+        <item>@font/baloo_chettan</item>
+        <item>@font/gentium_basic</item>
+        <item>@font/kanit_black</item>
+        <item>@font/kanit_thin</item>
+        <item>@font/open_sans_semibold</item>
+        <item>@font/roboto_condensed_bold</item>
+        <item>@font/roboto_slab</item>
+    </array>
+</resources>
