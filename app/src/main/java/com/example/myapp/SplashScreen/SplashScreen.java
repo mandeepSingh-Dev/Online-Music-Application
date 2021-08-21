@@ -10,13 +10,13 @@ import android.view.animation.AnimationUtils;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapp.MainActivity;
+import com.example.myapp.MusicService;
 import com.example.myapp.R;
 import com.example.myapp.databinding.ActivitySplashScreenBinding;
 
 public class SplashScreen extends AppCompatActivity {
     Animation animation,bottom_anim;
     ActivitySplashScreenBinding mBinding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,9 @@ public class SplashScreen extends AppCompatActivity {
         mBinding=ActivitySplashScreenBinding.inflate(getLayoutInflater());
         View view=mBinding.getRoot();
         setContentView(view);
+
+        Intent intenttt=new Intent(this, MusicService.class);
+        startService(intenttt);
 
         if(getActionBar()!=null) {
             getSupportActionBar().hide();
@@ -61,5 +64,8 @@ public class SplashScreen extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         onDestroy();
+        //stopService(intenttt);
     }
+
+
 }
