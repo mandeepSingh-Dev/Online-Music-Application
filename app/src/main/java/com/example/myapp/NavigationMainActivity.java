@@ -1,5 +1,6 @@
 package com.example.myapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -51,8 +53,9 @@ public class NavigationMainActivity extends AppCompatActivity {
     String databaseBitmapSTR;
     MotionLayout motionLayout;
 
+    Intent intenttt;
 
-
+LocalBroadcastManager broadcastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,9 @@ public class NavigationMainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        /*intenttt=new Intent(this, MusicService.class);
+        startService(intenttt);*/
+        broadcastManager= LocalBroadcastManager.getInstance(this);
 
        // View bottomLayoutView= findViewById(R.id.bottom_sheet_Include);
        // SeekBar seekBar=bottomLayoutView.findViewById(R.id.seekbar);
@@ -162,17 +168,19 @@ public class NavigationMainActivity extends AppCompatActivity {
                 Log.d("rrrrrrrr", databaseBitmapSTR);
                 Uri uri = Uri.parse(databaseBitmapSTR);
 
-                   Glide.with(NavigationMainActivity.this).asBitmap().load(uri).into(new CustomTarget<Bitmap>() {
-                       @Override
-                       public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable Transition<? super Bitmap> transition) {
-                           Log.d("ggggglide",resource.toString());
-                           profilePic.setImageBitmap(resource);
-                       }
+                try {
+                    Glide.with(NavigationMainActivity.this).asBitmap().load(uri).into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable Transition<? super Bitmap> transition) {
+                            Log.d("ggggglide", resource.toString());
+                            profilePic.setImageBitmap(resource);
+                        }
 
-                       @Override
-                       public void onLoadCleared(@Nullable @org.jetbrains.annotations.Nullable Drawable placeholder) {
-                       }
-                   });
+                        @Override
+                        public void onLoadCleared(@Nullable @org.jetbrains.annotations.Nullable Drawable placeholder) {
+                        }
+                    });
+                }catch (Exception e){}
             }
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {}
@@ -218,4 +226,13 @@ public class NavigationMainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+      /*  Intent stopIntent = new Intent(getApplicationContext(), MusicService.class);
+        stopIntent.setAction("ACTION_STOP");
+        startService(stopIntent);*/
+
+    }
 }

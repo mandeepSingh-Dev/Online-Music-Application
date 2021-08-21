@@ -1,6 +1,7 @@
 package com.example.myapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapp.MusicRecylerView.Songs;
 import com.example.myapp.databinding.ActivityMainBinding;
 import com.example.myapp.signUpActivity.SignUpActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,7 +28,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+
+    public static ArrayList<Songs> arrayList=new ArrayList<>();
     ActivityMainBinding binder;
     FirebaseAuth firebaseAuth;
     EditText editTextEmail;
@@ -37,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference mReference;
+
+    Intent intent;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -49,9 +57,23 @@ public class MainActivity extends AppCompatActivity {
         View view = binder.getRoot();
         setContentView(view);
 
+
+
         if(getActionBar()!=null) {
             getSupportActionBar().hide();
         }
+
+       /*  intent=new Intent(this,MusicService.class);
+
+        arrayList.add(new Songs("Wakke","Mandeep", Uri.parse("file:///storage/emulated/0/Download/astronaut.mp3")));
+        arrayList.add(new Songs("Wakke","Mandeep",Uri.parse("file:///storage/emulated/0/Download/Celebrity%20Killer%20-%20Sidhu%20Moose%20Wala%20(DjPunjab.Com).mp3")));
+        arrayList.add(new Songs("Wakke","Mandeep",Uri.parse("file:///storage/emulated/0/Download/daughter_calling.mp3")));
+        arrayList.add(new Songs("Wakke","Mandeep",Uri.parse("file:///storage/emulated/0/Download/Wakka%20-%20Kulbir%20Jhinjer%20(DjPunjab.Com).mp3")));
+        intent.putExtra("ff",arrayList);*/
+       // startService(intent);
+
+        SharedPreferences sharedPreferences=getSharedPreferences("hello",MODE_PRIVATE);
+
 
         binder.Forgottextpassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +203,17 @@ public class MainActivity extends AppCompatActivity {
             editTextPassword.setEnabled(true);
 
         }
+       /* intent=new Intent(this,MusicService.class);
+
+      *//*  arrayList.add(new Songs("Wakke","Mandeep", Uri.parse("file:///storage/emulated/0/Download/astronaut.mp3")));
+        arrayList.add(new Songs("Wakke","Mandeep",Uri.parse("file:///storage/emulated/0/Download/Celebrity%20Killer%20-%20Sidhu%20Moose%20Wala%20(DjPunjab.Com).mp3")));
+        arrayList.add(new Songs("Wakke","Mandeep",Uri.parse("file:///storage/emulated/0/Download/daughter_calling.mp3")));
+        arrayList.add(new Songs("Wakke","Mandeep",Uri.parse("file:///storage/emulated/0/Download/Wakka%20-%20Kulbir%20Jhinjer%20(DjPunjab.Com).mp3")));
+*//*
+
+        intent.setAction("ACTION_PLAY");
+        intent.putExtra("ff",arrayList);
+       //startService(intent);*/
 
     }
     public void gotoNavigationActivityAfterSeconds()
@@ -212,4 +245,6 @@ public class MainActivity extends AppCompatActivity {
         });
         t.start();
     }
+
+
 }

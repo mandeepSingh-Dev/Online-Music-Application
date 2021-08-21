@@ -164,6 +164,7 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
         super.onViewCreated(view, savedInstanceState);
 
         Intent intenttt=new Intent(getActivity(), MusicService.class);
+     intenttt.setAction("ACTION_START_FROM_MUSICFRAGMENT");
         getActivity().startService(intenttt);
 
         //getting arraylist from service but after starting the service
@@ -716,13 +717,21 @@ Log.d("pHLE","PPHHLLEE");
 
     public void sendPosition(int position)
     {
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("DETRO","StopmUSICFRAGMENT");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-
+        Log.d("DETRO","DESTROYmUSICFRAGMENT");
+      /*  Intent inntent=new Intent(getContext(),MusicService.class);
+        inntent.setAction("ACTION_STOP");
+      getActivity().startService(inntent);
+*/
     }
 }

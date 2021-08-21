@@ -29,6 +29,7 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(view);
 
         Intent intenttt=new Intent(this, MusicService.class);
+        intenttt.setAction("ACTION_START_FROM_SPLASHSCREEN");
         startService(intenttt);
 
         if(getActionBar()!=null) {

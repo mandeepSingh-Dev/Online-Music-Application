@@ -13,6 +13,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -44,6 +45,7 @@ public class MusicService extends Service {
     int position = 1;
     MediaPlayer player;
 
+
    public  BroadcastReceiver receiver=new BroadcastReceiver() {
        @Override
        public void onReceive(Context context, Intent intent) {
@@ -52,14 +54,7 @@ public class MusicService extends Service {
                int pos=intent.getIntExtra("Position",1);
                Log.d("PPOOSSIITTION",pos+"__");
                position=pos;
-
-
-                /* try {
-                     player.reset();
-                     player.setDataSource(getApplicationContext(), songsList.get(pos).getSonguri());
-                     player.prepare();
-                     player.start();
-                 }catch (Exception e){}*/
+               Log.d("PPOOSSIITTION",position+"_**_");
               changeMusic(position);
            }
        }
@@ -69,11 +64,14 @@ public class MusicService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        player=new MediaPlayer();
+        if (player == null){
+            player = new MediaPlayer();
+    }
         songsList =getSongArrayList();
 
         //register broadcastReceiver by checking intentFilter "ACTION_POSITION"
        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("ACTION_POSITION"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("ACTION_DESTROY"));
 
 
         Log.d("KPKPKP", "onCrearte");
@@ -87,24 +85,33 @@ public class MusicService extends Service {
        Log.d("KPKPKP", "onStartCommand 34");
        // songs = MainActivity.arrayList;
    // if (!songs1.isEmpty()) {
+
         Log.d("djkhfdj", songsList.size()+"");
+if(intent.getAction().equals("ACTION_START_FROM_MUSICFRAGMENT")) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);
+        channel.setDescription("GHello");
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
+    }
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channelid");
+    builder.setContentTitle("MUSIC")
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setColor(Color.BLUE)
+            .setContentTitle("MUSIC PLAY");
+
+    Notification notification = builder.build();
 
 
-
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);
-                channel.setDescription("GHello");
-                NotificationManager manager = getSystemService(NotificationManager.class);
-                manager.createNotificationChannel(channel);
-            }
-            NotificationCompat.Builder builder=new NotificationCompat.Builder(this,"channelid");
-            builder.setContentTitle("MUSIC")
-                    .setSmallIcon(R.drawable.ic_launcher_background)
-                    .setContentTitle("MUSIC PLAY");
-
-        Notification notification= builder.build();
-
-startForeground(101,notification);
+    startForeground(101, notification);
+}
+//this block for first time starting of service from SplashScreen
+// Because at First tym starting service our songsList will be 0
+// But at second tym songlist will be not empty so
+// in above if block we get startservice from MusicFragment.
+ else if(intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
+ {Log.d("ERRORRR","ERROR");}
          // changeMusic(position);
 
 
@@ -227,7 +234,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
          });
      }*/
 
-    return START_STICKY;
+    return START_NOT_STICKY;
     }
 
     @Nullable
@@ -288,13 +295,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("DDEESSTROY","DESTROY");
-      stopSelf();
-      stopForeground(true);
-    }
+
 
     public ArrayList<Songs> getSongArrayList()
     {
@@ -435,9 +436,17 @@ public void changeMusic(int positionn)
    Log.d("LOLO",position+"_+");
    /* if(!songsList.isEmpty())
     {*/
+    if(positionn==-1)
+    {
+        Log.d("reset_position",positionn+"_");
+        player.reset();
+        player=null;
+    }
+    player.reset();
         try {
-            player.reset();
-            player.setDataSource(songsList.get(position).getSonguri().toString());
+            Log.d("SONGUURRII",songsList.get(positionn).getSonguri().toString());
+
+            player.setDataSource(this,songsList.get(position).getSonguri());
             player.prepare();
             player.start();
         }catch (Exception e){}
@@ -448,7 +457,7 @@ public void changeMusic(int positionn)
                 position += 1;
                 try {
                     player.reset();
-                    player.setDataSource(songsList.get(position).getSonguri().toString());
+                    player.setDataSource(getApplicationContext(),songsList.get(position).getSonguri());
                     player.prepare();
                     player.start();
                 }catch(Exception e){}
@@ -460,5 +469,17 @@ public void changeMusic(int positionn)
 
 }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("DDEESSTROY","DESTROY");
+       /* Intent inntent=new Intent(this,MusicService.class);
+        inntent.setAction("ACTION_STOP");
+        startService(inntent);*/
+        changeMusic(-1);
+        stopForeground(true);
+        stopSelf();
 
+
+    }
 }
