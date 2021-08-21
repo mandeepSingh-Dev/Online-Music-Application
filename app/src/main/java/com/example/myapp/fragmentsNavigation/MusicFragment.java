@@ -2,24 +2,16 @@ package com.example.myapp.fragmentsNavigation;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +52,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * create an instance of this fragment.
  */
 public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionListener {
-    public ArrayList<Songs> songsArrayList;
+    public static ArrayList<Songs> songsArrayList;
+    public static ArrayList<Songs> songsArrayList2;
     MediaPlayer mediaPlayer;
 
     MyThread myThread;
@@ -88,26 +81,30 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
 
     AlphaAnimation buttonanimation;
     Intent intent;
+
     MusicService musicService;
 
     Boolean completionCON;
 
-    int mposition = 0;  //for use it globally and for changeMusic method call repeatdely after song comletion/
+    public LocalBroadcastManager broadcastManager;
+
+   public static int mposition = 0;  //for use it globally and for changeMusic method call repeatdely after song comletion/
 
     ServiceConnection sConnection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder binder)
         {
+            Log.d("KPKPKP","onServiceConnected 101");
             MusicService.MyBinder myBinder=(MusicService.MyBinder)binder;
             musicService=myBinder.getService();
 
 
-
             //setting total duration to motion total duration textview
         }
-
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            Log.d("KPKPKP","onServiceDisconnected 110");
+           // musicService=null;
         }
     };
 
@@ -115,6 +112,11 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d("KPKPKP","onCreateView 119");
+         songsArrayList = new ArrayList<>();
+        songsArrayList2 = new ArrayList<>();
+
+
         return inflater.inflate(R.layout.fragment_music, container, false);
     }
 
@@ -122,8 +124,10 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
     BroadcastReceiver receiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d("KPKPKP","onReceive 127");
             if(intent.getAction().equals("ACTION_HULLI"))
             {
+                Log.d("KPKPKP","IF STAEMENT OF ONRECEIVE 130");
                 int duratiiion=intent.getIntExtra("DURATION",10000);
                 Log.d("YTYTYTY",duratiiion+"Hello");
                 seekBar.setMax(duratiiion);
@@ -139,8 +143,13 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
                   Log.d("VVBBBVV",completionCON.toString());
                    if(completionCON)
                    {
+                       Log.d("KPKPKP","IF STAEMENT FOR GETTING BOOLEAN COMPELTION OF SONG 146");
                        playPauseButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-                       changeMusic(++mposition);
+                       int bPosition=intent.getIntExtra("POSITIONN",1);
+                      Log.d("POPOPO",bPosition+"ggh");
+                       changeMusic(bPosition);
+
+
 
                    }
 
@@ -154,19 +163,31 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Intent intenttt=new Intent(getActivity(), MusicService.class);
+        getActivity().startService(intenttt);
+
+        //getting arraylist from service but after starting the service
+        songsArrayList2=MusicService.songsList;
+        Log.d("LLIISSTT",songsArrayList2.size()+"__");
+
+        Log.d("YAYA","ONVIEWCREATE");
+
+        Log.d("KPKPKP","onViewCreated 164");
         //set defaultbitmap because of no bitmap available in song album image..
+
+        //register LocalBroadcastManager to receive data from MusicService.
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver,new IntentFilter("ACTION_HULLI"));
 
+        //Initialize broadcastManager to send data to MusicService.
+       broadcastManager=LocalBroadcastManager.getInstance(getContext());
 
-        intent=new Intent(getContext(), MusicService.class);
 
           buttonanimation = new AlphaAnimation(1F, 0F);
 
         RecyclerView recyclerView = view.findViewById(R.id.rexcylerviewMusic);
         progressBar = view.findViewById(R.id.progressbar);
 
-        songsArrayList = new ArrayList<>();
-
+         // songsArrayList = new ArrayList<>();
         myThread = new MyThread();
         myThread.start();
 
@@ -209,7 +230,7 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
                 public void run() {
 
 
-                    ContentResolver resolver = getContext().getContentResolver();
+                    /*ContentResolver resolver = getContext().getContentResolver();
                     Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
                     Cursor cursor = resolver.query(uri, null, null, null);
@@ -222,7 +243,8 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
 
                         Long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
 
-                        Uri uridata = Uri.withAppendedPath(uri, String.valueOf(id));  //getting Uri from _id..
+                        Uri uridata = Uri.withAppendedPath(uri, String.valueOf(id));//getting Uri from _id..
+                        Log.d("dfdf", uridata.toString());
                         Log.d("dfdf", artist + duration + name);
 
                         Bitmap bitmap = null;
@@ -242,29 +264,38 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
                             songsArrayList.add(new Songs(uridata, name, artist, duration));
                         }
 
-                    } //while loop closed
+                    }*/ //while loop closed
 
 
-                    MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList);
+                    MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
+try {
+    getActivity().runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+            recyclerView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(myAdapter);
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            recyclerView.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                            recyclerView.setAdapter(myAdapter);
-
-                        }
-                    });
+        }
+    });
+}catch(Exception e){
+    Log.d("djkh",e.getMessage());
+}
 
 
                     //user defined setOnItemClickListener Method and Interface in MyAdapter.
                     myAdapter.setOnItemClickListener(new MyAdapter.CustomItemClickListener() {
                         @Override
                         public void onItemClick(int position, View v) {
+                            Log.d("KPKPKP","onItemClick 275");
                             motionLayoutt.setVisibility(View.VISIBLE);
                             mposition = position;
+                            //SENDING POSITION TO MUSIC SERVICE THROUGH BROADCAST MANAGER.
+                            Intent i=new Intent("ACTION_POSITION");
+                            i.putExtra("Position",position);
+                            broadcastManager.sendBroadcast(i);
+
                             changeMusic(position);
 
                         }
@@ -275,7 +306,9 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
 
         //if statement for android version below Q
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            File file = Environment.getExternalStorageDirectory();
+
+
+           //File file = Environment.getExternalStorageDirectory();
 
             // File file = Environment.getRootDirectory();
             ExecutorSingleton.getInstance().execute(new Runnable() {
@@ -289,7 +322,7 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
                         }
                     });
 
-                    ArrayList<File> fileAL = getDirectories(file);  //getting files in Thread handler...
+                   /* ArrayList<File> fileAL = getDirectories(file);  //getting files in Thread handler...
 
                     for (int i = 0; i < fileAL.size(); i++) {
 
@@ -322,9 +355,9 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
                         } catch (Exception e) {
                         }
                     }  //for loop closed
+*/
 
-
-                    MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList);
+                    MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -339,6 +372,10 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
                         public void onItemClick(int position, View imageview) {
                             motionLayoutt.setVisibility(View.VISIBLE);
                             mposition = position;
+                            Intent i=new Intent("ACTION_POSITION");
+                            i.putExtra("Position",position);
+                            broadcastManager.sendBroadcast(i);
+
                             changeMusic(position);
                         }
                     });
@@ -350,6 +387,7 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
                     });
                 }
             });
+
 
         }
 
@@ -426,6 +464,7 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
             mediaPlayer = new MediaPlayer();
         }
         try {
+            Log.d("KPKPKP","playMusic 438");
             //When we call mediaPlayer.reset() mediaPlayer goes to IDLE state
             musicService.reset(); //now mediaplayer in uninitialized  state  Means mediaplayer ke andar ka sara source mal pani nikal jaeyga mtlab reset ho jaeyga  lekin mediaplayer object delete nhi hoga bs.
             //and every tym we click item this method
@@ -509,16 +548,18 @@ Log.d("pHLE","PPHHLLEE");
 
     //Handler to get currentPosition of song to set in timer textview and SeekBar
 
-
-
     public void changeMusic(int position) {
+        Log.d("KPKPKP","changeMusic 525");
 
-            try {
+
+        try {
             if (position <= songsArrayList.size() - 1) {
                 Songs songs = songsArrayList.get(position);
-
                 intent.putExtra("SONG_URI", songs.getSonguri().toString());
+                intent.putExtra("POSITION",position);
 
+                Log.d("JPJP",songs.getSongName());
+                Log.d("JPJP",position+"DDF");
               //setting songName in motion song name textview
                 String songName = songs.getSongName();
                 motiontextView.setText(songName);
@@ -531,10 +572,15 @@ Log.d("pHLE","PPHHLLEE");
                     motionImagevIew.setImageDrawable(getResources().getDrawable(R.drawable.musictwo_tone));
                 }
 
-
+                Log.d("KPKPKP","changeMusic 2ND LOG MSG 545");
                 //starting service evrytym when song change.
-                getActivity().startService(intent);
-              playMusic(songs);
+             //  getActivity().stopService(intent);
+                Log.d("KPKPKP","changeMusic 3rD LOG MSG 548");
+
+                //getActivity().startService(intent);
+                Log.d("KPKPKP","changeMusic 4th LOG MSG 551");
+
+                playMusic(songs);
 
                 //instead of creating playMusic we can recursivly used the changeMusic method with the playMusic code
             }
@@ -542,13 +588,7 @@ Log.d("pHLE","PPHHLLEE");
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (musicService != null) {
-            musicService.stop();
-        }
-    }
+
 
     //motion playPause button
     public void playPauseButton() {
@@ -634,17 +674,55 @@ Log.d("pHLE","PPHHLLEE");
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-         getActivity().bindService(intent,sConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
     public void onCompletion(MediaPlayer mp) {
-
+        Log.d("KPKPKP","onCompletion 642LINE METHOD 642");
         playPauseButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
         changeMusic(++mposition);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("KPKPKP","onStart 642LINE METHOD 650");
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent intent1=new Intent(getContext(),MusicService.class);
+        getActivity().bindService(intent1,sConnection, Context.BIND_AUTO_CREATE);
+
+ /*if(!songsArrayList.isEmpty())
+ {
+     getActivity().startService(intent);
+     Intent intent1=new Intent(getContext(),MusicService.class);
+     getActivity().bindService(intent1,sConnection, Context.BIND_AUTO_CREATE);
+
+ }
+ else{
+     Log.d("fff","not start service");
+ }*/
+    }
+
+
+    /* @Override
+    public void onStop() {
+        super.onStop();
+        if (musicService != null) {
+            musicService.stop();
+        }
+    }*/
+
+    public void sendPosition(int position)
+    {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+
+    }
 }
