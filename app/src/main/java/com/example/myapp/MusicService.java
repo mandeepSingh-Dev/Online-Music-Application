@@ -37,13 +37,13 @@ import java.util.ArrayList;
 
 public class MusicService extends Service {
     private MyBinder mBinder = new MyBinder();
-    public MediaPlayer mediaPlayer;
     public static ArrayList<Songs> songsList;
 
     Intent i;
     LocalBroadcastManager manager;
     int position = 1;
     MediaPlayer player;
+    Intent intent = new Intent("ACTION_SEND");
 
 
    public  BroadcastReceiver receiver=new BroadcastReceiver() {
@@ -67,7 +67,12 @@ public class MusicService extends Service {
         if (player == null){
             player = new MediaPlayer();
     }
-        songsList =getSongArrayList();
+
+
+           songsList = getSongArrayList();
+
+           //Initialize LocalBroadcastManager object here
+        manager=LocalBroadcastManager.getInstance(getApplicationContext());
 
         //register broadcastReceiver by checking intentFilter "ACTION_POSITION"
        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("ACTION_POSITION"));
@@ -85,10 +90,10 @@ public class MusicService extends Service {
        Log.d("KPKPKP", "onStartCommand 34");
        // songs = MainActivity.arrayList;
    // if (!songs1.isEmpty()) {
+        Log.d("djpkhfdj", songsList.size()+"");
 
-        Log.d("djkhfdj", songsList.size()+"");
-if(intent.getAction().equals("ACTION_START_FROM_MUSICFRAGMENT")) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if(intent.getAction().equals("ACTION_START_FROM_MUSICFRAGMENT")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);
         channel.setDescription("GHello");
         NotificationManager manager = getSystemService(NotificationManager.class);
@@ -111,7 +116,7 @@ if(intent.getAction().equals("ACTION_START_FROM_MUSICFRAGMENT")) {
 // But at second tym songlist will be not empty so
 // in above if block we get startservice from MusicFragment.
  else if(intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
- {Log.d("ERRORRR","ERROR");}
+ {Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");}
          // changeMusic(position);
 
 
@@ -253,34 +258,34 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 
   public  void reset()
    {
-       mediaPlayer.reset();
+       player.reset();
    }
    public int getDuration()
    {
-     return mediaPlayer.getDuration();
+     return player.getDuration();
    }
    public boolean isPlaying()
    {
-       return mediaPlayer.isPlaying();
+       return player.isPlaying();
    }
 
     public int getCurrentPosition() {
-        return mediaPlayer.getCurrentPosition();
+        return player.getCurrentPosition();
     }
 
 
 
     public void pause() {
-        mediaPlayer.pause();
+        player.pause();
     }
 
     public void start() {
-        mediaPlayer.start();
+        player.start();
     }
 
     public void seekTo(int progress)
     {
-        mediaPlayer.seekTo(progress);
+        player.seekTo(progress);
     }
 
 
@@ -376,14 +381,14 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                             if (bytes != null) {
                                 bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);   //geting Bitmap
                             } else {
-                                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.musictwo_tone);
+                                bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.music_two_tonne);
                             }
                             //To get metadata(Artist and Duration)
                             String artist = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
                             Long duration = Long.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
 
                             // now adding data to Arraylist..
-                            if (!(bitmap == null)) {
+                            if (bitmap != null) {
                                 arrayList.add(new Songs(uri, name, artist, duration, bitmap));
                             } else {
                                 arrayList.add(new Songs(uri, name, artist, duration));
@@ -440,34 +445,41 @@ public void changeMusic(int positionn)
     {
         Log.d("reset_position",positionn+"_");
         player.reset();
-        player=null;
+       // player=null;
     }
-    player.reset();
-        try {
-            Log.d("SONGUURRII",songsList.get(positionn).getSonguri().toString());
+   // Intent intent = new Intent("ACTION_SEND");
+    intent.putExtra("receivedPosition",positionn);
+    intent.putExtra("TOTAL_DURATION",player.getDuration());
+    intent.putExtra("CURRENT_DURATION",player.getCurrentPosition());
+    Log.d("Hello",positionn+"hello");
+    manager.sendBroadcast(intent);
+        player.reset();
 
-            player.setDataSource(this,songsList.get(position).getSonguri());
+        try {
+            Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
+
+            player.setDataSource(this, songsList.get(position).getSonguri());
             player.prepare();
             player.start();
-        }catch (Exception e){}
+
+            getCurrentPosiotnnn();
+        } catch (Exception e) {
+        }
 
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                position += 1;
-                try {
-                    player.reset();
-                    player.setDataSource(getApplicationContext(),songsList.get(position).getSonguri());
-                    player.prepare();
-                    player.start();
-                }catch(Exception e){}
+              changeMusic(++position);
+
             }
         });
+
        // startForeground(100,notification);
 
    // }
 
 }
+
 
     @Override
     public void onDestroy() {
@@ -479,7 +491,33 @@ public void changeMusic(int positionn)
         changeMusic(-1);
         stopForeground(true);
         stopSelf();
+    }
 
+    public int getCurrentPosiotnnn() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (player != null) {
+                    try {
+                        if (player.isPlaying()) {
+
+                             intent.putExtra("CURRENTDURATION", player.getCurrentPosition());
+                             manager.sendBroadcast(intent);
+                            Log.d("HEJO", player.getCurrentPosition() + "__position");
+                            Thread.sleep(1000);
+
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+        return  player.getCurrentPosition();
 
     }
+
+
+
+
 }

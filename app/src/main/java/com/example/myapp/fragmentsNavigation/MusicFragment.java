@@ -54,6 +54,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionListener {
     public static ArrayList<Songs> songsArrayList;
     public static ArrayList<Songs> songsArrayList2;
+
+
     MediaPlayer mediaPlayer;
 
     MyThread myThread;
@@ -63,10 +65,11 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
     int CurrentPosition=0;
     View MmotionLayout;
 
-    TextView motiontextView;
+    TextView motionSongName;
     ImageView motionImagevIew;
     TextView motionCurrentDuration;
     TextView motionTotalDuration;
+    TextView motionartistName;
     CardView motionCardView;
     ImageView motionCollapseImageview;
 
@@ -86,7 +89,12 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
 
     Boolean completionCON;
 
+    String receivedsongName;
+
     public LocalBroadcastManager broadcastManager;
+
+    BroadcastReceiver receiver;
+    Bitmap recievedBitmap=null;
 
    public static int mposition = 0;  //for use it globally and for changeMusic method call repeatdely after song comletion/
 
@@ -117,46 +125,12 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
         songsArrayList2 = new ArrayList<>();
 
 
+
         return inflater.inflate(R.layout.fragment_music, container, false);
     }
 
     //BROADCAST RECEIVER FOR GETTING DATA FROM SERVICE IN THIS FRAGMENT
-    BroadcastReceiver receiver=new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d("KPKPKP","onReceive 127");
-            if(intent.getAction().equals("ACTION_HULLI"))
-            {
-                Log.d("KPKPKP","IF STAEMENT OF ONRECEIVE 130");
-                int duratiiion=intent.getIntExtra("DURATION",10000);
-                Log.d("YTYTYTY",duratiiion+"Hello");
-                seekBar.setMax(duratiiion);
-                String timelabel=createTimeLabel(duratiiion);
-                motionTotalDuration.setText(timelabel);
 
-                CurrentPosition= intent.getIntExtra("CURRENTDURATION",1000);
-                Log.d("YYYYY",CurrentPosition+"fgfgf");
-                motionCurrentDuration.setText(createTimeLabel(CurrentPosition));
-                seekBar.setProgress(CurrentPosition);
-
-                completionCON= intent.getBooleanExtra("BooleanCOMPLETION",false);
-                  Log.d("VVBBBVV",completionCON.toString());
-                   if(completionCON)
-                   {
-                       Log.d("KPKPKP","IF STAEMENT FOR GETTING BOOLEAN COMPELTION OF SONG 146");
-                       playPauseButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-                       int bPosition=intent.getIntExtra("POSITIONN",1);
-                      Log.d("POPOPO",bPosition+"ggh");
-                       changeMusic(bPosition);
-
-
-
-                   }
-
-
-            }
-        }
-    };
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -169,15 +143,80 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
 
         //getting arraylist from service but after starting the service
         songsArrayList2=MusicService.songsList;
-        Log.d("LLIISSTT",songsArrayList2.size()+"__");
+
+      //  Log.d("LLIISSTT",songsArrayList2.size()+"__");
 
         Log.d("YAYA","ONVIEWCREATE");
 
         Log.d("KPKPKP","onViewCreated 164");
         //set defaultbitmap because of no bitmap available in song album image..
 
+        receiver=new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("KPKPKP","onReceive 127");
+                //NOW THIS IF BLOCK IS USELESS.
+                if(intent.getAction().equals("ACTION_HULLI"))
+                {
+                    Log.d("KPKPKP","IF STAEMENT OF ONRECEIVE 130");
+                    int duratiiion=intent.getIntExtra("DURATION",10000);
+                    Log.d("YTYTYTY",duratiiion+"Hello");
+                    seekBar.setMax(duratiiion);
+                    String timelabel=createTimeLabel(duratiiion);
+                    motionTotalDuration.setText(timelabel);
+
+                    CurrentPosition= intent.getIntExtra("CURRENTDURATION",1000);
+                    Log.d("YYYYY",CurrentPosition+"fgfgf");
+                                motionCurrentDuration.setText(createTimeLabel(CurrentPosition));
+                    seekBar.setProgress(CurrentPosition);
+
+                    completionCON= intent.getBooleanExtra("BooleanCOMPLETION",false);
+                    Log.d("VVBBBVV",completionCON.toString());
+                    if(completionCON)
+                    {
+                        Log.d("KPKPKP","IF STAEMENT FOR GETTING BOOLEAN COMPELTION OF SONG 146");
+                        playPauseButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                        int bPosition=intent.getIntExtra("POSITIONN",1);
+                        Log.d("POPOPO",bPosition+"ggh");
+                        changeMusic(bPosition);
+                    }
+                }
+                else if(intent.getAction().equals("ACTION_SEND"))
+                {
+                    Log.d("PPOOK",String.valueOf(intent.getIntExtra("receivedPosition",1)));
+                    int receivedPosition=intent.getIntExtra("receivedPosition",1);
+
+                    int receivedcurrentPosition= intent.getIntExtra("CURRENTDURATION",1000);
+
+                     //setting current position to textview and seekbar
+                    seekBar.setProgress(receivedcurrentPosition);
+                    String currentTimeLabel=createTimeLabel(receivedcurrentPosition);
+                    motionCurrentDuration.setText(currentTimeLabel);
+
+                    //SETTING Total duration to seekbar and TextView
+                    seekBar.setMax(musicService.getDuration());
+                    motionTotalDuration.setText(createTimeLabel(musicService.getDuration()));
+                    Log.d("DDUURATION",musicService.getDuration()+"__dud");
+
+                    motionSongName.setText(songsArrayList2.get(receivedPosition).getSongName());
+                    motionartistName.setText(songsArrayList2.get(receivedPosition).getArtist());
+
+                     recievedBitmap=songsArrayList2.get(receivedPosition).getBitmap();
+
+                     try {
+                         if (recievedBitmap != null) {
+                             motionImagevIew.setImageBitmap(recievedBitmap);
+
+                         } else {
+                             motionImagevIew.setImageDrawable(getResources().getDrawable(R.drawable.music_two_tonne));
+                              Toast.makeText(getContext(),"bach gya",Toast.LENGTH_SHORT).show();
+                         }
+                     }catch (Exception e){}
+                }
+            }
+        };
         //register LocalBroadcastManager to receive data from MusicService.
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver,new IntentFilter("ACTION_HULLI"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver,new IntentFilter("ACTION_SEND"));
 
         //Initialize broadcastManager to send data to MusicService.
        broadcastManager=LocalBroadcastManager.getInstance(getContext());
@@ -197,7 +236,8 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
         //getting motion layout from <include/> navigationActivity.
         MotionLayout motionLayoutt = getActivity().findViewById(R.id.inccluddeMotion);
         motionCardView =motionLayoutt.findViewById(R.id.cardview);
-        motiontextView = motionLayoutt.findViewById(R.id.song_name);
+        motionSongName = motionLayoutt.findViewById(R.id.song_name);
+       motionartistName=motionLayoutt.findViewById(R.id.artist_name_text_view);
         motionImagevIew = motionLayoutt.findViewById(R.id.album_art_image_view);
         playPauseButton = motionLayoutt.findViewById(R.id.play_pause_button);
         motionCurrentDuration = motionLayoutt.findViewById(R.id.currentDurationText);
@@ -205,6 +245,8 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
         prev_Button = motionLayoutt.findViewById(R.id.prev_image_view);
         next_Button = motionLayoutt.findViewById(R.id.next_image_view);
         motionLayoutt.findViewById(R.id.collapse_image_view);
+
+
 
         //To set duration of song to motion layout textviews
 
@@ -231,7 +273,7 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
                 public void run() {
 
 
-                    /*ContentResolver resolver = getContext().getContentResolver();
+                  /*  ContentResolver resolver = getContext().getContentResolver();
                     Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
                     Cursor cursor = resolver.query(uri, null, null, null);
@@ -297,7 +339,7 @@ try {
                             i.putExtra("Position",position);
                             broadcastManager.sendBroadcast(i);
 
-                            changeMusic(position);
+                          //  changeMusic(position);
 
                         }
                     });
@@ -563,14 +605,14 @@ Log.d("pHLE","PPHHLLEE");
                 Log.d("JPJP",position+"DDF");
               //setting songName in motion song name textview
                 String songName = songs.getSongName();
-                motiontextView.setText(songName);
+                motionSongName.setText(songName);
 
                  //setting bitmap to album image of motion layout
                 Bitmap bitmap = songs.getBitmap();
                 if (bitmap != null) {
                     motionImagevIew.setImageBitmap(bitmap);
                 } else {
-                    motionImagevIew.setImageDrawable(getResources().getDrawable(R.drawable.musictwo_tone));
+                    motionImagevIew.setImageDrawable(getResources().getDrawable(R.drawable.musictwo_ton));
                 }
 
                 Log.d("KPKPKP","changeMusic 2ND LOG MSG 545");
@@ -631,7 +673,7 @@ Log.d("pHLE","PPHHLLEE");
         next_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("sssiize",songsArrayList.size()+"");
+                Log.d("sssiize",songsArrayList2.size()+"");
                 next_Button.startAnimation(buttonanimation);
                 //this if() block when se select last
                 // song from listview then after click
@@ -715,23 +757,7 @@ Log.d("pHLE","PPHHLLEE");
         }
     }*/
 
-    public void sendPosition(int position)
-    {
-    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("DETRO","StopmUSICFRAGMENT");
-    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("DETRO","DESTROYmUSICFRAGMENT");
-      /*  Intent inntent=new Intent(getContext(),MusicService.class);
-        inntent.setAction("ACTION_STOP");
-      getActivity().startService(inntent);
-*/
-    }
+
 }
