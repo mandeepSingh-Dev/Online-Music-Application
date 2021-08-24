@@ -96,6 +96,8 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
     BroadcastReceiver receiver;
     Bitmap recievedBitmap=null;
 
+    Intent i=new Intent("ACTION_POSITION");
+
    public static int mposition = 0;  //for use it globally and for changeMusic method call repeatdely after song comletion/
 
     ServiceConnection sConnection=new ServiceConnection() {
@@ -183,6 +185,7 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
                 }
                 else if(intent.getAction().equals("ACTION_SEND"))
                 {
+                    try {
                     Log.d("PPOOK",String.valueOf(intent.getIntExtra("receivedPosition",1)));
                     int receivedPosition=intent.getIntExtra("receivedPosition",1);
 
@@ -203,7 +206,6 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
 
                      recievedBitmap=songsArrayList2.get(receivedPosition).getBitmap();
 
-                     try {
                          if (recievedBitmap != null) {
                              motionImagevIew.setImageBitmap(recievedBitmap);
 
@@ -222,7 +224,7 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
        broadcastManager=LocalBroadcastManager.getInstance(getContext());
 
 
-          buttonanimation = new AlphaAnimation(1F, 0F);
+          buttonanimation = new AlphaAnimation(1F, 0.5F);
 
         RecyclerView recyclerView = view.findViewById(R.id.rexcylerviewMusic);
         progressBar = view.findViewById(R.id.progressbar);
@@ -335,11 +337,13 @@ try {
                             motionLayoutt.setVisibility(View.VISIBLE);
                             mposition = position;
                             //SENDING POSITION TO MUSIC SERVICE THROUGH BROADCAST MANAGER.
-                            Intent i=new Intent("ACTION_POSITION");
+                           // Intent i=new Intent("ACTION_POSITION");
                             i.putExtra("Position",position);
                             broadcastManager.sendBroadcast(i);
+                            playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
 
-                          //  changeMusic(position);
+
+                            //  changeMusic(position);
 
                         }
                     });
@@ -415,11 +419,14 @@ try {
                         public void onItemClick(int position, View imageview) {
                             motionLayoutt.setVisibility(View.VISIBLE);
                             mposition = position;
-                            Intent i=new Intent("ACTION_POSITION");
+                           // Intent i=new Intent("ACTION_POSITION");  //setting this globally..
+
                             i.putExtra("Position",position);
                             broadcastManager.sendBroadcast(i);
+                            playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
 
-                            changeMusic(position);
+
+                            // changeMusic(position);
                         }
                     });
                     getActivity().runOnUiThread(new Runnable() {
@@ -675,29 +682,25 @@ Log.d("pHLE","PPHHLLEE");
             public void onClick(View v) {
                 Log.d("sssiize",songsArrayList2.size()+"");
                 next_Button.startAnimation(buttonanimation);
-                //this if() block when se select last
-                // song from listview then after click
-                // next the first song will play
-                if(mposition==songsArrayList.size()-1)
-                {
-                    mposition=-1;
+                Log.d("SSIIZE",songsArrayList.size()+"HAPU__");
 
-                    changeMusic(mposition);
-                }
-
-                //this if block for continue clicking
+                //this else if block for continue clicking
                 // the next button to next the song
-                if(mposition>=-1 ) {
-                    musicService.reset();
+                if(mposition>=songsArrayList2.size()-1)
+                {
+                    i.putExtra("Position",mposition);
+                    broadcastManager.sendBroadcast(i);
+                    mposition=-1;
+                }
+                 else if((mposition>=-1) &&(mposition<songsArrayList2.size()-1) ) {
                     playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
-                    changeMusic(++mposition);
-                    //this nested if() block play first song when
-                    // we click next when last song on display
-                    if(mposition==songsArrayList.size()-1)
-                    {
-                        mposition=-1;
-                    }
-
+                    Log.d("mposition",mposition+"_");
+                    int size=songsArrayList2.size()-1;
+                    Log.d("HAALO",size+""+mposition+"_");
+                    ++mposition;
+                    i.putExtra("Position",mposition);
+                    broadcastManager.sendBroadcast(i);
+                    Log.d("Nichewala","else if condition");
                 }
 
 
@@ -710,7 +713,11 @@ Log.d("pHLE","PPHHLLEE");
                 if(mposition>=1) {
                     musicService.reset();
                     playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
-                    changeMusic(--mposition);
+
+                    i.putExtra("Position",--mposition);
+                    broadcastManager.sendBroadcast(i);
+
+                   // changeMusic(--mposition);
                 }
             }
         });

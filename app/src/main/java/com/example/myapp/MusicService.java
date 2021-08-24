@@ -52,10 +52,10 @@ public class MusicService extends Service {
            if(intent.getAction().equals("ACTION_POSITION"))
            {
                int pos=intent.getIntExtra("Position",1);
-               Log.d("PPOOSSIITTION",pos+"__");
+               Log.d("POSiTION",pos+"__");
                position=pos;
-               Log.d("PPOOSSIITTION",position+"_**_");
-              changeMusic(position);
+
+               changeMusic(pos);
            }
        }
    };
@@ -447,12 +447,14 @@ public void changeMusic(int positionn)
         player.reset();
        // player=null;
     }
-   // Intent intent = new Intent("ACTION_SEND");
-    intent.putExtra("receivedPosition",positionn);
-    intent.putExtra("TOTAL_DURATION",player.getDuration());
-    intent.putExtra("CURRENT_DURATION",player.getCurrentPosition());
-    Log.d("Hello",positionn+"hello");
-    manager.sendBroadcast(intent);
+    else if (positionn <= songsList.size() - 1) {
+
+        // Intent intent = new Intent("ACTION_SEND");
+        intent.putExtra("receivedPosition", positionn);
+        intent.putExtra("TOTAL_DURATION", player.getDuration());
+        intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
+        Log.d("Hello", positionn + "hello");
+        manager.sendBroadcast(intent);
         player.reset();
 
         try {
@@ -469,10 +471,11 @@ public void changeMusic(int positionn)
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-              changeMusic(++position);
+                changeMusic(++position);
 
             }
         });
+    }
 
        // startForeground(100,notification);
 
