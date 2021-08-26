@@ -208,6 +208,7 @@ public class MusicFragment extends Fragment implements MediaPlayer.OnCompletionL
 
                          if (recievedBitmap != null) {
                              motionImagevIew.setImageBitmap(recievedBitmap);
+                             Log.d("revicerdBitmap",recievedBitmap.toString());
 
                          } else {
                              motionImagevIew.setImageDrawable(getResources().getDrawable(R.drawable.music_two_tonne));

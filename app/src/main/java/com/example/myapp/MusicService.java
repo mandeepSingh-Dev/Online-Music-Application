@@ -4,6 +4,7 @@ package com.example.myapp;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -14,6 +15,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaMetadata;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -22,6 +24,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 import android.util.Size;
 
@@ -38,6 +42,9 @@ import java.util.ArrayList;
 public class MusicService extends Service {
     private MyBinder mBinder = new MyBinder();
     public static ArrayList<Songs> songsList;
+    MediaSessionCompat mediaSessionCompat;
+MediaMetadataCompat mediametadataCompat;
+
 
     Intent i;
     LocalBroadcastManager manager;
@@ -78,7 +85,7 @@ public class MusicService extends Service {
        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("ACTION_POSITION"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("ACTION_DESTROY"));
 
-
+        mediaSessionCompat=new MediaSessionCompat(getBaseContext(),"Music Service");
         Log.d("KPKPKP", "onCrearte");
 
     }
@@ -92,33 +99,91 @@ public class MusicService extends Service {
    // if (!songs1.isEmpty()) {
         Log.d("djpkhfdj", songsList.size()+"");
 
-        if(intent.getAction().equals("ACTION_START_FROM_MUSICFRAGMENT")) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);
-        channel.setDescription("GHello");
-        NotificationManager manager = getSystemService(NotificationManager.class);
-        manager.createNotificationChannel(channel);
-    }
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channelid");
-    builder.setContentTitle("MUSIC")
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setColor(Color.BLUE)
-            .setContentTitle("MUSIC PLAY");
-
-    Notification notification = builder.build();
+        //if(intent.getAction().equals("ACTION_START_FROM_MUSICFRAGMENT")) {
+           /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d("HJO", "HDFDIHFN");
+                // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+               // mediaSessionCompat = new MediaSession(getBaseContext(), "MusicService");
+               // mediaSessionCompat.setActive(true);
 
 
-    startForeground(101, notification);
-}
+                Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "1");
+
+               NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);
+              //  channel.setDescription("GHello");
+                NotificationManager manager = getSystemService(NotificationManager.class);
+                manager.createNotificationChannel(channel);
+                // }
+                Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"2");
+
+                PendingIntent pendingIntentPrevious;
+                int drw_previous;
+               // if (position == 0){
+                  //  pendingIntentPrevious = null;
+                  //  drw_previous = 0;
+              //  } else {
+                    Intent intentPrevious = new Intent(this, MusicService.class)
+                            .setAction("ACTION_PREVIUOS");
+                    pendingIntentPrevious = PendingIntent.getService(this, 0,
+                            intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT);
+                    drw_previous = R.drawable.music_two_tonne;
+
+                Intent intentPlay = new Intent(this, MusicService.class)
+                        .setAction("ACTION_PLAY");
+                PendingIntent pendingIntentPlay = PendingIntent.getService(this, 0,
+                        intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                Intent intentNext = new Intent(this, MusicService.class)
+                        .setAction("ACTION_NEXT");
+              PendingIntent  pendingIntentNext = PendingIntent.getService(this, 0,
+                        intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
+               // }
+                Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"3");
+
+                Bitmap bitmap=BitmapFactory.decodeFile("android.graphics.Bitmap@ffeece5");
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channelid");
+                builder.setContentTitle("MUSIC")
+                       .setSmallIcon(R.drawable.ic_launcher_background)
+                      // .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                       // .setLargeIcon(bitmap)
+                       .setColor(Color.BLUE)
+                        .setContentTitle(songsList.get(position).getSongName())
+                        .setContentText("Kulbir ")
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.music_two_tonne))
+                        .setOnlyAlertOnce(true)
+                        .setShowWhen(false)
+                        .setProgress(10000,4000,true)
+
+                        .addAction(R.drawable.music_two_tonne,"Previous",pendingIntentPrevious)
+                        .addAction(R.drawable.ic_launcher_background,"Previous",pendingIntentPlay)
+                        .addAction(R.drawable.ic_launcher_background,"Previous",pendingIntentNext)
+                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()))
+                        .setPriority(NotificationCompat.PRIORITY_MAX);
+                Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"4");
+
+                Notification notification = builder.build();
+
+               // notificationManagerCompat.notify(1, notification);
+                Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"5");
+         //   NotificationManagerCompat.from(MusicService.this).notify(1, builder.build());
+
+                startForeground(101,notification);
+       }
+*/
+//}
 //this block for first time starting of service from SplashScreen
 // Because at First tym starting service our songsList will be 0
 // But at second tym songlist will be not empty so
 // in above if block we get startservice from MusicFragment.
- else if(intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
+ /*else*/ if(intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
  {Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");}
          // changeMusic(position);
-
+        //this else if block for pending intent.
+else if(intent.getAction().equals("ACTION_NEXT"))
+        {
+            player.pause();
+        }
 
 
 
@@ -332,8 +397,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                         try {
                             Size size = new Size(300, 300);
                             //  Size size = new Size(100, 100);
-
-                            bitmap = resolver.loadThumbnail(uridata, size, null);  //getting Bitmap
+                            bitmap = resolver.loadThumbnail(uridata, size, null);
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -449,16 +513,21 @@ public void changeMusic(int positionn)
     }
     else if (positionn <= songsList.size() - 1) {
 
+        Log.d("MEATADATA", MediaMetadata.METADATA_KEY_ALBUM+"_+_");
         // Intent intent = new Intent("ACTION_SEND");
         intent.putExtra("receivedPosition", positionn);
         intent.putExtra("TOTAL_DURATION", player.getDuration());
         intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
+
+
         Log.d("Hello", positionn + "hello");
         manager.sendBroadcast(intent);
         player.reset();
 
         try {
             Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
+
+
 
             player.setDataSource(this, songsList.get(position).getSonguri());
             player.prepare();
@@ -467,7 +536,7 @@ public void changeMusic(int positionn)
             getCurrentPosiotnnn();
         } catch (Exception e) {
         }
-
+        showNotification(positionn);
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -484,17 +553,7 @@ public void changeMusic(int positionn)
 }
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("DDEESSTROY","DESTROY");
-       /* Intent inntent=new Intent(this,MusicService.class);
-        inntent.setAction("ACTION_STOP");
-        startService(inntent);*/
-        changeMusic(-1);
-        stopForeground(true);
-        stopSelf();
-    }
+
 
     public int getCurrentPosiotnnn() {
         new Thread(new Runnable() {
@@ -521,6 +580,96 @@ public void changeMusic(int positionn)
     }
 
 
+public void showNotification(int possition)
+{
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        Log.d("HJO", "HDFDIHFN");
+        // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        // mediaSessionCompat = new MediaSession(getBaseContext(), "MusicService");
+        // mediaSessionCompat.setActive(true);
 
 
+
+        mediaSessionCompat.setMetadata(
+                new MediaMetadataCompat.Builder()
+                        .putString(MediaMetadata.METADATA_KEY_TITLE,songsList.get(possition).getSongName())
+                        .putString(MediaMetadata.METADATA_KEY_ARTIST,songsList.get(possition).getArtist())
+                        .putBitmap(MediaMetadata.METADATA_KEY_ART,songsList.get(possition).getBitmap())
+                        .build());
+
+
+        NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);
+        //  channel.setDescription("GHello");
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
+        // }
+        Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"2");
+
+        PendingIntent pendingIntentPrevious;
+        int drw_previous;
+        // if (position == 0){
+        //  pendingIntentPrevious = null;
+        //  drw_previous = 0;
+        //  } else {
+        Intent intentPrevious = new Intent(this, MusicService.class)
+                .setAction("ACTION_PREVIUOS");
+        pendingIntentPrevious = PendingIntent.getService(this, 0,
+                intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent intentPlay = new Intent(this, MusicService.class)
+                .setAction("ACTION_PLAY");
+        PendingIntent pendingIntentPlay = PendingIntent.getService(this, 0,
+                intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent intentNext = new Intent(this, MusicService.class)
+                .setAction("ACTION_NEXT");
+        PendingIntent  pendingIntentNext = PendingIntent.getService(this, 0,
+                intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
+        // }
+        Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"3");
+
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channelid");
+        builder.setContentTitle("MUSIC")
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                // .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                 .setLargeIcon(songsList.get(possition).getBitmap())
+                .setColor(Color.BLUE)
+                .setContentTitle(songsList.get(possition).getSongName())
+                .setContentText("Kulbir ")
+                .setLargeIcon(songsList.get(possition).getBitmap())
+                .setOnlyAlertOnce(true)
+                .setShowWhen(false)
+
+
+                .addAction(R.drawable.music_two_tonne,"Previous",pendingIntentPrevious)
+                .addAction(R.drawable.ic_launcher_background,"Previous",pendingIntentPlay)
+                .addAction(R.drawable.ic_launcher_background,"Previous",pendingIntentNext)
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()).setShowCancelButton(true).setShowActionsInCompactView(0,1,2))
+                .setPriority(NotificationCompat.PRIORITY_MAX);
+        Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"4");
+
+        Notification notification = builder.build();
+
+
+        startForeground(101,notification);
+    }
+
+}
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("DDEESSTROY","DESTROY");
+       /* Intent inntent=new Intent(this,MusicService.class);
+        inntent.setAction("ACTION_STOP");
+        startService(inntent);*/
+        if(player!=null)
+        {player.reset();
+        player.release();}
+       // changeMusic(-1);
+        stopForeground(true);
+        stopSelf();
+    }
 }
