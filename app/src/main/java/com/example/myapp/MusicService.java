@@ -40,13 +40,13 @@ import java.util.ArrayList;
 
 
 public class MusicService extends Service {
-    private MyBinder mBinder = new MyBinder();
+    private final MyBinder mBinder = new MyBinder();
     public static ArrayList<Songs> songsList;
+
     MediaSessionCompat mediaSessionCompat;
-MediaMetadataCompat mediametadataCompat;
 
 
-    Intent i;
+
     LocalBroadcastManager manager;
     int position = 1;
     MediaPlayer player;
@@ -316,9 +316,9 @@ if(intent.getAction().equals("ACTION_PLAY")) {
    public void stop()
    {
        Log.d("OOO","ONSTOP MUSICSERVICE");
-       stopSelf();
 
    }
+
 
 
   public  void reset()
@@ -398,7 +398,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                             Size size = new Size(300, 300);
                             //  Size size = new Size(100, 100);
                             bitmap = resolver.loadThumbnail(uridata, size, null);
-
+//GITHUB
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -513,7 +513,7 @@ public void changeMusic(int positionn)
     }
     else if (positionn <= songsList.size() - 1) {
 
-        Log.d("MEATADATA", MediaMetadata.METADATA_KEY_ALBUM+"_+_");
+
         // Intent intent = new Intent("ACTION_SEND");
         intent.putExtra("receivedPosition", positionn);
         intent.putExtra("TOTAL_DURATION", player.getDuration());
@@ -536,6 +536,7 @@ public void changeMusic(int positionn)
             getCurrentPosiotnnn();
         } catch (Exception e) {
         }
+
         showNotification(positionn);
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -589,12 +590,11 @@ public void showNotification(int possition)
         // mediaSessionCompat.setActive(true);
 
 
-
         mediaSessionCompat.setMetadata(
                 new MediaMetadataCompat.Builder()
-                        .putString(MediaMetadata.METADATA_KEY_TITLE,songsList.get(possition).getSongName())
-                        .putString(MediaMetadata.METADATA_KEY_ARTIST,songsList.get(possition).getArtist())
-                        .putBitmap(MediaMetadata.METADATA_KEY_ART,songsList.get(possition).getBitmap())
+                        .putString(MediaMetadata.METADATA_KEY_TITLE, songsList.get(possition).getSongName())
+                        .putString(MediaMetadata.METADATA_KEY_ARTIST, songsList.get(possition).getArtist())
+                        .putBitmap(MediaMetadata.METADATA_KEY_ART, songsList.get(possition).getBitmap())
                         .build());
 
 
@@ -603,8 +603,8 @@ public void showNotification(int possition)
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
         // }
-        Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"2");
-
+        Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "2");
+    }
         PendingIntent pendingIntentPrevious;
         int drw_previous;
         // if (position == 0){
@@ -656,7 +656,7 @@ public void showNotification(int possition)
         startForeground(101,notification);
     }
 
-}
+//}
 
     @Override
     public void onDestroy() {
@@ -671,5 +671,6 @@ public void showNotification(int possition)
        // changeMusic(-1);
         stopForeground(true);
         stopSelf();
+
     }
 }
