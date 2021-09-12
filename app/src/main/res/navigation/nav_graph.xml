@@ -2,11 +2,23 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/wallpFragment">
+    app:startDestination="@id/OfflineMusicFragment">
+    <fragment
+        android:id="@+id/onlineMusicFragment"
+        android:name="com.example.myapp.fragmentsNavigation.OnlineMusicFragment"
+        android:label="fragment_online_music"
+        tools:layout="@layout/fragment_online_music" />
 
     <fragment
-        android:id="@+id/wallpFragment"
-        android:name="com.example.myapp.fragmentsNavigation.MusicFragment"
+        android:id="@+id/OfflineMusicFragment"
+        android:name="com.example.myapp.fragmentsNavigation.OfflineMusicFragment"
         android:label="fragment_wallp"
-        tools:layout="@layout/fragment_music" />
+        tools:layout="@layout/fragment_music" ></fragment>
+    <fragment
+        android:id="@+id/search_Fragment"
+        android:name="com.example.myapp.fragmentsNavigation.Search_Fragment"
+        android:label="fragment_search_"
+        tools:layout="@layout/fragment_search_" />
+
+
 </navigation>

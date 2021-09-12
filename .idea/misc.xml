@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/MyApp2/app/src/main/res/drawable-v24/musictwo_tone.xml" value="0.2212962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable-v24/shape.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/dots_more_horiz.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/gradient_for_imagevew.xml" value="0.176" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/gradint_for_recylerview.xml" value="0.2264840182648402" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_expand_less_24.xml" value="0.25833333333333336" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_expand_more_24.xml" value="0.25833333333333336" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_pause_circle_filled_24.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.25833333333333336" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_arrow_249.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_circle_filled_24.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_skip_next_24.xml" value="0.25833333333333336" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_skip_previous_24.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_myimage_background.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_pause_svg.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_play_arrow_miniplayer.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_play_svg.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/music_two_tonne.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/musictwo_tone.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/play_notification.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/play_notificationn.xml" value="0.176" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/prev_next_shape_button.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_bottom_sheet.xml" value="0.2264840182648402" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_emailedit.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cardview.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cover_image.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/activity_navigation_main.xml" value="0.2" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/activity_splash_screen.xml" value="0.2152777777777778" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/bottom_sheet_layout.xml" value="0.23846153846153847" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/detailssong_bottom_sheetlayout.xml" value="0.264" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_music.xml" value="0.1" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music.xml" value="0.2152777777777778" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_search_.xml" value="0.2152777777777778" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/header_layout.xml" value="0.1" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/list_items_music.xml" value="0.4" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/motion_music_layout.xml" value="0.1" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/motion_player.xml" value="0.2" />
+        <entry key="..\:/MyApp2/app/src/main/res/menu/motion_navigation_menu.xml" value="0.2152777777777778" />
+        <entry key="..\:/MyApp2/app/src/main/res/xml/provider_paths.xml" value="0.21232876712328766" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

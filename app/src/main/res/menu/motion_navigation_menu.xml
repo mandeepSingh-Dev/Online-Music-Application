@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/onlineMusicFragment"
+        android:title="Home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:enabled="true"
+
+       />
+    <item
+        android:id="@+id/search_Fragment"
+        android:title="Search"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:enabled="true"
+        />
+    <item
+        android:id="@+id/change_id_after_3"
+        android:title="Library"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:enabled="true"
+       />
+</menu>

@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference mReference;
 
     Intent intent;
+    Boolean firstBackPressed=false;
+    int TOAST_LENGTH=500;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -246,5 +250,24 @@ public class MainActivity extends AppCompatActivity {
         t.start();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(firstBackPressed) {
+            super.onBackPressed();
+        return;
+        }
+        //when we pressed back first time then firstBackPressed becomes true
+        //and to avoid it as true for long time we need to set it false after 1 second
+        //it will be false and we need to process this back butoon twice again
+        firstBackPressed=true;
+        Toast.makeText(this,"Click again to exit",Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                firstBackPressed=false;
+            }
+        },2000);
 
+
+    }
 }

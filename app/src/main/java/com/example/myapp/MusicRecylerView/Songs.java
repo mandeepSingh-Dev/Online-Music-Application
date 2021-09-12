@@ -2,34 +2,52 @@ package com.example.myapp.MusicRecylerView;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
 
-public class Songs implements Parcelable
+public class Songs
 {
     Uri songuri;
     String songName;
     String artist;
     Long duration;
     Bitmap bitmap;
+    String dateModified;
+    long songSize;
 
-    public Songs(){}
-    public Songs(Uri songuri, String songName, String artist, Long duration, Bitmap bitmap)
+    public Songs(String dateModified,String songName){
+        this.dateModified=dateModified;
+        this.songName=songName;
+    }
+    public Songs(String songName, String artist,Uri songuri){
+        this.songName=songName;
+        this.artist=artist;
+        this.songuri=songuri;
+    }
+
+    public Songs(Uri songuri, String songName, String artist, Long duration, Bitmap bitmap,String dateModified,long songSize)
     {
         this.songuri=songuri;
         this.songName=songName;
         this.artist=artist;
         this.duration=duration;
         this.bitmap=bitmap;
+        this.dateModified=dateModified;
+        this.songSize=songSize;
     }
 
-    public Songs(Uri songuri, String songName, String artist, Long duration)
+    public Songs(Uri songuri, String songName, String artist, Long duration,String dateModified,long songSize)
     {
         this.songuri=songuri;
         this.songName=songName;
         this.artist=artist;
         this.duration=duration;
+        this.dateModified=dateModified;
+        this.songSize=songSize;
     }
+
+
+
+
+
 
     public void setArtist(String artist) {
         this.artist = artist;
@@ -71,13 +89,15 @@ public class Songs implements Parcelable
         return bitmap;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setDateModified(String dateModified) {
+        this.dateModified = dateModified;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public String getDateModified() {
+        return dateModified;
+    }
 
+    public long getSongSize() {
+        return songSize;
     }
 }

@@ -25,11 +25,17 @@
             android:id="@+id/cardview"
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
-            android:layout_height="71dp"
+            android:layout_height="63dp"
             motion:layout_constraintRight_toRightOf="parent"
-            android:layout_marginBottom="0dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginBottom="8dp"
+motion:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginRight="9dp"
+
+            android:layout_marginEnd="9dp" />
+
         <Constraint
             android:id="@+id/top_frame_layout"
             android:elevation="10dp"
@@ -37,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:layout_marginStart="8dp"
             motion:layout_constraintTop_toTopOf="@+id/cardview"
             motion:layout_constraintStart_toStartOf="parent"
@@ -49,22 +55,28 @@
             android:layout_height="wrap_content"
             motion:layout_constraintTop_toTopOf="@id/cardview"
             motion:layout_constraintLeft_toRightOf="@id/album_art_image_view"
-            motion:layout_constraintRight_toLeftOf="@id/play_pause_button">
+            motion:layout_constraintRight_toLeftOf="@id/play_pause_button"
+            android:layout_marginTop="10dp">
             <CustomAttribute
                 motion:attributeName="textColor"
-                motion:customColorValue="#000000"/>
+                motion:customColorValue="#FFFFFF"/>
         </Constraint>
         <Constraint
             android:id="@+id/album_art_image_view"
             android:elevation="10dp"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             motion:layout_constraintTop_toTopOf="@id/cardview"
             motion:layout_constraintHeight_percent="0.1"
             motion:layout_constraintDimensionRatio="1:1"
 
             motion:layout_constraintStart_toStartOf="parent"
-           />
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="5dp">
+
+        </Constraint>
         <Constraint
             android:id="@+id/artist_name_text_view"
 
@@ -83,21 +95,22 @@
             android:id="@+id/next_image_view"
             android:layout_width="30dp"
             android:layout_height="30dp"
-
             motion:layout_editor_absoluteY="588dp"
             motion:layout_constraintEnd_toEndOf="@id/cardview"
             motion:layout_constraintTop_toTopOf="@id/cardview"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginRight="12dp"
             android:layout_marginEnd="12dp" />
         <Constraint
             android:id="@+id/play_pause_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
            motion:layout_constraintTop_toTopOf="@id/cardview"
             motion:layout_constraintRight_toLeftOf="@id/next_image_view"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
 
         </Constraint>
         <Constraint
@@ -125,7 +138,42 @@
             motion:layout_constraintRight_toRightOf="@id/cardview"
             motion:layout_constraintTop_toTopOf="@id/seekbar"
             android:visibility="invisible" />
+        <Constraint
+            android:id="@+id/Now_Playing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toBottomOf="@id/top_frame_layout"
+            motion:layout_constraintLeft_toLeftOf="@id/cardview"
+            android:layout_marginLeft="20dp"
+            android:alpha="0" />
+        <Constraint
+            android:id="@+id/position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toBottomOf="@id/Now_Playing"
+            motion:layout_constraintLeft_toLeftOf="@id/Now_Playing"
+            motion:layout_constraintRight_toRightOf="@id/Now_Playing"
+            android:alpha="0" />
+        <Constraint
+            android:id="@+id/DotsButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            motion:layout_constraintTop_toBottomOf="@id/top_frame_layout"
+            motion:layout_constraintRight_toRightOf="@id/cardview"
+            android:layout_marginRight="10dp"
+            android:alpha="0"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@+id/seekbar"
+            android:scaleY="2"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            motion:layout_constraintBottom_toTopOf="@id/cardview"
+            motion:layout_constraintLeft_toLeftOf="@id/cardview"
+            motion:layout_constraintRight_toRightOf="@id/cardview" />
+
     </ConstraintSet>
+
     <ConstraintSet android:id="@+id/expanded_player" >
         <Constraint
             android:id="@+id/cardview"
@@ -150,13 +198,13 @@
             android:id="@+id/album_art_image_view"
             android:elevation="10dp"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            motion:layout_constraintTop_toBottomOf="@id/top_frame_layout"
+            android:layout_height="270dp"
+            motion:layout_constraintTop_toBottomOf="@id/position"
             motion:layout_constraintHeight_percent=".3"
             motion:layout_constraintDimensionRatio="1:1"
             motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="60dp" />
+            android:layout_marginTop="10dp"
+            android:layout_width="300dp" />
         <Constraint
             android:id="@+id/song_name"
             android:elevation="10dp"
@@ -174,18 +222,21 @@
         <Constraint
             android:id="@+id/artist_name_text_view"
             android:elevation="10dp"
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="6dp"
-            motion:layout_constraintTop_toBottomOf="@id/song_name" />
+            motion:layout_constraintStart_toStartOf="@id/song_name"
+            android:layout_marginTop="10dp"
+            motion:layout_constraintTop_toBottomOf="@id/song_name"
+            motion:layout_constraintRight_toRightOf="@id/song_name"
+            motion:layout_constraintLeft_toLeftOf="@id/song_name"
+            android:layout_marginRight="0dp"
+            android:layout_marginEnd="0dp" />
         <Constraint
             android:id="@+id/prev_image_view"
             android:elevation="10dp"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginBottom="70dp"
+            android:layout_marginBottom="20dp"
             motion:layout_constraintBottom_toTopOf="@id/lastspace"
             motion:layout_constraintRight_toLeftOf="@id/play_pause_button"
             android:layout_marginLeft="70dp"
@@ -200,7 +251,7 @@
             android:layout_height="45dp"
             motion:layout_constraintBottom_toTopOf="@id/lastspace"
             android:layout_marginRight="70dp"
-            android:layout_marginBottom="70dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginEnd="70dp" />
         <Constraint
             android:id="@+id/play_pause_button"
@@ -209,7 +260,7 @@
             android:layout_height="50dp"
             motion:layout_constraintBottom_toTopOf="@id/lastspace"
             motion:layout_constraintRight_toLeftOf="@id/next_image_view"
-            android:layout_marginBottom="70dp" />
+            android:layout_marginBottom="20dp" />
         <Constraint
             android:id="@+id/lastspace"
             android:layout_width="match_parent"
@@ -220,12 +271,44 @@
         <Constraint
             android:id="@+id/seekbar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             motion:layout_constraintBottom_toTopOf="@id/play_pause_button"
             motion:layout_constraintLeft_toLeftOf="@id/prev_image_view"
             motion:layout_constraintRight_toRightOf="@id/next_image_view"
-            android:layout_marginBottom="30dp"
             motion:transitionEasing="cubic(0.2,0.21,0.8,0.8)" />
+
+        <Constraint
+            android:id="@+id/currentDurationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintLeft_toLeftOf="@id/cardview"
+            motion:layout_constraintRight_toLeftOf="@id/seekbar"
+            motion:layout_constraintTop_toTopOf="@id/seekbar"
+            android:layout_marginTop="10dp" />
+        <Constraint
+            android:id="@+id/totalDurationText"
+            motion:layout_constraintLeft_toRightOf="@id/seekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintRight_toRightOf="@id/cardview"
+            motion:layout_constraintTop_toTopOf="@id/seekbar"
+            android:layout_marginTop="8dp" />
+        <Constraint
+            android:id="@+id/gradient_imageview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            motion:layout_constraintBottom_toBottomOf="@id/album_art_image_view"
+            motion:layout_constraintLeft_toLeftOf="@id/album_art_image_view"
+            motion:layout_constraintRight_toRightOf="@id/album_art_image_view"
+            motion:layout_constraintTop_toTopOf="@id/album_art_image_view" />
+
+        <Constraint
+            android:id="@+id/bottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            motion:layout_constraintTop_toBottomOf="parent" />
 
     </ConstraintSet>
 

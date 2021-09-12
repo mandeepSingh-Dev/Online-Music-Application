@@ -58,7 +58,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
             holder.imageView.setImageBitmap(bitmap);
         }
       else{
-          holder.imageView.setBackgroundResource(R.drawable.musictwo_tone);
+          holder.imageView.setBackgroundResource(R.drawable.musictwo_ton);
       }
 
         holder.songName.setText(name);
