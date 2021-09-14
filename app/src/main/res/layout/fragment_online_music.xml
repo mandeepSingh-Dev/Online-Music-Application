@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     tools:context=".fragmentsNavigation.OnlineMusicFragment">
 
     <ScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/scroll_ConstraintLayout"
@@ -49,7 +52,7 @@
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/linearlayout1"
+        android:id="@+id/RecentPlayed_LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -57,22 +60,133 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/upperConstraintLayout">
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/Recent_Constraintlayout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
         <TextView
             android:id="@+id/RecentlyPlayedTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Recently Played"
             android:textStyle="bold"
+            android:layout_weight="1"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/Recent_Constraintlayout"/>
+          <ImageView
+              android:id="@+id/arrowImageView"
+              android:layout_width="30dp"
+              android:layout_height="30dp"
+              android:layout_weight="1"
+              android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+              app:layout_constraintRight_toRightOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              android:layout_marginRight="30dp"
+              android:layout_marginTop="10dp"/>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Recently_RecylerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Trending_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/RecentPlayed_LinearLayout">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Trending_Constraintlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/TrendingTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Trending"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/Trending_Constraintlayout"/>
+                    <ImageView
+                        android:id="@+id/arrowImageView2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <HorizontalScrollView
+                    android:id="@+id/Scrolled_TrendingLayouts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:measureAllChildren="false"
+                    android:fillViewport="false"
+                    android:scrollbars="none"
+                    >
+                    <LinearLayout
+                        android:id="@+id/Linear_TrendingLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <include
+                            android:id="@+id/include_TrendingLay1111"
+                            android:layout_width="230dp"
+                            android:background="@drawable/gradint_for_recylerview"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            layout="@layout/list_trending_layout"
+
+                            />
+                        <include
+                            android:id="@+id/include_TrendingLay111"
+                            android:layout_width="230dp"
+                            android:background="@drawable/gradint_for_recylerview"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="30dp"
+                            layout="@layout/list_trending_layout"
+
+
+                            />
+
+                        <include
+                            android:id="@+id/include_TrendingLay11"
+                            android:layout_width="230dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="30dp"
+                            android:background="@drawable/gradint_for_recylerview"
+                            layout="@layout/list_trending_layout"
+/>
+
+                            />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </FrameLayout>

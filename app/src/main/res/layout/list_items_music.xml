@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:paddingLeft="10dp"
     android:paddingTop="20dp"
     android:paddingRight="10dp"
@@ -12,7 +11,7 @@
     >
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardview"
+        android:id="@+id/cardview_motionn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#8A7B7B"
@@ -53,7 +52,7 @@
 
             <TextView
                 android:id="@+id/artistNametext"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"

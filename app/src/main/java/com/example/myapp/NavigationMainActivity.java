@@ -60,6 +60,7 @@ BottomNavigationView bottomNavigationMotion;
 
 LocalBroadcastManager broadcastManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,6 +210,7 @@ LocalBroadcastManager broadcastManager;
         //if(endState==2131361981L)
         if(endState==motionLayout.getCurrentState()) {
             motionLayout.transitionToStart();
+
 
         }
             else{

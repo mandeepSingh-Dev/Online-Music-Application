@@ -12,6 +12,7 @@
         app:layoutDescription="@xml/motion_player_xml_constraintlayout_scene"
         >
 
+        <!--cardview-->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview"
             android:layout_width="0dp"
