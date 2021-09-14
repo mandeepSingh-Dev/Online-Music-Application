@@ -31,16 +31,23 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_emailedit.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cardview.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cover_image.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_trending_page.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_imageview.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/MyApp2/app/src/main/res/layout/activity_navigation_main.xml" value="0.2" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/activity_navigation_main.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/activity_splash_screen.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/bottom_sheet_layout.xml" value="0.23846153846153847" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/detailssong_bottom_sheetlayout.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_music.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music.xml" value="0.2152777777777778" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music2.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_search_.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/header_layout.xml" value="0.1" />
-        <entry key="..\:/MyApp2/app/src/main/res/layout/list_items_music.xml" value="0.4" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/list_items_music.xml" value="0.17114914425427874" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/list_online_items_fragment.xml" value="0.264" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_Layout.xml" value="0.21232876712328766" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_items.xml" value="0.264" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_layout.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/motion_music_layout.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/motion_player.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/menu/motion_navigation_menu.xml" value="0.2152777777777778" />

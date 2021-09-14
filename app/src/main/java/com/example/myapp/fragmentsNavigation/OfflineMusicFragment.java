@@ -44,6 +44,8 @@ import com.example.myapp.MusicRecylerView.MyAdapter;
 import com.example.myapp.MusicRecylerView.Songs;
 import com.example.myapp.MusicService;
 import com.example.myapp.R;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.jetbrains.annotations.NotNull;
@@ -113,9 +115,13 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     BroadcastReceiver receiver;
     Bitmap recievedBitmap=null;
 
+    RecyclerView recyclerView;
+    BottomNavigationView bottomNavigationView;
+
 
     Intent i=new Intent("ACTION_POSITION");
     Window window;
+    CollapsingToolbarLayout toolbarLayout;
 
     public static int mposition = 0;  //for use it globally and for changeMusic method call repeatdely after song comletion/
 
@@ -147,7 +153,9 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
 
 
-        return inflater.inflate(R.layout.fragment_music, container, false);
+        View view=inflater.inflate(R.layout.fragment_music, container, false);
+        recyclerView = view.findViewById(R.id.rexcylerviewMusic);
+        return view;
     }
 
     //BROADCAST RECEIVER FOR GETTING DATA FROM SERVICE IN THIS FRAGMENT
@@ -172,6 +180,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
         }
 
+
       //  Log.d("LLIISSTT",songsArrayList2.size()+"__");
 
         Log.d("YAYA","ONVIEWCREATE");
@@ -181,7 +190,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
         //getting motion layout from <include/> navigationActivity.
         MotionLayout motionLayoutt = getActivity().findViewById(R.id.inccluddeMotion);
-        motionCardView =motionLayoutt.findViewById(R.id.cardview);
+        motionCardView =motionLayoutt.findViewById(R.id.cardview_motionn);
         motionSongName = motionLayoutt.findViewById(R.id.song_name);
         motionartistName=motionLayoutt.findViewById(R.id.artist_name_text_view);
         motionImagevIew = motionLayoutt.findViewById(R.id.album_art_image_view);
@@ -194,13 +203,36 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         positionTextview=motionLayoutt.findViewById(R.id.position);
         lastSpace=motionLayoutt.findViewById(R.id.lastspace);
          dotsButton=motionLayoutt.findViewById(R.id.DotsButton);
+         bottomNavigationView=motionLayoutt.findViewById(R.id.bottomNavigation);
+//Toolbar toolbar =getActivity().findViewById(R.id.toolbarr);
+        //AppBarLayout appBarLayout=view.findViewById(R.id.Appbar);
+ /*       try {
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    Log.d("RECYSCROOLL", recyclerView.getScrollState() + "\n" + "scrolled");
 
+                }
 
+                @SuppressLint("RestrictedApi")
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if(dy>0)
+                    {
+                            }
+                    else {
+                    }
+
+                }
+            });
+        }catch(Exception e){}*/
 
         //getting DetailsongBottomSheet layout from <include/> navigationActivity.
 
         /*bottomsheetLayout=getActivity().findViewById(R.id.Details_bottom_sheet_Layout);
-        artistSheetText=bottomsheetLayout.findViewById(R.id.artist_textview);
+        artistSheetText=bottomsheetLayout.findViewById(R.id.artist_textview);a
         artistSheetText.setText("dkhfgdj");*/
 
         bottomSheetViews();
@@ -326,7 +358,7 @@ Log.d("soongssize",String.valueOf(songSize));
 
           buttonanimation = new AlphaAnimation(1F, 0.5F);
 
-        RecyclerView recyclerView = view.findViewById(R.id.rexcylerviewMusic);
+         //recyclerView = view.findViewById(R.id.rexcylerviewMusic);
         progressBar = view.findViewById(R.id.progressbar);
 
          // songsArrayList = new ArrayList<>();

@@ -12,20 +12,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:foreground="@android:color/transparent"
-        android:background="@android:color/transparent"
+
         >
 
-        <androidx.appcompat.widget.Toolbar
-            android:background="@android:color/transparent"
-            android:foreground="@android:color/transparent"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:title="Music"
-            android:id="@+id/toolbarr"
-            >
 
-        </androidx.appcompat.widget.Toolbar>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarr"
+                android:background="@android:color/transparent"
+                android:foreground="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="gone"
+                app:title="Music"
+                app:popupTheme="@style/Theme.AppCompat.Light"
+                app:layout_collapseMode="pin"
+                />
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
             android:name="androidx.navigation.fragment.NavHostFragment"
