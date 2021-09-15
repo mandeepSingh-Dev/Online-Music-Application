@@ -50,8 +50,8 @@
         android:layout_marginTop="15dp"
        />
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
+            <!--Recent Played List-->
+            <LinearLayout
         android:id="@+id/RecentPlayed_LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,19 +65,21 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="horizontal">
-        <TextView
-            android:id="@+id/RecentlyPlayedTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recently Played"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/Recent_Constraintlayout"/>
+
+          <TextView
+              android:id="@+id/RecentlyPlayedTextView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="16dp"
+              android:layout_marginTop="8dp"
+              android:layout_weight="1"
+              android:text="Recently Played"
+              android:textColor="@color/black"
+              android:textSize="20sp"
+              android:textStyle="bold"
+              app:layout_constraintLeft_toLeftOf="parent"
+              app:layout_constraintTop_toTopOf="@id/Recent_Constraintlayout" />
+
           <ImageView
               android:id="@+id/arrowImageView"
               android:layout_width="30dp"
@@ -96,7 +98,7 @@
             android:layout_height="match_parent">
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
-
+            <!--Trending List-->
             <LinearLayout
                 android:id="@+id/Trending_linearlayout"
                 android:layout_width="match_parent"
@@ -184,9 +186,227 @@
                 </HorizontalScrollView>
 
             </LinearLayout>
+            <!--Top Charts List-->
+            <LinearLayout
+                android:id="@+id/TopCharts_LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Trending_linearlayout">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/TopCharts_Constraintlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/TopChartsTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="Top Charts"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/TopCharts_Constraintlayout" />
+
+                    <ImageView
+                        android:id="@+id/arrowImageView3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/TopCharts_RecylerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+            <!--Moods & Collection List-->
+            <LinearLayout
+                android:id="@+id/Moods_LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/TopCharts_LinearLayout"
+                >
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Moods_Constraintlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/Moods_Textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="Moods &amp; Collections"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/Moods_Constraintlayout" />
+
+                    <ImageView
+                        android:id="@+id/arrowImageView4"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/Moods_RecylerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+            <!--Featured Artist List-->
+            <LinearLayout
+                android:id="@+id/Artists_LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Moods_LinearLayout"
+                app:layout_constraintBottom_toTopOf="@id/lastView">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Artists_Constraintlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/ArtistBasedOnInterest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/black"
+                        android:text="Featured Artists"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="@id/Artists_Constraintlayout"
+                        app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+                    <TextView
+                        android:id="@+id/Artists_Textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:text="Artists based on your interest"
+                        android:textColor="#685C5C"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="@id/ArtistBasedOnInterest"
+                        app:layout_constraintTop_toBottomOf="@id/ArtistBasedOnInterest" />
+
+                    <ImageView
+                        android:id="@+id/arrowImageView5"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/Artists_RecylerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+            <!--&lt;!&ndash;New Release List&ndash;&gt;
+            <LinearLayout
+                android:id="@+id/Artists_LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Moods_LinearLayout"
+                app:layout_constraintBottom_toTopOf="@id/lastView">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Artists_Constraintlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/Artists_Textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="Featured Artists"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/Artists_Constraintlayout" />
+
+                    <ImageView
+                        android:id="@+id/arrowImageView5"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/Artists_RecylerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>-->
 
 
 
+
+
+
+            <View
+    android:id="@+id/lastView"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </FrameLayout>
