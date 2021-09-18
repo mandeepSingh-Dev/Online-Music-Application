@@ -115,8 +115,8 @@
 
     <TextView
         android:id="@+id/Forgottextpassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="180dp"
         android:text="Forgot Password?"

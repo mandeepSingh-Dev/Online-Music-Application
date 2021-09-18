@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#252121"
     android:fitsSystemWindows="true"
     tools:context=".fragmentsNavigation.OnlineMusicFragment">
 
@@ -32,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Music"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:textSize="40sp"
@@ -74,7 +75,7 @@
               android:layout_marginTop="8dp"
               android:layout_weight="1"
               android:text="Recently Played"
-              android:textColor="@color/black"
+              android:textColor="@color/white"
               android:textSize="20sp"
               android:textStyle="bold"
               app:layout_constraintLeft_toLeftOf="parent"
@@ -88,16 +89,16 @@
               android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
               app:layout_constraintRight_toRightOf="parent"
               app:layout_constraintTop_toTopOf="parent"
-              android:layout_marginRight="30dp"
+              android:layout_marginRight="20dp"
               android:layout_marginTop="10dp"/>
 
       </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/Recently_RecylerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/Recently_RecylerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
             <!--Trending List-->
             <LinearLayout
                 android:id="@+id/Trending_linearlayout"
@@ -120,7 +121,7 @@
                         android:text="Trending"
                         android:textStyle="bold"
                         android:layout_weight="1"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="10dp"
@@ -134,7 +135,7 @@
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -157,7 +158,7 @@
                             android:layout_width="230dp"
                             android:background="@drawable/gradint_for_recylerview"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
+                            android:layout_marginLeft="12dp"
                             layout="@layout/list_trending_layout"
 
                             />
@@ -166,7 +167,7 @@
                             android:layout_width="230dp"
                             android:background="@drawable/gradint_for_recylerview"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginLeft="12dp"
                             layout="@layout/list_trending_layout"
 
 
@@ -176,7 +177,7 @@
                             android:id="@+id/include_TrendingLay11"
                             android:layout_width="230dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginLeft="12dp"
                             android:background="@drawable/gradint_for_recylerview"
                             layout="@layout/list_trending_layout"
 />
@@ -210,7 +211,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
                         android:text="Top Charts"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -224,15 +225,69 @@
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-                <androidx.recyclerview.widget.RecyclerView
+               <!-- <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/TopCharts_RecylerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                </androidx.recyclerview.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>-->
+            <HorizontalScrollView
+                android:id="@+id/Scrolled_TopCharts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:measureAllChildren="false"
+                android:fillViewport="false"
+                android:scrollbars="none"
+                >
+            <LinearLayout
+                android:id="@+id/Linear_TopCharts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <include
+                    android:id="@+id/include_EnglishTop10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    layout="@layout/folder_layout_normal"/>
+
+                <include
+                    android:id="@+id/include_PunjabiTop10"
+                    layout="@layout/folder_layout_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp" />
+
+                <include
+                    android:id="@+id/include_HindiTop10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    layout="@layout/folder_layout_normal"/>
+                <include
+                    android:id="@+id/include_USTop10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    layout="@layout/folder_layout_normal"/>
+                <include
+                    android:id="@+id/include_DanceTop10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    layout="@layout/folder_layout_normal"/>
+                <include
+                    android:id="@+id/include_Hindi90sTop10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    layout="@layout/folder_layout_normal"/>
+            </LinearLayout>
+            </HorizontalScrollView>
             </LinearLayout>
             <!--Moods & Collection List-->
             <LinearLayout
@@ -259,7 +314,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
                         android:text="Moods &amp; Collections"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -273,15 +328,87 @@
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-                <androidx.recyclerview.widget.RecyclerView
+               <!-- <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Moods_RecylerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:layout_height="match_parent">-->
+                <HorizontalScrollView
+                    android:id="@+id/Scrolled_Moods"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:measureAllChildren="false"
+                    android:fillViewport="false"
+                    android:scrollbars="none"
+                    >
+                    <LinearLayout
+                        android:id="@+id/Linear_Moods"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <include
+                            android:id="@+id/include_Romance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            layout="@layout/folder_layout_normal"/>
+
+                        <include
+                            android:id="@+id/include_90sAndEarly"
+                            layout="@layout/folder_layout_normal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp" />
+
+                        <include
+                            android:id="@+id/include_Party"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_HipHop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_Bhakti"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_Music"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_Heals"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_PunjabiHits"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_Workout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_normal"/>
+                    </LinearLayout>
+                </HorizontalScrollView>
+                <!--</androidx.recyclerview.widget.RecyclerView>-->
             </LinearLayout>
             <!--Featured Artist List-->
             <LinearLayout
@@ -293,7 +420,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/Moods_LinearLayout"
-                app:layout_constraintBottom_toTopOf="@id/lastView">
+               >
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Artists_Constraintlayout"
                     android:layout_width="match_parent"
@@ -306,7 +433,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="5dp"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:text="Featured Artists"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -335,65 +462,367 @@
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-                <androidx.recyclerview.widget.RecyclerView
+                <!--<androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Artists_RecylerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                </androidx.recyclerview.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>-->
+                <HorizontalScrollView
+                    android:id="@+id/Scrolled_Artists"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:measureAllChildren="false"
+                    android:fillViewport="false"
+                    android:scrollbars="none"
+                    >
+                    <LinearLayout
+                        android:id="@+id/Linear_Artists"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <include
+                            android:id="@+id/include_TheWeeknd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            layout="@layout/featured_artist_layout"/>
+
+                        <include
+                            android:id="@+id/include_DiljitDosanjh"
+                            layout="@layout/featured_artist_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp" />
+
+                        <include
+                            android:id="@+id/include_JustinBeiber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_AmmyVirk"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_Kygo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_Apdhillon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_camilacabillo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_dilpreetdhillon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_JasonDerulo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_Shivjot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_TonesAndI"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            layout="@layout/featured_artist_layout"/>
+
+                        <include
+                            android:id="@+id/include_GurnaamBhullar"
+                            layout="@layout/featured_artist_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp" />
+
+                        <include
+                            android:id="@+id/include_DuaLipa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_ManinderButtar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_AnnieMarie"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_AmritMaan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_PostMalone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_NehaKakkar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_KishoreKumar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+                        <include
+                            android:id="@+id/include_ArijitSingh"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/featured_artist_layout"/>
+
+                    </LinearLayout>
+                </HorizontalScrollView>
             </LinearLayout>
-            <!--&lt;!&ndash;New Release List&ndash;&gt;
+            <!--New Release List-->
             <LinearLayout
-                android:id="@+id/Artists_LinearLayout"
+                android:id="@+id/newRelease_LinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:orientation="vertical"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/Moods_LinearLayout"
-                app:layout_constraintBottom_toTopOf="@id/lastView">
+                app:layout_constraintTop_toBottomOf="@id/Artists_LinearLayout">
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/Artists_Constraintlayout"
+                    android:id="@+id/NewRelease_Constraintlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/Artists_Textview"
+                        android:id="@+id/newRelease_Textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:text="Featured Artists"
-                        android:textColor="@color/black"
+                        android:text="New Releases"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/Artists_Constraintlayout" />
+                        app:layout_constraintTop_toTopOf="@id/NewRelease_Constraintlayout" />
 
                     <ImageView
-                        android:id="@+id/arrowImageView5"
+                        android:id="@+id/arrowImageView6"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_weight="1"
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/Artists_RecylerView"
+                    android:id="@+id/newRelease_RecylerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </androidx.recyclerview.widget.RecyclerView>
-            </LinearLayout>-->
+            </LinearLayout>
+            <!--Discover List-->
+            <LinearLayout
+                android:id="@+id/discover_LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/newRelease_LinearLayout">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/discover_Constraintlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/discoverTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="Discover"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/discover_Constraintlayout" />
+
+                    <ImageView
+                        android:id="@+id/arrowImageView7"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="10dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <HorizontalScrollView
+                    android:id="@+id/Scrolled_Discover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:measureAllChildren="false"
+                    android:fillViewport="false"
+                    android:scrollbars="none"
+                    >
+                    <LinearLayout
+                        android:id="@+id/Linear_Discover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <include
+                            android:id="@+id/include_Retro"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            layout="@layout/folder_layout_small"/>
+
+                        <include
+                            android:id="@+id/include_Indie"
+                            layout="@layout/folder_layout_small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp" />
+
+                        <include
+                            android:id="@+id/include_EDM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_small"/>
+                        <include
+                            android:id="@+id/include_Wedding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_small"/>
+                    </LinearLayout>
+                </HorizontalScrollView>
+                <HorizontalScrollView
+                    android:id="@+id/Scrolled_Discover2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:measureAllChildren="false"
+                    android:fillViewport="false"
+                    android:scrollbars="none"
+                    >
+                    <LinearLayout
+                        android:id="@+id/Linear_Discover2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/include_Dance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_small"/>
+                        <include
+                            android:id="@+id/include_Rock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_small"/>
+                        <include
+                            android:id="@+id/include_Kids"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_small"/>
+                        <include
+                            android:id="@+id/include_Ghazals"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            layout="@layout/folder_layout_small"/>
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+            <!--song Language -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/songLanguage_constraintlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+               app:layout_constraintTop_toBottomOf="@id/discover_LinearLayout"
+                app:layout_constraintBottom_toTopOf="@id/lastView">
+                <TextView
+                    android:id="@+id/songLanguage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Song Language"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+                <ImageView
+                    android:id="@+id/songlang_Icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="15dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/folder_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/folder_image"
+        android:layout_width="150dp"
+        android:layout_height="160dp"
+        android:background="@drawable/shape_universe"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+    <ImageView
+        android:id="@+id/songImage_folder"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/teal_200"
+        android:src="@drawable/ic_baseline_pause_24"
+        app:layout_constraintRight_toRightOf="@id/folder_image"
+        app:layout_constraintTop_toTopOf="@id/folder_image"/>
+<TextView
+    android:id="@+id/language_Textview_folder"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="International"
+    android:textStyle="bold"
+    android:textSize="16sp"
+    android:layout_marginLeft="20dp"
+    android:textColor="@color/white"
+    app:layout_constraintLeft_toLeftOf="@id/folder_image"
+    app:layout_constraintBottom_toTopOf="@id/top10_textview_folder"/>
+    <TextView
+        android:id="@+id/top10_textview_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Top 10"
+        android:textSize="13sp"
+        android:layout_marginBottom="13dp"
+        android:textColor="#FFD600"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/language_Textview_folder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

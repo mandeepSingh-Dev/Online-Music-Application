@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -234,6 +235,10 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         /*bottomsheetLayout=getActivity().findViewById(R.id.Details_bottom_sheet_Layout);
         artistSheetText=bottomsheetLayout.findViewById(R.id.artist_textview);a
         artistSheetText.setText("dkhfgdj");*/
+
+
+
+
 
         bottomSheetViews();
           //On 3 dots button clicked then bottom sheet dialog will open
@@ -622,6 +627,12 @@ try {
             }
         });*/
 
+        lastSpace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Lastspace","lastSpace view clicked");
+            }
+        });
     }    //onViewCreated closed
 
 
@@ -649,7 +660,7 @@ try {
                     Log.d("sfdfdf", singlefile.getName());
 
                     // CtentResolver resolver=getContext().getContentResolver();
-                    // Size size=new Size(100,100);
+                    //Size size=new Size(100,100);
                     //  Bitmap bitmap=  ThumbnailUtils.createAudioThumbnail(singlefile.getAbsoluteFile(),size,null);
                     // BitmapFactory.decodeFile()
                 }
@@ -959,6 +970,7 @@ Log.d("pHLE","PPHHLLEE");
               }
           });
       }
+
 
 
 

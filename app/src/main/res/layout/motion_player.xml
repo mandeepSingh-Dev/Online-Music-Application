@@ -213,6 +213,7 @@
             android:layout_width="match_parent"
             android:layout_height="140dp"
         android:background="#0C473F"
+            android:onClick="lastSpaceClickListener"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
