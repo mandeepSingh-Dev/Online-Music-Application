@@ -58,6 +58,7 @@ public class NavigationMainActivity extends AppCompatActivity {
 BottomNavigationView bottomNavigationMotion;
 
 
+
 LocalBroadcastManager broadcastManager;
 
 

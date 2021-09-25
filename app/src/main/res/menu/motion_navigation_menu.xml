@@ -11,13 +11,13 @@
     <item
         android:id="@+id/search_Fragment"
         android:title="Search"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/ic_outline_search_24"
         android:enabled="true"
         />
     <item
-        android:id="@+id/change_id_after_3"
+        android:id="@+id/library_Fragment"
         android:title="Library"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/ic_outline_library_music_24"
         android:enabled="true"
        />
 </menu>

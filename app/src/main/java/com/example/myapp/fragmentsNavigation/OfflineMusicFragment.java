@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +119,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     BottomNavigationView bottomNavigationView;
 
 
+
     Intent i=new Intent("ACTION_POSITION");
     Window window;
     CollapsingToolbarLayout toolbarLayout;
@@ -154,7 +154,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
 
 
-        View view=inflater.inflate(R.layout.fragment_music, container, false);
+        View view=inflater.inflate(R.layout.fragment_offline_music, container, false);
         recyclerView = view.findViewById(R.id.rexcylerviewMusic);
         return view;
     }
@@ -191,7 +191,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
         //getting motion layout from <include/> navigationActivity.
         MotionLayout motionLayoutt = getActivity().findViewById(R.id.inccluddeMotion);
-        motionCardView =motionLayoutt.findViewById(R.id.cardview_motionn);
+        motionCardView =motionLayoutt.findViewById(R.id.cardview);
         motionSongName = motionLayoutt.findViewById(R.id.song_name);
         motionartistName=motionLayoutt.findViewById(R.id.artist_name_text_view);
         motionImagevIew = motionLayoutt.findViewById(R.id.album_art_image_view);
@@ -205,40 +205,6 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         lastSpace=motionLayoutt.findViewById(R.id.lastspace);
          dotsButton=motionLayoutt.findViewById(R.id.DotsButton);
          bottomNavigationView=motionLayoutt.findViewById(R.id.bottomNavigation);
-//Toolbar toolbar =getActivity().findViewById(R.id.toolbarr);
-        //AppBarLayout appBarLayout=view.findViewById(R.id.Appbar);
- /*       try {
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    Log.d("RECYSCROOLL", recyclerView.getScrollState() + "\n" + "scrolled");
-
-                }
-
-                @SuppressLint("RestrictedApi")
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    if(dy>0)
-                    {
-                            }
-                    else {
-                    }
-
-                }
-            });
-        }catch(Exception e){}*/
-
-        //getting DetailsongBottomSheet layout from <include/> navigationActivity.
-
-        /*bottomsheetLayout=getActivity().findViewById(R.id.Details_bottom_sheet_Layout);
-        artistSheetText=bottomsheetLayout.findViewById(R.id.artist_textview);a
-        artistSheetText.setText("dkhfgdj");*/
-
-
-
-
 
         bottomSheetViews();
           //On 3 dots button clicked then bottom sheet dialog will open
@@ -272,7 +238,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
             public void onReceive(Context context, Intent intent) {
                 Log.d("KPKPKP","onReceive 127");
                 //NOW THIS IF BLOCK IS USELESS.
-                if(intent.getAction().equals("ACTION_HULLI"))
+               /* if(intent.getAction().equals("ACTION_HULLI"))
                 {
                     Log.d("KPKPKP","IF STAEMENT OF ONRECEIVE 130");
                     int duratiiion=intent.getIntExtra("DURATION",10000);
@@ -296,8 +262,8 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                         Log.d("POPOPO",bPosition+"ggh");
                         changeMusic(bPosition);
                     }
-                }
-                else if(intent.getAction().equals("ACTION_SEND"))
+                }*/
+                /*else*/ if(intent.getAction().equals("ACTION_SEND"))
                 {
                     try {
                     Log.d("PPOOK",String.valueOf(intent.getIntExtra("receivedPosition",1)));
@@ -340,9 +306,10 @@ Log.d("soongssize",String.valueOf(songSize));
                                  Palette.from(recievedBitmap).generate(new Palette.PaletteAsyncListener() {
                                      public void onGenerated(Palette p) {
 
-                                         setPaletteColor(p);
-                                        // motionCardView.setBackgroundColor(p.getMutedColor(getResources().getColor(R.color.paletteDEFAULT)));
-                                        //  lastSpace.setBackgroundColor(p.getMutedColor(getResources().getColor(R.color.paletteDEFAULT)));
+
+                                             setPaletteColor(p);
+                                             motionCardView.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
+                                             lastSpace.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
                                      }
 
                                  });
@@ -434,20 +401,21 @@ Log.d("soongssize",String.valueOf(songSize));
                     }*/ //while loop closed
 
 
-                    songsArrayList2.sort(new Comparator<Songs>() {
-                        @Override
-                        public int compare(Songs lhs, Songs rhs) {
-                            String lhsName=lhs.getSongName();
-                            String rhsName= rhs.getSongName();
-                            byte[] lhsByteArray=lhsName.getBytes();
-                            byte[] rhsByteArray=rhsName.getBytes();
+                    if(!songsArrayList2.isEmpty()) {
+                        songsArrayList2.sort(new Comparator<Songs>() {
+                            @Override
+                            public int compare(Songs lhs, Songs rhs) {
+                                String lhsName = lhs.getSongName();
+                                String rhsName = rhs.getSongName();
+                                byte[] lhsByteArray = lhsName.getBytes();
+                                byte[] rhsByteArray = rhsName.getBytes();
 
-                            Log.d("compsuyrtddys",lhsName.compareTo(rhsName)+"djfkd");
+                                Log.d("compsuyrtddys", lhsName.compareTo(rhsName) + "djfkd");
                                 return rhs.getDateModified().compareTo(lhs.getDateModified());
 
-                        }
-                    });
-
+                            }
+                        });
+                    }
                     MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
 try {
     getActivity().runOnUiThread(new Runnable() {
@@ -471,17 +439,7 @@ try {
                         @Override
                         public void onItemClick(int position, View v) {
                             Log.d("KPKPKP","onItemClick 275");
-                            //motionLayoutt.setVisibility(View.VISIBLE);
-                           // if(motionLayoutt.getCurrentState()==motionLayoutt.getStartState()) {
-                               /* motionCardView.setVisibility(View.VISIBLE);
-                                motionSongName.setVisibility(View.VISIBLE);
-                                motionImagevIew.setVisibility(View.VISIBLE);
-                                motionartistName.setVisibility(View.VISIBLE);
-                                next_Button.setVisibility(View.VISIBLE);
-                                playPauseButton.setVisibility(View.VISIBLE);
-                                seekBar.setVisibility(View.VISIBLE);*/
 
-                           // }
                             mposition = position;
                             //SENDING POSITION TO MUSIC SERVICE THROUGH BROADCAST MANAGER.
                            // Intent i=new Intent("ACTION_POSITION");
@@ -906,14 +864,15 @@ Log.d("pHLE","PPHHLLEE");
         getActivity().bindService(intent1,sConnection, Context.BIND_AUTO_CREATE);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setPaletteColor(Palette p)
     {
         try {
-            motionCardView.setBackgroundColor(p.getDarkMutedColor(getResources().getColor(R.color.Green)));
-            lastSpace.setBackgroundColor(p.getDarkMutedColor(getResources().getColor(R.color.Green)));
-             window.setStatusBarColor(p.getDarkMutedColor(getResources().getColor(R.color.Green)));
-             window.setNavigationBarColor(p.getDarkMutedColor(getResources().getColor(R.color.Green)));
+            motionCardView.setBackgroundColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
+            lastSpace.setBackgroundColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.setStatusBarColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
+                window.setNavigationBarColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
+            }
 
         }catch (Exception e){}
     }

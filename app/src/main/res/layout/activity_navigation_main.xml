@@ -34,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="true"
+            android:forceHasOverlappingRendering="true"
             app:navGraph="@navigation/nav_graph" />
 
     </LinearLayout>
@@ -78,7 +79,6 @@
         android:layout_height="match_parent"
         android:id="@+id/navdrawer"
         android:fitsSystemWindows="true"
-
         app:headerLayout="@layout/header_layout"
         android:layout_gravity="start"
         />

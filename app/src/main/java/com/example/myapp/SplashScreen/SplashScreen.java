@@ -1,6 +1,7 @@
 package com.example.myapp.SplashScreen;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class SplashScreen extends AppCompatActivity {
     Animation animation,bottom_anim;
     ActivitySplashScreenBinding mBinding;
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,8 @@ public class SplashScreen extends AppCompatActivity {
 
         mBinding.constraintlayout.setAnimation(animation);
         mBinding.welcomeText.setAnimation(bottom_anim);
+
+
 
        /* Thread thread=new Thread(new Runnable() {
             @Override

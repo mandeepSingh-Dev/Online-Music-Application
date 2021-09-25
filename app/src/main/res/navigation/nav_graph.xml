@@ -13,12 +13,17 @@
         android:id="@+id/OfflineMusicFragment"
         android:name="com.example.myapp.fragmentsNavigation.OfflineMusicFragment"
         android:label="fragment_wallp"
-        tools:layout="@layout/fragment_music" ></fragment>
+        tools:layout="@layout/fragment_offline_music" ></fragment>
     <fragment
         android:id="@+id/search_Fragment"
         android:name="com.example.myapp.fragmentsNavigation.Search_Fragment"
         android:label="fragment_search_"
         tools:layout="@layout/fragment_search_" />
+    <fragment
+        android:id="@+id/library_Fragment"
+        android:name="com.example.myapp.fragmentsNavigation.Library_Fragment"
+        android:label="fragment_library_"
+        tools:layout="@layout/fragment_library_" />
 
 
 </navigation>

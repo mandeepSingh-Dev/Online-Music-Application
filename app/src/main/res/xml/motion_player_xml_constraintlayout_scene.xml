@@ -171,6 +171,13 @@ motion:layout_constraintBottom_toTopOf="@id/bottomNavigation"
             motion:layout_constraintBottom_toTopOf="@id/cardview"
             motion:layout_constraintLeft_toLeftOf="@id/cardview"
             motion:layout_constraintRight_toRightOf="@id/cardview" />
+        <Constraint
+            android:id="@+id/loveimage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            motion:layout_constraintRight_toRightOf="@id/album_art_image_view"
+            motion:layout_constraintTop_toTopOf="@id/song_name"
+            android:visibility="gone" />
 
     </ConstraintSet>
 

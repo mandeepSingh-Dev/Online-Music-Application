@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/folder_layout"
+    android:padding="10dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <ImageView
@@ -9,17 +10,22 @@
         android:layout_width="165dp"
         android:layout_height="90dp"
         android:background="@drawable/shape_universe"
-        android:src="@drawable/imagindragons"
+        android:src="@color/Dark_Red"
         android:scaleType="fitXY"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
+<!--
+    android:src="@drawable/imagindragons"
+-->
+
 
     <TextView
         android:id="@+id/language_Textview_folder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Festival"
+        android:fontFamily="@font/baloo_chettan"
         android:textSize="20sp"
         android:textAllCaps="true"
         android:textColor="#FFFFFF"

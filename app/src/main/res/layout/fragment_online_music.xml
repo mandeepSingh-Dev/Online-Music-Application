@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#252121"
+    android:background="#322D2D"
+    android:id="@+id/layout_main"
     android:fitsSystemWindows="true"
     tools:context=".fragmentsNavigation.OnlineMusicFragment">
 
@@ -33,11 +34,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Music"
+        android:fontFamily="@font/baloo_chettan"
         android:textColor="@color/white"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:textSize="40sp"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
     <ImageView
@@ -77,7 +78,7 @@
               android:text="Recently Played"
               android:textColor="@color/white"
               android:textSize="20sp"
-              android:textStyle="bold"
+              android:fontFamily="@font/baloo_chettan"
               app:layout_constraintLeft_toLeftOf="parent"
               app:layout_constraintTop_toTopOf="@id/Recent_Constraintlayout" />
 
@@ -119,7 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Trending"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/baloo_chettan"
                         android:layout_weight="1"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -139,6 +140,11 @@
                         android:layout_marginTop="10dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- <androidx.recyclerview.widget.RecyclerView
+                 android:id="@+id/trending_RecylerView"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content" />-->
+
                 <HorizontalScrollView
                     android:id="@+id/Scrolled_TrendingLayouts"
                     android:layout_width="match_parent"
@@ -154,31 +160,20 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <include
-                            android:id="@+id/include_TrendingLay1111"
-                            android:layout_width="230dp"
-                            android:background="@drawable/gradint_for_recylerview"
+                            android:id="@+id/include_TrendingEnglish"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="12dp"
+                            android:layout_marginLeft="10dp"
                             layout="@layout/list_trending_layout"
 
                             />
                         <include
-                            android:id="@+id/include_TrendingLay111"
-                            android:layout_width="230dp"
-                            android:background="@drawable/gradint_for_recylerview"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="12dp"
+                            android:id="@+id/include_TrendingPunjabi"
                             layout="@layout/list_trending_layout"
-
-
                             />
 
                         <include
-                            android:id="@+id/include_TrendingLay11"
-                            android:layout_width="230dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="12dp"
-                            android:background="@drawable/gradint_for_recylerview"
+                            android:id="@+id/include_TrendingHindi"
                             layout="@layout/list_trending_layout"
 />
 
@@ -213,7 +208,7 @@
                         android:text="Top Charts"
                         android:textColor="@color/white"
                         android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/baloo_chettan"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="@id/TopCharts_Constraintlayout" />
 
@@ -250,41 +245,28 @@
                 android:orientation="horizontal">
                 <include
                     android:id="@+id/include_EnglishTop10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     layout="@layout/folder_layout_normal"/>
 
                 <include
                     android:id="@+id/include_PunjabiTop10"
                     layout="@layout/folder_layout_normal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp" />
+                   />
 
                 <include
                     android:id="@+id/include_HindiTop10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+
                     layout="@layout/folder_layout_normal"/>
                 <include
                     android:id="@+id/include_USTop10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+
                     layout="@layout/folder_layout_normal"/>
                 <include
                     android:id="@+id/include_DanceTop10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+
                     layout="@layout/folder_layout_normal"/>
                 <include
                     android:id="@+id/include_Hindi90sTop10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+
                     layout="@layout/folder_layout_normal"/>
             </LinearLayout>
             </HorizontalScrollView>
@@ -316,7 +298,7 @@
                         android:text="Moods &amp; Collections"
                         android:textColor="@color/white"
                         android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/baloo_chettan"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="@id/Moods_Constraintlayout" />
 
@@ -352,59 +334,33 @@
                         android:orientation="horizontal">
                         <include
                             android:id="@+id/include_Romance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
                             layout="@layout/folder_layout_normal"/>
 
                         <include
                             android:id="@+id/include_90sAndEarly"
                             layout="@layout/folder_layout_normal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp" />
+                            />
 
                         <include
                             android:id="@+id/include_Party"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_normal"/>
                         <include
                             android:id="@+id/include_HipHop"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_normal"/>
                         <include
                             android:id="@+id/include_Bhakti"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_normal"/>
                         <include
                             android:id="@+id/include_Music"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_normal"/>
                         <include
                             android:id="@+id/include_Heals"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_normal"/>
                         <include
                             android:id="@+id/include_PunjabiHits"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_normal"/>
                         <include
                             android:id="@+id/include_Workout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_normal"/>
                     </LinearLayout>
                 </HorizontalScrollView>
@@ -436,7 +392,7 @@
                         android:textColor="@color/white"
                         android:text="Featured Artists"
                         android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/baloo_chettan"
                         app:layout_constraintTop_toTopOf="@id/Artists_Constraintlayout"
                         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -487,128 +443,72 @@
                         android:orientation="horizontal">
                         <include
                             android:id="@+id/include_TheWeeknd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
 
                         <include
                             android:id="@+id/include_DiljitDosanjh"
-                            layout="@layout/featured_artist_layout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp" />
+                            layout="@layout/folder_featured_artist_layout"
+                            />
 
                         <include
                             android:id="@+id/include_JustinBeiber"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_AmmyVirk"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_Kygo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_Apdhillon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_camilacabillo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_dilpreetdhillon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_JasonDerulo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_Shivjot"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_TonesAndI"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
 
                         <include
                             android:id="@+id/include_GurnaamBhullar"
-                            layout="@layout/featured_artist_layout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp" />
+                            layout="@layout/folder_featured_artist_layout"
+                           />
 
                         <include
                             android:id="@+id/include_DuaLipa"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_ManinderButtar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/folder_layout_normal"/>
+
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_AnnieMarie"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_AmritMaan"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_PostMalone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_NehaKakkar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_KishoreKumar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
                         <include
                             android:id="@+id/include_ArijitSingh"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            layout="@layout/featured_artist_layout"/>
+                            layout="@layout/folder_featured_artist_layout"/>
 
                     </LinearLayout>
                 </HorizontalScrollView>
@@ -639,7 +539,7 @@
                         android:text="New Releases"
                         android:textColor="@color/white"
                         android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/baloo_chettan"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="@id/NewRelease_Constraintlayout" />
 
@@ -687,7 +587,7 @@
                         android:text="Discover"
                         android:textColor="@color/white"
                         android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/baloo_chettan"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="@id/discover_Constraintlayout" />
 
@@ -719,29 +619,20 @@
                         android:orientation="horizontal">
                         <include
                             android:id="@+id/include_Retro"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
                             layout="@layout/folder_layout_small"/>
 
                         <include
                             android:id="@+id/include_Indie"
                             layout="@layout/folder_layout_small"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp" />
+                           />
 
                         <include
                             android:id="@+id/include_EDM"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
+
                             layout="@layout/folder_layout_small"/>
                         <include
                             android:id="@+id/include_Wedding"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
+
                             layout="@layout/folder_layout_small"/>
                     </LinearLayout>
                 </HorizontalScrollView>
@@ -762,27 +653,16 @@
 
                         <include
                             android:id="@+id/include_Dance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
+
                             layout="@layout/folder_layout_small"/>
                         <include
                             android:id="@+id/include_Rock"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_small"/>
                         <include
                             android:id="@+id/include_Kids"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_small"/>
                         <include
                             android:id="@+id/include_Ghazals"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             layout="@layout/folder_layout_small"/>
                     </LinearLayout>
                 </HorizontalScrollView>
@@ -806,7 +686,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/baloo_chettan"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
                 <ImageView

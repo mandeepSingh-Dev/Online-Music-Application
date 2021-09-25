@@ -44,6 +44,12 @@ public class Songs
         this.songSize=songSize;
     }
 
+    //for pracise only
+    public Songs(String songName)
+    {
+        this.songName=songName;
+    }
+
 
 
 
