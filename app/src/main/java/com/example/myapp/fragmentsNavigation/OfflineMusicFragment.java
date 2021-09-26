@@ -400,22 +400,23 @@ Log.d("soongssize",String.valueOf(songSize));
 
                     }*/ //while loop closed
 
+try {
+    if (!songsArrayList2.isEmpty()) {
+        songsArrayList2.sort(new Comparator<Songs>() {
+            @Override
+            public int compare(Songs lhs, Songs rhs) {
+                String lhsName = lhs.getSongName();
+                String rhsName = rhs.getSongName();
+                byte[] lhsByteArray = lhsName.getBytes();
+                byte[] rhsByteArray = rhsName.getBytes();
 
-                    if(!songsArrayList2.isEmpty()) {
-                        songsArrayList2.sort(new Comparator<Songs>() {
-                            @Override
-                            public int compare(Songs lhs, Songs rhs) {
-                                String lhsName = lhs.getSongName();
-                                String rhsName = rhs.getSongName();
-                                byte[] lhsByteArray = lhsName.getBytes();
-                                byte[] rhsByteArray = rhsName.getBytes();
+                Log.d("compsuyrtddys", lhsName.compareTo(rhsName) + "djfkd");
+                return rhs.getDateModified().compareTo(lhs.getDateModified());
 
-                                Log.d("compsuyrtddys", lhsName.compareTo(rhsName) + "djfkd");
-                                return rhs.getDateModified().compareTo(lhs.getDateModified());
-
-                            }
-                        });
-                    }
+            }
+        });
+    }
+}catch (Exception e){}
                     MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
 try {
     getActivity().runOnUiThread(new Runnable() {

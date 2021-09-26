@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/MyApp2/app/src/main/res/drawable-v24/musictwo_tone.xml" value="0.2212962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable-v24/shape.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/background_btn.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/bottom_gradient.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/dots_more_horiz.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/gradient_for_imagevew.xml" value="0.176" />
@@ -20,6 +21,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_expand_less_24.xml" value="0.25833333333333336" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_expand_more_24.xml" value="0.25833333333333336" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.21666666666666667" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_24.xml" value="0.20925925925925926" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_pause_circle_filled_24.xml" value="0.22962962962962963" />
@@ -49,9 +51,11 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_emailedit.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cardview.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cover_image.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_recyclerview.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_trending_page.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_imageview.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_universe.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/top_background.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/useless_gradiebnt.xml" value="0.20925925925925926" />
         <entry key="..\:/MyApp2/app/src/main/res/font/fonts.xml" value="0.23881278538812786" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -65,10 +69,11 @@
         <entry key="..\:/MyApp2/app/src/main/res/layout/folder_layout.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/folder_layout_normal.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/folder_layout_small.xml" value="0.2152777777777778" />
-        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_library_.xml" value="0.264" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_content_upload_.xml" value="0.264" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_library_.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_music.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_offline_music.xml" value="0.2152777777777778" />
-        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music.xml" value="0.1" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music2.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_search_.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/header_layout.xml" value="0.1" />
@@ -78,7 +83,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_items.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_layout.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/motion_music_layout.xml" value="0.1" />
-        <entry key="..\:/MyApp2/app/src/main/res/layout/motion_player.xml" value="0.2" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/motion_player.xml" value="0.16" />
         <entry key="..\:/MyApp2/app/src/main/res/menu/motion_navigation_menu.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/xml/provider_paths.xml" value="0.21232876712328766" />
       </map>

@@ -15,9 +15,12 @@
         android:enabled="true"
         />
     <item
-        android:id="@+id/library_Fragment"
+        android:id="@+id/contentUpload_Fragment"
+
         android:title="Library"
         android:icon="@drawable/ic_outline_library_music_24"
         android:enabled="true"
        />
+    <!--android:id="@+id/library_Fragment"
+-->
 </menu>

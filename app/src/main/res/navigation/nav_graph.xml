@@ -24,6 +24,11 @@
         android:name="com.example.myapp.fragmentsNavigation.Library_Fragment"
         android:label="fragment_library_"
         tools:layout="@layout/fragment_library_" />
+    <fragment
+        android:id="@+id/contentUpload_Fragment"
+        android:name="com.example.myapp.fragmentsNavigation.ContentUpload_Fragment"
+        android:label="fragment_content_upload_"
+        tools:layout="@layout/fragment_content_upload_" />
 
 
 </navigation>

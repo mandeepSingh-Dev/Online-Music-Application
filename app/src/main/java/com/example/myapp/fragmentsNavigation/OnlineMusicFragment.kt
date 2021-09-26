@@ -1,10 +1,13 @@
 package com.example.myapp.fragmentsNavigation
 
+import android.content.ContentResolver
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.*
@@ -22,9 +25,17 @@ import com.example.myapp.MusicService
 import com.example.myapp.R
 import com.example.myapp.databinding.FolderFeaturedArtistLayoutBinding
 import com.example.myapp.databinding.FragmentOnlineMusicBinding
+import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -35,19 +46,23 @@ class OnlineMusicFragment : Fragment() {
     //view binding
     private var _binding: FragmentOnlineMusicBinding? = null
 
-    var storage:FirebaseStorage?=null
-    var mRefernce:StorageReference?=null
+    var storage: FirebaseStorage? = null
+    var mRefernce: StorageReference? = null
+
+    //trending Punjabi Arraylist
+    var trendingPunjabiArraylist: ArrayList<Songs>? = null
+    var trendingEnglishArraylist: ArrayList<Songs>? = null
+    var trendingHindiArraylist: ArrayList<Songs>? = null
 
 
-
-
-
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_online_music, container, false)
-       _binding=FragmentOnlineMusicBinding.inflate(inflater,container,false)
+        _binding = FragmentOnlineMusicBinding.inflate(inflater, container, false)
         return _binding?.root
     }
 
@@ -55,57 +70,21 @@ class OnlineMusicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
-         storage= FirebaseStorage.getInstance()
-         mRefernce=storage?.getReference()
+        //getting storage INstance and refernce from storage..
+        storage = FirebaseStorage.getInstance()
+        mRefernce = storage?.getReference()
 
-        val layout: View = view.findViewById(R.id.layout_main)
+        //set up of artists images and etc..
         setUp_FeaturedArtists(view)
-
-
-
-
+        //set color of status bar..
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             activity?.window?.statusBarColor = resources.getColor(R.color.Dark_Red, null)
         } else {
             activity?.window?.statusBarColor = resources.getColor(R.color.Dark_Red)
 
         }
+        //getting arraylist of local(device) songs from Music Service..
         var arrlist: ArrayList<Songs>? = MusicService.songsList
-
-/*
-        CoroutineScope(IO).launch {
-            Log.d("YOTHREAD",Thread.currentThread().toString())
-
-      var  arrlist:ArrayList<Songs>?=MusicService.songsList
-
-
-
-             var trendList=ArrayList<Songs>()
-        var trendSonglist=ArrayList<Songs>()
-        var folderArraylistForAdapter=ArrayList<Folders_dataClass>()
-
-        val storage:FirebaseStorage= FirebaseStorage.getInstance()
-        val storageReference=storage.getReference()
-        storageReference.child("Trending_Punjabi").listAll().addOnSuccessListener {
-            for (item in 0..it.items.size - 1) {
-                Log.d("FIREKOTLINFIRE", it.items.get(item).name)
-                var name: String = it.items.get(item).name
-                trendSonglist.add(Songs(name))
-            }
-
-            folderArraylistForAdapter.add(Folders_dataClass("In Punjabi (10)", trendSonglist))
-
-
-            val adapter: TrendingAdapterRecycleView =
-                TrendingAdapterRecycleView(context, folderArraylistForAdapter)
-            var recylerview: RecyclerView = view.findViewById(R.id.trending_RecylerView)
-            recylerview.layoutManager =
-                GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
-            recylerview.adapter = adapter
-        }
-
-*/
-
 
 
         if (arrlist != null) {
@@ -130,7 +109,13 @@ class OnlineMusicFragment : Fragment() {
         setUp_DiscoverFolders(view)
         setUp_MoodFolders(view)
 
-       /* includeEnglishTrendingLayout.background =
+        //coroutine scope to launch suspend function in it
+
+          CoroutineScope(Dispatchers.Main).launch {
+
+        set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "Trending_Punjabi", view)
+         }
+        /* includeEnglishTrendingLayout.background =
             resources.getDrawable(R.drawable.gradient_includetrending_eng, null)
         includePunjabiTrendingLayout.background =
             resources.getDrawable(R.drawable.gradient_includetrending_punjabi)
@@ -140,9 +125,11 @@ class OnlineMusicFragment : Fragment() {
     }  //onViewClosed
 
 
-
     //function to set data to Recent Played
-    /*suspend fun*/ fun setDataToRecentPlayedList(arraylist: ArrayList<Songs>, view: View)/*= withContext(Dispatchers.IO)*/ {
+    /*suspend fun*/ fun setDataToRecentPlayedList(
+        arraylist: ArrayList<Songs>,
+        view: View
+    )/*= withContext(Dispatchers.IO)*/ {
         val myAdapter: MyAdapter = MyAdapter(context, arraylist)
 
         // withContext(Dispatchers.Main){
@@ -154,7 +141,10 @@ class OnlineMusicFragment : Fragment() {
     }
 
     //function to set data to Trending include layouts
-    /*suspend*/ fun setDataToNewReleasePlayedList(arraylist: ArrayList<Songs>, view: View)/*= withContext(Dispatchers.IO)*/ {
+    /*suspend*/ fun setDataToNewReleasePlayedList(
+        arraylist: ArrayList<Songs>,
+        view: View
+    )/*= withContext(Dispatchers.IO)*/ {
         val myAdapter: MyAdapter = MyAdapter(context, arraylist)
         // withContext(Dispatchers.Main){
         val recycelrView = view.findViewById<RecyclerView>(R.id.newRelease_RecylerView)
@@ -167,6 +157,7 @@ class OnlineMusicFragment : Fragment() {
 
     //function to setUp Trending folders(include layouts)
     fun setUp_TrendingFolder(arrlist: ArrayList<Songs>) {
+
 
         if (arrlist != null) {
             _binding?.includeTrendingEnglish?.InLanguageTextView?.setText("In English (15)")
@@ -190,7 +181,8 @@ class OnlineMusicFragment : Fragment() {
             _binding?.includeTrendingPunjabi?.songName2?.setText(arrlist.get(1).songName)
             _binding?.includeTrendingPunjabi?.songName3?.setText(arrlist.get(2).songName)
             _binding?.includeTrendingPunjabi?.songName4?.setText(arrlist.get(3).songName)
-            _binding?.includeTrendingPunjabi?.songName5?.setText(arrlist.get(4).songName)        }
+            _binding?.includeTrendingPunjabi?.songName5?.setText(arrlist.get(4).songName)
+        }
     }
 
     //function to setUp Top Charts folders(include layouts)
@@ -228,8 +220,9 @@ class OnlineMusicFragment : Fragment() {
         _binding?.includePunjabiHits?.languageTextviewFolder?.setText("Punjabi Top Hits")
         _binding?.includeWorkout?.languageTextviewFolder?.setText("Workout")
     }
+
     fun setUp_FeaturedArtists(view: View) {
-       _binding?.includeTheWeeknd?.singerName?.setText("The Weekend")
+        _binding?.includeTheWeeknd?.singerName?.setText("The Weekend")
         _binding?.includeDiljitDosanjh?.singerName?.setText("Diljit Dosanjh")
         _binding?.includeJustinBeiber?.singerName?.setText("The Justin Beiber")
         _binding?.includeAmmyVirk?.singerName?.setText("Ammy virk")
@@ -251,38 +244,193 @@ class OnlineMusicFragment : Fragment() {
         _binding?.includeArijitSingh?.singerName?.setText("Arijit Singh")
 
         //functions to upload images on artist images..
-        val featured_Artist="Featured Artists"
-        set_ImageToFeaturedArtist(featured_Artist,"The Weeknd","the weekend.jpg",_binding?.includeTheWeeknd!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Ammy virk","ammyvirkimage.jpg",_binding?.includeAmmyVirk!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Diljit Dosanjh","Diljit-Dosanjh13.jpg",_binding?.includeDiljitDosanjh!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Amrit Maan","amrit_maan-6.jpg",_binding?.includeAmritMaan!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Annie Marie","annie marie.jpg",_binding?.includeAnnieMarie!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Ap dhillon","AP-dhillon-wallpapers-7.jpg",_binding?.includeApdhillon!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Arijit singh","arijit singh.jpg",_binding?.includeArijitSingh!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Camila Cabillo","camilla cabillo.jpg",_binding?.includeCamilacabillo!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Dilpreet Dhillon","dilpreet dhilon.jpg",_binding?.includeDilpreetdhillon!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Dua lipa","dua lipa.jpg",_binding?.includeDuaLipa!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Gurnaam Bhullar","gurnaam bhullar.jpg",_binding?.includeGurnaamBhullar!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Jason Derulo","jason derulo.jpg",_binding?.includeJasonDerulo!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Justin Beiber","justin beiber.jpg",_binding?.includeJustinBeiber!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Kishore kumar","kishorekumar.jpg",_binding?.includeKishoreKumar!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Kygo","kygo.jpg",_binding?.includeKygo!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Maninder buttar","maninder.jpg",_binding?.includeManinderButtar!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Neha kakkar","neha kakkr.jpg",_binding?.includeNehaKakkar!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Post malone","post malone.jpg",_binding?.includePostMalone!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Shivjot","shivjot.jpg",_binding?.includeShivjot!!,view)
-        set_ImageToFeaturedArtist(featured_Artist,"Tones and I","tones and i.jpg",_binding?.includeTonesAndI!!,view)
+        val featured_Artist = "Featured Artists"
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "The Weeknd",
+            "the weekend.jpg",
+            _binding?.includeTheWeeknd!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Ammy virk",
+            "ammyvirkimage.jpg",
+            _binding?.includeAmmyVirk!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Diljit Dosanjh",
+            "Diljit-Dosanjh13.jpg",
+            _binding?.includeDiljitDosanjh!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Amrit Maan",
+            "amrit_maan-6.jpg",
+            _binding?.includeAmritMaan!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Annie Marie",
+            "annie marie.jpg",
+            _binding?.includeAnnieMarie!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Ap dhillon",
+            "AP-dhillon-wallpapers-7.jpg",
+            _binding?.includeApdhillon!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Arijit singh",
+            "arijit singh.jpg",
+            _binding?.includeArijitSingh!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Camila Cabillo",
+            "camilla cabillo.jpg",
+            _binding?.includeCamilacabillo!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Dilpreet Dhillon",
+            "dilpreet dhilon.jpg",
+            _binding?.includeDilpreetdhillon!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Dua lipa",
+            "dua lipa.jpg",
+            _binding?.includeDuaLipa!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Gurnaam Bhullar",
+            "gurnaam bhullar.jpg",
+            _binding?.includeGurnaamBhullar!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Jason Derulo",
+            "jason derulo.jpg",
+            _binding?.includeJasonDerulo!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Justin Beiber",
+            "justin beiber.jpg",
+            _binding?.includeJustinBeiber!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Kishore kumar",
+            "kishorekumar.jpg",
+            _binding?.includeKishoreKumar!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Kygo",
+            "kygo.jpg",
+            _binding?.includeKygo!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Maninder buttar",
+            "maninder.jpg",
+            _binding?.includeManinderButtar!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Neha kakkar",
+            "neha kakkr.jpg",
+            _binding?.includeNehaKakkar!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Post malone",
+            "post malone.jpg",
+            _binding?.includePostMalone!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Shivjot",
+            "shivjot.jpg",
+            _binding?.includeShivjot!!,
+            view
+        )
+        set_ImageToFeaturedArtist(
+            featured_Artist,
+            "Tones and I",
+            "tones and i.jpg",
+            _binding?.includeTonesAndI!!,
+            view
+        )
 
 
-
-        }
-    fun set_ImageToFeaturedArtist(playlistName:String,artistName:String,imageName:String,layout:FolderFeaturedArtistLayoutBinding,view:View)
-    {
-        mRefernce?.child(playlistName)?.child(artistName)?.child(imageName)?.downloadUrl?.addOnSuccessListener {
-            Glide.with(view).asBitmap().load(it).into(layout.singerImage)
-            Log.d("FUNDD","fnction run secuucfdfully")
-        }
     }
+
+    fun set_ImageToFeaturedArtist(
+        playlistName: String,
+        artistName: String,
+        imageName: String,
+        layout: FolderFeaturedArtistLayoutBinding,
+        view: View
+    ) {
+        mRefernce?.child(playlistName)?.child(artistName)
+            ?.child(imageName)?.downloadUrl?.addOnSuccessListener {
+                Glide.with(view).asBitmap().load(it).into(layout.singerImage)
+                Log.d("FUNDD", "fnction run secuucfdfully")
+            }
+    }
+    suspend fun set_Arraylist_ToTrendingLayouts(refernce: StorageReference, playlistName: String, folderName: String, view: View) = withContext(Dispatchers.Default)
+    {
+
+        refernce?.child(playlistName)?.child(folderName)?.listAll()?.addOnSuccessListener {
+
+            var list = it.items
+            for (i in 0..list.size - 1) {
+
+                list.get(i).downloadUrl?.addOnSuccessListener {
+                    Log.d("UUU",it.toString())
+
+                    var resolver=activity?.contentResolver
+                    val cursor: Cursor?=resolver?.query(it,null,null,null,null)
+
+/*
+                            Log.d("HCUROEHELLO", cursor!!.getStriursor!!.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)))
+*/
+
+
+                    }
+                }
+             }//for loop closed
+
+                }
+
+
+
+
+
 
 
 

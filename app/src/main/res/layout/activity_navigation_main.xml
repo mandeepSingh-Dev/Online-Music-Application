@@ -47,7 +47,6 @@
 <include
 
     android:id="@+id/inccluddeMotion"
-
     layout="@layout/motion_player"
 
    /><!--android:visibility="invisible"-->

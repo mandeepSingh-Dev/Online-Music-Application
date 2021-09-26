@@ -79,51 +79,80 @@
 app:layout_constraintLeft_toRightOf="@id/playlist_button"
            app:layout_constraintTop_toTopOf="@id/playlist_button"/>
 
-       <View
-           android:id="@+id/division"
-           android:layout_width="match_parent"
-           android:layout_height="5dp"
-           android:background="@color/light_blue_A400"
-           android:layout_marginTop="15dp"
-           app:layout_constraintLeft_toLeftOf="parent"
-           app:layout_constraintRight_toRightOf="parent"
-           app:layout_constraintTop_toBottomOf="@id/artists_button"/>
 
+       <ImageView
+           android:id="@+id/fav_Icon"
+           android:layout_width="30dp"
+           android:layout_height="30dp"
+           android:layout_marginTop="30dp"
+           app:layout_constraintLeft_toLeftOf="@id/user_image"
+           app:layout_constraintTop_toBottomOf="@id/playlist_button"
+           android:src="@drawable/ic_baseline_favorite_border_24"/>
 
        <TextView
            android:id="@+id/likedSongs"
-           android:layout_width="0dp"
+           android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="Liked Songs"
-           android:layout_marginTop="15dp"
-           android:textSize="28dp"
+           android:textSize="20dp"
+           android:fontFamily="@font/baloo_chettan"
+           android:layout_marginLeft="10dp"
            android:textColor="@color/white"
-           app:layout_constraintTop_toBottomOf="@id/division"
-           app:layout_constraintLeft_toLeftOf="@id/user_image"
-           app:layout_constraintRight_toRightOf="@id/plus_button"/>
+           app:layout_constraintTop_toTopOf="@id/fav_Icon"
+           app:layout_constraintLeft_toRightOf="@id/fav_Icon"
+          />
+       <ImageView
+           android:id="@+id/arrow1"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+android:layout_marginRight="20dp"
+           android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+           app:layout_constraintRight_toRightOf="@id/plus_button"
+           app:layout_constraintTop_toTopOf="@id/likedSongs"
+           app:layout_constraintBottom_toBottomOf="@id/likedSongs"/>
 
        <TextView
            android:id="@+id/playlistTextview"
-           android:layout_width="wrap_content"
+           android:layout_width="0dp"
            android:layout_height="wrap_content"
            android:text="Playlist . "
            android:layout_marginLeft="8dp"
            android:textColor="#D8C6C6"
            app:layout_constraintLeft_toLeftOf="@id/likedSongs"
+           app:layout_constraintRight_toRightOf="@id/likedSongs"
            app:layout_constraintTop_toBottomOf="@id/likedSongs"
            />
 
+       <ImageView
+           android:id="@+id/Device_Icon"
+           android:layout_width="30dp"
+           android:layout_height="30dp"
+           android:layout_marginTop="10dp"
+           app:layout_constraintLeft_toLeftOf="@id/user_image"
+           app:layout_constraintTop_toBottomOf="@id/playlistTextview"
+           android:src="@drawable/ic_baseline_favorite_border_24"/>
+
+       <ImageView
+           android:id="@+id/arrow2"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginRight="20dp"
+           android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+           app:layout_constraintRight_toRightOf="@id/plus_button"
+           app:layout_constraintTop_toTopOf="@id/OnDevice"
+           app:layout_constraintBottom_toBottomOf="@id/OnDevice"/>
+
        <TextView
            android:id="@+id/OnDevice"
-           android:layout_width="0dp"
+           android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="On Device"
-           android:layout_marginTop="12dp"
            android:textSize="20dp"
+           android:fontFamily="@font/baloo_chettan"
+           android:layout_marginLeft="8dp"
            android:textColor="@color/white"
-           app:layout_constraintLeft_toLeftOf="@id/user_image"
-           app:layout_constraintRight_toRightOf="@id/plus_button"
-           app:layout_constraintTop_toBottomOf="@id/playlistTextview"/>
+           app:layout_constraintLeft_toRightOf="@id/Device_Icon"
+           app:layout_constraintTop_toTopOf="@id/Device_Icon"/>
 
        <TextView
            android:id="@+id/songsTextView"
@@ -131,33 +160,52 @@ app:layout_constraintLeft_toRightOf="@id/playlist_button"
            android:layout_height="wrap_content"
            android:textColor="#D8C6C6"
            android:text="Songs"
-           android:layout_marginLeft="8dp"
-           app:layout_constraintLeft_toLeftOf="@id/OnDevice"
+           android:layout_marginLeft="8dp" app:layout_constraintLeft_toLeftOf="@id/OnDevice"
            app:layout_constraintRight_toRightOf="@id/OnDevice"
            app:layout_constraintTop_toBottomOf="@id/OnDevice"/>
 
+
+       <ImageView
+           android:id="@+id/download_Icon"
+           android:layout_width="30dp"
+           android:layout_height="30dp"
+           android:layout_marginTop="10dp"
+           app:layout_constraintLeft_toLeftOf="@id/user_image"
+           app:layout_constraintTop_toBottomOf="@id/songsTextView"
+           android:src="@drawable/ic_baseline_favorite_border_24"/>
+
+       <ImageView
+           android:id="@+id/arrow3"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginRight="20dp"
+           android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+           app:layout_constraintRight_toRightOf="@id/plus_button"
+           app:layout_constraintTop_toTopOf="@id/Downloads"
+           app:layout_constraintBottom_toBottomOf="@id/Downloads"/>
+
        <TextView
            android:id="@+id/Downloads"
-           android:layout_width="0dp"
+           android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="Downloads"
-           android:layout_marginTop="12dp"
+           android:text="Downloaded Songs"
+           android:layout_marginLeft="8dp"
            android:textSize="20dp"
+           android:fontFamily="@font/baloo_chettan"
            android:textColor="@color/white"
-           app:layout_constraintLeft_toLeftOf="@id/user_image"
-           app:layout_constraintRight_toRightOf="@id/plus_button"
-           app:layout_constraintTop_toBottomOf="@id/songsTextView"/>
+           app:layout_constraintLeft_toRightOf="@id/download_Icon"
+           app:layout_constraintTop_toTopOf="@id/download_Icon"/>
 
 
        <androidx.recyclerview.widget.RecyclerView
            android:id="@+id/playlists_artists_RecyclerView"
            android:layout_width="0dp"
            android:layout_height="400dp"
-           android:layout_marginTop="15dp"
+           android:layout_marginTop="25dp"
            android:clipToPadding="false"
            app:layout_behavior="@string/appbar_scrolling_view_behavior"
            android:layout_marginRight="15dp"
-           android:background="@color/teal_200"
+           android:background="@drawable/shape_for_recyclerview"
            app:layout_constraintRight_toRightOf="parent"
            app:layout_constraintTop_toBottomOf="@id/Downloads"
            app:layout_constraintBottom_toTopOf="@id/lastView_library"

@@ -215,15 +215,7 @@
             android:layout_marginEnd="45dp" />
 
 
-        <View
-            android:id="@+id/lastspace"
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
-        android:background="#0C473F"
-            android:onClick="lastSpaceClickListener"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/play_pause_button"
@@ -236,6 +228,16 @@
             app:layout_constraintLeft_toRightOf="@id/prev_image_view"
             app:layout_constraintRight_toLeftOf="@id/next_image_view"
             tools:ignore="SpeakableTextPresentCheck" />
+
+        <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lastspace"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="#0C473F"
+        android:onClick="lastSpaceClickListener"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
       <!--  <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationMotion"
             android:layout_width="match_parent"
@@ -248,7 +250,7 @@
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="59dp"
-            app:itemIconTint="#FFFFFF"
+            app:itemIconTint="#E9E6ED"
             app:itemRippleColor="@color/white"
             app:itemIconSize="30dp"
             app:itemTextColor="@color/white"
