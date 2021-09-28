@@ -308,6 +308,9 @@ class OnlineMusicFragment : Fragment() {
                     var artist:String=it.getCustomMetadata("Artist")!!
                     var bitmapstr:String=it.getCustomMetadata("Bitmap")!!
 
+                    val byteArray=Base64.decode(bitmapstr,Base64.DEFAULT)
+                    val finalBitmap=BitmapFactory.decodeByteArray(byteArray,0,byteArray.size)
+
 
 
                    /* var byteArray=Base64.decode(bitmapstr,Base64.DEFAULT)
@@ -318,28 +321,27 @@ class OnlineMusicFragment : Fragment() {
                     {
                         0 -> {view.songName1.setText(songName)
                               view.artistName1.setText(artist)
-                            Glide.with(requireContext()).asBitmap().load(bitmapstr).into(view.songImage1)
-                        //view.songImage1.setImageBitmap()
+                        view.songImage1.setImageBitmap(finalBitmap)
                         }
                         1 -> {
                             view.songName2.setText(songName)
                             view.artistName2.setText(artist)
-                      //  view.songImage2.setImageBitmap( )
+                        view.songImage2.setImageBitmap( finalBitmap)
                         }
                         2 -> {
                             view.songName3.setText(songName)
                             view.artistName3.setText(artist)
-                       // view.songImage3.setImageBitmap(   )
+                       view.songImage3.setImageBitmap( finalBitmap  )
                         }
                         3 -> {
                             view.songName4.setText(songName)
                             view.artistName4.setText(artist)
-                        //    view.songImage4.setImageBitmap()
+                           view.songImage4.setImageBitmap(finalBitmap)
                         }
                         4 -> {
                             view.songName5.setText(songName)
                             view.artistName5.setText(artist)
-                           // view.songImage5.setImageBitmap()
+                            view.songImage5.setImageBitmap(finalBitmap)
                         }
                     }
                 }

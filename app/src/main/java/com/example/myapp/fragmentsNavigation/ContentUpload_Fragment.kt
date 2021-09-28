@@ -133,8 +133,8 @@ class ContentUpload_Fragment : Fragment()
         var arraylist=MusicService.songsList
         CoroutineScope(Dispatchers.Main).launch {
 
-            //uploadSongs("Trending_Playlist", "Hindi", arraylist)
-           /*  uploadSongs("Trending_Playlist", "Punjabi", arraylist)
+            /*uploadSongs("Trending_Playlist", "Hindi", arraylist)
+             uploadSongs("Trending_Playlist", "Punjabi", arraylist)
              uploadSongs("Trending_Playlist", "English", arraylist)
 
              uploadSongs("Top_Charts", "Punjabi_Top10", arraylist)
@@ -181,9 +181,8 @@ class ContentUpload_Fragment : Fragment()
             uploadSongs("Discover", "EDM", arraylist)
             uploadSongs("Discover", "KIDS", arraylist)
             uploadSongs("Discover", "WEDDING", arraylist)
-            uploadSongs("Discover", "GHAZAL", arraylist)*/
-
-
+            uploadSongs("Discover", "GHAZAL", arraylist)
+*/
 
 
         }
@@ -269,15 +268,31 @@ class ContentUpload_Fragment : Fragment()
                     {
                         metaDataBuilder.setCustomMetadata("Bitmap", "bitmap")
                     }*/
-                  var bitmapstring=encodeBitmapToString(bitmap)
-                    metaDataBuilder.setCustomMetadata("Bitmap", bitmapstring)
-
+                    try{
+                        if(bitmap!=null) {
+                            var bitmapstring = encodeBitmapToString(bitmap)
+                            metaDataBuilder.setCustomMetadata("Bitmap", bitmapstring)
+                        }else
+                        {
+                            metaDataBuilder.setCustomMetadata("Bitmap", "bitmap")
+                        }
+                    }catch (e:Exception){}
 
                     metaDataBuilder.setCustomMetadata("Size", songSize.toString())
 
                     var metaData = metaDataBuilder.build()
 
-                    mRefernce?.child(playlist)?.child(folder)?.child(songsList.get(i).songName)?.putFile(songUri, metaData)
+                    mRefernce?.child(playlist)?.child(folder)?.child(songsList.get(i).songName)?.putFile(songUri, metaData)?.addOnProgressListener {
+                        var double=(100*it.bytesTransferred)/it.totalByteCount
+
+                        binding?.progressBarUpload?.visibility=View.VISIBLE
+                        binding?.progressTextViewUpload?.visibility=View.VISIBLE
+
+                        binding?.songNameUpload?.setText("$playlist-->$folder-->$songName")
+                        binding?.progressBarUpload?.setProgress(double.toInt())
+                        binding?.progressTextViewUpload?.setText("${double.toInt()} %")
+
+                    }
 
                 }catch (e:Exception){}
                 }
@@ -310,12 +325,15 @@ class ContentUpload_Fragment : Fragment()
 
     suspend fun encodeBitmapToString(bitmap:Bitmap):String= withContext(Dispatchers.Default)
     {
-        var byteArrayOutputStream=ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream)
 
-        var bitmapString=Base64.encodeToString(byteArrayOutputStream.toByteArray(),Base64.DEFAULT)
+        var bitmapString:String?=null
+        try {
+            var byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
 
-        return@withContext bitmapString
+            bitmapString = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
+        }catch (e:java.lang.Exception){}
+        return@withContext bitmapString!!
     }
 
 
