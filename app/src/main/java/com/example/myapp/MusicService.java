@@ -25,7 +25,6 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.util.Log;
 import android.util.Size;
 
 import androidx.annotation.Nullable;
@@ -65,7 +64,7 @@ public class MusicService extends Service {
            if(intent.getAction().equals("ACTION_POSITION"))
            {
                int pos=intent.getIntExtra("Position",1);
-               Log.d("POSiTION",pos+"__");
+            //   Log.d("POSiTION",pos+"__");
                position=pos;
 
                changeMusic(pos);
@@ -90,7 +89,7 @@ public class MusicService extends Service {
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("ACTION_DESTROY"));
 
         mediaSessionCompat=new MediaSessionCompat(getBaseContext(),"Music Service");
-        Log.d("KPKPKP", "onCrearte");
+       // Log.d("KPKPKP", "onCrearte");
 
 
     }
@@ -99,10 +98,10 @@ public class MusicService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
        // songs1=getSongArrayList();
 
-       Log.d("KPKPKP", "onStartCommand 34");
+     //  Log.d("KPKPKP", "onStartCommand 34");
        // songs = MainActivity.arrayList;
    // if (!songs1.isEmpty()) {
-        Log.d("djpkhfdj", songsList.size()+"");
+       // Log.d("djpkhfdj", songsList.size()+"");
 
         //if(intent.getAction().equals("ACTION_START_FROM_MUSICFRAGMENT")) {
            /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -182,7 +181,8 @@ public class MusicService extends Service {
 // But at second tym songlist will be not empty so
 // in above if block we get startservice from MusicFragment.
  /*else*/ if(intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
- {Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");}
+ {//Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");
+     }
          // changeMusic(position);
         //this else if block for pending intent.
 else if(intent.getAction().equals("ACTION_PLAY"))
@@ -199,12 +199,12 @@ else if(intent.getAction().equals("ACTION_PLAY"))
 else if(intent.getAction().equals("ACTION_PREVIUOS"))
         {
             changeMusic(--position);
-            Log.d("pendingintentposition",position+"_previous");
+           // Log.d("pendingintentposition",position+"_previous");
         }
         else if(intent.getAction().equals("ACTION_NEXT"))
         {
             changeMusic(++position);
-            Log.d("pendingintentposition",position+"_next");
+          //  Log.d("pendingintentposition",position+"_next");
         }
 
 
@@ -361,7 +361,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 
    public void stop()
    {
-       Log.d("OOO","ONSTOP MUSICSERVICE");
+     //  Log.d("OOO","ONSTOP MUSICSERVICE");
 
    }
 
@@ -439,10 +439,10 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                         long songSize=cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
 
                          Uri uridata = Uri.withAppendedPath(uri, String.valueOf(id));//getting Uri from _id..
-                        Log.d("dfdYYYY", uridata.toString());
-                        Log.d("TYTYTYT", artist + duration + name);
+                      //  Log.d("dfdYYYY", uridata.toString());
+                       // Log.d("TYTYTYT", artist + duration + name);
 
-                        Log.d("416line_feature adding",cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))+name);
+                       // Log.d("416line_feature adding",cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))+name);
                         String dateModified=cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED));
 
                         Bitmap bitmap = null;
@@ -488,7 +488,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                             String name = fileAL.get(i).getName(); //get all files name...
                             // Log.d("nameofSONG",name);
                             Uri uri = Uri.fromFile(fileAL.get(i));
-                            Log.d("nameofSONG", uri.toString());//get file and parse into Uri.
+                          //  Log.d("nameofSONG", uri.toString());//get file and parse into Uri.
 
                             MediaMetadataRetriever retriever = new MediaMetadataRetriever();   //For getting Bitmap image from song.
                             retriever.setDataSource(fileAL.get(i).toString());
@@ -526,7 +526,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
     public ArrayList<File> getDirectories(File file) {
 
         ArrayList<File> fileArrayList;
-        Log.d("dddddddddd", Thread.currentThread().toString());
+       // Log.d("dddddddddd", Thread.currentThread().toString());
 
         File[] filesarr = file.listFiles();
         fileArrayList = new ArrayList<>();
@@ -540,7 +540,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                 if (singlefile.getName().endsWith(".mp3")) {
 
                     fileArrayList.add(singlefile.getAbsoluteFile());
-                    Log.d("sfdfdf", singlefile.getName());
+                  //  Log.d("sfdfdf", singlefile.getName());
 
                     // CtentResolver resolver=getContext().getContentResolver();
                     // Size size=new Size(100,100);
@@ -556,12 +556,12 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 public void changeMusic(int positionn)
 {
   // position=positionn;
-   Log.d("LOLO",position+"_+");
+  // Log.d("LOLO",position+"_+");
    /* if(!songsList.isEmpty())
     {*/
     if(positionn<=-1)
     {
-        Log.d("reset_position",positionn+"_");
+      //  Log.d("reset_position",positionn+"_");
         player.reset();
         position=0;
        // player=null;
@@ -575,12 +575,12 @@ public void changeMusic(int positionn)
         intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
 
 
-        Log.d("Hello", positionn + "hello");
+       // Log.d("Hello", positionn + "hello");
         manager.sendBroadcast(intent);
         player.reset();
 
         try {
-            Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
+           // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
 
 
 
@@ -631,7 +631,7 @@ public void changeMusic(int positionn)
                         if (player.isPlaying()) {
                              intent.putExtra("CURRENTDURATION", player.getCurrentPosition());
                              manager.sendBroadcast(intent);
-                            Log.d("HEJO", player.getCurrentPosition() + "__position");
+                          //  Log.d("HEJO", player.getCurrentPosition() + "__position");
                             Thread.sleep(1000);
 
                         }
@@ -648,7 +648,7 @@ public void changeMusic(int positionn)
 
 public void showNotification(int possition,int play_pauseICON) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        Log.d("HJO", "HDFDIHFN");
+      //  Log.d("HJO", "HDFDIHFN");
         // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         // mediaSessionCompat = new MediaSession(getBaseContext(), "MusicService");
         // mediaSessionCompat.setActive(true);
@@ -668,7 +668,7 @@ public void showNotification(int possition,int play_pauseICON) {
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
         // }
-        Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "2");
+      //  Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "2");
     }
     PendingIntent pendingIntentPrevious;
     int drw_previous;
@@ -691,7 +691,7 @@ public void showNotification(int possition,int play_pauseICON) {
     PendingIntent pendingIntentNext = PendingIntent.getService(this, 0,
             intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
     // }
-    Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "3");
+   // Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "3");
 
 
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channelid");
@@ -722,7 +722,7 @@ public void showNotification(int possition,int play_pauseICON) {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("DDEESSTROY","DESTROY");
+      //  Log.d("DDEESSTROY","DESTROY");
        /* Intent inntent=new Intent(this,MusicService.class);
         inntent.setAction("ACTION_STOP");
         startService(inntent);*/
