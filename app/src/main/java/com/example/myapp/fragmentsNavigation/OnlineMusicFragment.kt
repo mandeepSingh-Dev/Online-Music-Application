@@ -127,7 +127,10 @@ class OnlineMusicFragment : Fragment() {
 
           CoroutineScope(Dispatchers.Main).launch{
         set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "Punjabi", _binding?.includeTrendingPunjabi!!)
-         }
+              set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "English", _binding?.includeTrendingEnglish!!)
+              set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "Hindi", _binding?.includeTrendingHindi!!)
+
+          }
         /* includeEnglishTrendingLayout.background =
             resources.getDrawable(R.drawable.gradient_includetrending_eng, null)
         includePunjabiTrendingLayout.background =
