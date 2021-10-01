@@ -32,14 +32,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import android.app.Activity
 import androidx.activity.OnBackPressedCallback
+import kotlinx.coroutines.*
 
 
 class ContentUpload_Fragment : Fragment()
@@ -111,7 +108,14 @@ class ContentUpload_Fragment : Fragment()
                 songName=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)!!
                 artistName=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)!!
                 songUri=it
-               // duration=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
+                //TODO duration and songSize isnot getting correct Long datatype form.Correct it..
+                duration= retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
+                songSize= retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong()
+
+                Log.d("hello",retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong().toString())
+                Log.d("hello",retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong().toString())
+
+                // duration=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
                // songSize=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong()
             }
             binding?.uploadImage?.visibility=View.GONE
@@ -282,36 +286,44 @@ class ContentUpload_Fragment : Fragment()
         }
     }
 
-    fun  uploadASong(playlist:String,folder:String)
-    {
-        var metaDataBuilder=StorageMetadata.Builder()
-        var metaData=metaDataBuilder.setCustomMetadata("Name",songName).build()
-
-        mRefernce?.child(playlist)?.child(folder)?.child(songName)?.putFile(songUri!!,metaData)?.addOnSuccessListener {
-            Log.d("YoPo",it.toString()+"HOGYA")
-        }?.addOnProgressListener {
-            binding?.cardViewForHidenView?.visibility=View.VISIBLE
-
-            var doublee=(100*it.bytesTransferred)/it.totalByteCount
-            binding?.progressTextViewUpload?.setText("${doublee.toInt()}%")
-            binding?.progressBarUpload?.setProgress(doublee.toInt())
-
-            binding?.uploadButton?.visibility=View.GONE
-            binding?.progressBarUpload?.visibility=View.VISIBLE
-            binding?.progressTextViewUpload?.visibility=View.VISIBLE
-
-        }?.addOnSuccessListener {
-            binding?.uploadButton?.visibility=View.VISIBLE
-            binding?.cardViewForHidenView?.visibility=View.VISIBLE
-
-            binding?.progressBarUpload?.visibility=View.VISIBLE
-            binding?.progressTextViewUpload?.visibility=View.VISIBLE
+   suspend fun  uploadASong(playlist:String,folder:String)= withContext(Dispatchers.Default)
+       {
+           var metaDataBuilder = StorageMetadata.Builder()
+           metaDataBuilder.setCustomMetadata("SongName", songName)
+           metaDataBuilder.setCustomMetadata("Artist", artistName)
+           metaDataBuilder.setCustomMetadata("Bitmap", encodeBitmapToString(bitmap!!))
+           metaDataBuilder.setCustomMetadata("Duration",duration.toString())
+           metaDataBuilder.setCustomMetadata("Size",songSize.toString())
+                   metaDataBuilder.setCustomMetadata("Uri",songUri.toString())
+           val metaData=metaDataBuilder.build()
 
 
-        }
+           mRefernce?.child(playlist)?.child(folder)?.child(songName)?.putFile(songUri!!, metaData)
+               ?.addOnSuccessListener {
+                   Log.d("YoPo", it.toString() + "HOGYA")
+               }?.addOnProgressListener {
+               binding?.cardViewForHidenView?.visibility = View.VISIBLE
+
+               var doublee = (100 * it.bytesTransferred) / it.totalByteCount
+               binding?.progressTextViewUpload?.setText("${doublee.toInt()}%")
+               binding?.progressBarUpload?.setProgress(doublee.toInt())
+
+               binding?.uploadButton?.visibility = View.GONE
+               binding?.progressBarUpload?.visibility = View.VISIBLE
+               binding?.progressTextViewUpload?.visibility = View.VISIBLE
+
+           }?.addOnSuccessListener {
+               binding?.uploadButton?.visibility = View.VISIBLE
+               binding?.cardViewForHidenView?.visibility = View.VISIBLE
+
+               binding?.progressBarUpload?.visibility = View.VISIBLE
+               binding?.progressTextViewUpload?.visibility = View.VISIBLE
 
 
-    }  //function finished
+           }
+
+
+       } //function finished
 
     suspend fun encodeBitmapToString(bitmap:Bitmap):String= withContext(Dispatchers.Default)
     {
@@ -345,7 +357,8 @@ class ContentUpload_Fragment : Fragment()
 
     }
 
-        fun uploadOnItemSelected(bottomSheetDialog: BottomSheetDialog, playlist: String) {
+        fun uploadOnItemSelected(bottomSheetDialog: BottomSheetDialog, playlist: String)
+       {
             when (playlist) {
                 "Trending_Playlist" -> {
 
@@ -361,7 +374,9 @@ class ContentUpload_Fragment : Fragment()
                                 } else {
                                     if (parent?.selectedItem?.equals(playlist) == true) {
                                     } else {
-                                        uploadASong(playlist, parent?.selectedItem.toString())
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            uploadASong(playlist, parent?.selectedItem.toString())
+                                        }
                                     }
                                     val itemName: String = parent?.selectedItem.toString()
                                     bottomSheetDialog.hide()
@@ -391,7 +406,9 @@ class ContentUpload_Fragment : Fragment()
                                 } else {
                                     if (parent?.selectedItem?.equals(playlist) == true) {
                                     } else {
-                                        uploadASong(playlist, parent?.selectedItem.toString())
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            uploadASong(playlist, parent?.selectedItem.toString())
+                                        }
                                     }
                                     val itemName: String = parent?.selectedItem.toString()
                                     bottomSheetDialog.hide()
@@ -429,8 +446,10 @@ class ContentUpload_Fragment : Fragment()
                                 } else {
                                     if (parent?.selectedItem?.equals(playlist) == true) {
                                     } else {
-                                        uploadASong(playlist, parent?.selectedItem.toString())
-                                    }
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            uploadASong(playlist, parent?.selectedItem.toString())
+                                        }
+                                        }
                                     val itemName: String = parent?.selectedItem.toString()
                                     bottomSheetDialog.hide()
                                 }
@@ -463,10 +482,10 @@ class ContentUpload_Fragment : Fragment()
 
                                     } else {
                                         Log.d("SPINNER",parent?.selectedItem.toString()+"3")
-
-                                        uploadASong("Moods&Collection", parent?.selectedItem.toString()
-                                        )
-                                    }
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            uploadASong("Moods&Collection", parent?.selectedItem.toString())
+                                        }
+                                        }
                                     val itemName: String = parent?.selectedItem.toString()
                                     bottomSheetDialog.hide()
                                 }
@@ -503,8 +522,10 @@ class ContentUpload_Fragment : Fragment()
                                 } else {
                                     if (parent?.selectedItem?.equals(playlist) == true) {
                                     } else {
-                                        uploadASong(playlist, parent?.selectedItem.toString())
-                                    }
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            uploadASong(playlist, parent?.selectedItem.toString())
+                                        }
+                                        }
                                     val itemName: String = parent?.selectedItem.toString()
                                     bottomSheetDialog.hide()
                                 }
