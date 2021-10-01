@@ -6,11 +6,18 @@
     android:id="@+id/sheetConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    style="@style/Widget.Design.BottomSheet.Modal"
     android:background="@drawable/shape_bottom_sheet"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="@string/bottom_sheet_behavior"
     >
+    <ScrollView
+        android:id="@+id/scrollViewBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +26,44 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
+          <ImageView
+              android:id="@+id/upperMiniLine"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+              android:layout_gravity="center"
+              android:src="@drawable/ic_baseline_linear_scale_24"
+              android:layout_marginTop="2dp"/>
+       <ImageView
+           android:id="@+id/songImageBottomSheet"
+           android:layout_width="150dp"
+           android:layout_height="150dp"
+           android:layout_marginTop="10dp"
+           android:layout_gravity="center"
+           android:src="@drawable/photu"/>
+        <TextView
+            android:id="@+id/songNamebottomsheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Binding Glow"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:singleLine="true"
+            android:ellipsize="end"/>
+        <TextView
+            android:id="@+id/artistbottomsheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Binding Glow"
+            android:textSize="13sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white" />
+
+
+
         <LinearLayout
             android:id="@+id/artistLinearLayout"
             android:layout_width="match_parent"
@@ -40,7 +85,7 @@
                 android:text="Artist: Tarsem Jassar(DJJOHAL.COMM)"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
@@ -66,7 +111,7 @@
                 android:text="Album: Happiness(DJJOHAL.COMM)"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
@@ -92,7 +137,7 @@
                 android:text="3:35"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
@@ -118,7 +163,7 @@
                 android:text="8 mb"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
@@ -144,7 +189,7 @@
             android:text="set as ringtone"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/black"/>
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 
@@ -170,7 +215,7 @@
                 android:text="Share song file "
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
 
         </LinearLayout>
         <View
@@ -178,5 +223,6 @@
     android:layout_height="30dp"/>
 
     </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

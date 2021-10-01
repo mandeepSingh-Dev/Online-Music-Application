@@ -29,6 +29,7 @@
         >
         <!--app:title="BullDog"-->
     <ImageView
+        android:id="@+id/imageOnToolBar"
         android:layout_width="320dp"
         android:layout_height="200dp"
         android:src="@drawable/ic_baseline_keyboard_arrow_right_24"

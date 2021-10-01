@@ -417,15 +417,25 @@ try {
         });
     }
 }catch (Exception e){}
-                    MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
+
+        MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
 try {
     getActivity().runOnUiThread(new Runnable() {
         @Override
         public void run() {
+            ImageView imageOnToolbar=view.findViewById(R.id.imageOnToolBar);
             recyclerView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(myAdapter);
+           //To give different view look to recyleview list
+            imageOnToolbar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false));
+
+                }
+            });
 
 
         }

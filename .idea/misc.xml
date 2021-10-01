@@ -5,9 +5,12 @@
       <map>
         <entry key="..\:/MyApp2/app/src/main/res/drawable-v24/musictwo_tone.xml" value="0.2212962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable-v24/shape.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/album_icon.xml" value="0.2101851851851852" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/artist_person_icon.xml" value="0.2101851851851852" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/background_btn.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/bottom_gradient.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/dots_more_horiz.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/duration_icon.xml" value="0.2101851851851852" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/gradient_for_imagevew.xml" value="0.176" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/gradient_includetrending_1.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/gradient_includetrending_2.xml" value="0.22962962962962963" />
@@ -18,16 +21,19 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/gradient_splashscreen.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/gradint_for_recylerview.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_crop_square_24.xml" value="0.2101851851851852" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_expand_less_24.xml" value="0.25833333333333336" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_expand_more_24.xml" value="0.25833333333333336" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.21666666666666667" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_24.xml" value="0.20925925925925926" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_linear_scale_24.xml" value="0.2101851851851852" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_pause_circle_filled_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.25833333333333336" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_arrow_249.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_circle_filled_24.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.2101851851851852" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_skip_next_24.xml" value="0.25833333333333336" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_skip_previous_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_myimage_background.xml" value="0.22962962962962963" />
@@ -44,6 +50,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/play_notification.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/play_notificationn.xml" value="0.176" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/prev_next_shape_button.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ringtone_icon.xml" value="0.2101851851851852" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/search_icon.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/search_stroke.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape.xml" value="0.22962962962962963" />
