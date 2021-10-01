@@ -23,7 +23,9 @@
         <activity
             android:name=".NavigationMainActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
-            />
+            >
+
+        </activity>
         <activity
             android:name=".signUpActivity.SignUpActivity"
             android:windowSoftInputMode="stateHidden"

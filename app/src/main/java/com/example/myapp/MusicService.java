@@ -492,6 +492,8 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 
                             MediaMetadataRetriever retriever = new MediaMetadataRetriever();   //For getting Bitmap image from song.
                             retriever.setDataSource(fileAL.get(i).toString());
+                          //  Log.d("HUMBAHOOHUMBA",fileAL.get(i).toString());
+
 
                             byte[] bytes = retriever.getEmbeddedPicture();
                             Bitmap bitmap = null;

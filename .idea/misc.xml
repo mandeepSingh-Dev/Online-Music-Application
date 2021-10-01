@@ -49,6 +49,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_bottom_sheet.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_emailedit.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_buttons.xml" value="0.2101851851851852" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cardview.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cover_image.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_recyclerview.xml" value="0.2264840182648402" />
@@ -62,6 +63,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/layout/activity_navigation_main.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/activity_sign_up.xml" value="0.21232876712328766" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/activity_splash_screen.xml" value="0.2152777777777778" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/bottom_sheet_for_contentupload.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/bottom_sheet_layout.xml" value="0.23846153846153847" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/detailssong_bottom_sheetlayout.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/featured_artist_layout.xml" value="0.264" />
@@ -69,7 +71,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/layout/folder_layout.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/folder_layout_normal.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/folder_layout_small.xml" value="0.2152777777777778" />
-        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_content_upload_.xml" value="0.264" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_content_upload_.xml" value="0.176" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_library_.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_music.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_offline_music.xml" value="0.2152777777777778" />

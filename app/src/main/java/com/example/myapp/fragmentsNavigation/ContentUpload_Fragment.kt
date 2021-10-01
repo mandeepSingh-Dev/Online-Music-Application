@@ -16,6 +16,9 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
@@ -25,6 +28,7 @@ import com.example.myapp.MusicRecylerView.Songs
 import com.example.myapp.MusicService
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentContentUploadBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
@@ -34,6 +38,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
+import android.app.Activity
+import androidx.activity.OnBackPressedCallback
 
 
 class ContentUpload_Fragment : Fragment()
@@ -46,6 +52,8 @@ class ContentUpload_Fragment : Fragment()
     var duration:Long=44564545
     var songSize:Long=89787887
     var bitmap:Bitmap?=null
+
+    lateinit var bottomDialog:BottomSheetDialog
 
     var defaultUri = "content://media/external_primary/images/media/457"
 
@@ -76,23 +84,36 @@ class ContentUpload_Fragment : Fragment()
         ActivityResultCallback
         {
             Log.d("HOLOLOPOLO",it.toString())
-            var resolver=activity?.contentResolver
-            var cursor=resolver?.query(it,null,null,null,null,null)
-           if(cursor!!.moveToFirst())
-           {
-               songName=cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
-                artistName=cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
-               songUri=it  //uri
-               duration=cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
-               songSize=cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
+            //FOR  ABOVE OR EQUAL ANDROID Q
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
+                var resolver = activity?.contentResolver
+                var cursor = resolver?.query(it, null, null, null, null, null)
+                if (cursor!!.moveToFirst()) {
+                    songName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
+                    artistName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+                    songUri= it  //uri
+                    duration =cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
+                    songSize =cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
 
-               try {
-                   bitmap = resolver?.loadThumbnail(it, Size(180, 180), null)
-                   Log.d("kdfhj",bitmap.toString())
-                   binding?.songImageUpload?.setImageBitmap(bitmap)
+                    try {
+                        bitmap = resolver?.loadThumbnail(it, Size(180, 180), null)
+                        Log.d("kdfhj", bitmap.toString())
+                        binding?.songImageUpload?.setImageBitmap(bitmap)
 
-               }catch (e:Exception){}
-               }
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+            //FOR  BELOW ANDROID Q
+            else{
+                var retriever:MediaMetadataRetriever= MediaMetadataRetriever()
+                retriever.setDataSource(requireContext(),it)
+                songName=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)!!
+                artistName=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)!!
+                songUri=it
+               // duration=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
+               // songSize=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong()
+            }
             binding?.uploadImage?.visibility=View.GONE
             binding?.clickPlus?.visibility=View.GONE
 
@@ -131,109 +152,47 @@ class ContentUpload_Fragment : Fragment()
         }
 
         var arraylist=MusicService.songsList
-        CoroutineScope(Dispatchers.Main).launch {
 
-            /*uploadSongs("Trending_Playlist", "Hindi", arraylist)
-             uploadSongs("Trending_Playlist", "Punjabi", arraylist)
-             uploadSongs("Trending_Playlist", "English", arraylist)
+//if(Build.VERSION.SDK_INT<Build.VERSION_CODES.P) {
+    binding?.uploadImage?.setOnClickListener {
 
-             uploadSongs("Top_Charts", "Punjabi_Top10", arraylist)
-             uploadSongs("Top_Charts", "International_Top10", arraylist)
-             uploadSongs("Top_Charts", "Hindi_Top10", arraylist)
-             uploadSongs("Top_Charts", "US_Top10", arraylist)
-             uploadSongs("Top_Charts", "Dance_Top10", arraylist)
-             uploadSongs("Top_Charts", "Hindi_90s", arraylist)
-
-             uploadSongs("Moods&Collection", "Romance", arraylist)
-             uploadSongs("Moods&Collection", "90s&Early2000s", arraylist)
-             uploadSongs("Moods&Collection", "Party", arraylist)
-             uploadSongs("Moods&Collection", "Hip-Hop", arraylist)
-             uploadSongs("Moods&Collection", "Bhakti", arraylist)
-             uploadSongs("Moods&Collection", "Music", arraylist)  //that are enough
-            uploadSongs("Moods&Collection", "Heals", arraylist)
-            uploadSongs("Moods&Collection", "Workout", arraylist)
-
-            uploadSongs("Featured_Artists", "The_Weekend", arraylist)
-            uploadSongs("Featured_Artists", "Diljit Dosanjh", arraylist)
-            uploadSongs("Featured_Artists", "Justin Beiber", arraylist)
-            uploadSongs("Featured_Artists", "Ammy Virk", arraylist)
-            uploadSongs("Featured_Artists", "Kygo", arraylist)
-            uploadSongs("Featured_Artists", "Ap Dhillon", arraylist)
-            uploadSongs("Featured_Artists", "Camila Cabillo", arraylist)
-            uploadSongs("Featured_Artists", "Dilpreet Dhillon", arraylist)
-            uploadSongs("Featured_Artists", "Jason Derulo", arraylist)
-            uploadSongs("Featured_Artists", "Shivjot", arraylist)
-            uploadSongs("Featured_Artists", "Tones and I", arraylist)
-            uploadSongs("Featured_Artists", "Gurnaam Bhullar", arraylist)
-            uploadSongs("Featured_Artists", "Dua Lipa", arraylist)
-            uploadSongs("Featured_Artists", "Maninder Buttar", arraylist)
-            uploadSongs("Featured_Artists", "Annie Marie", arraylist)
-            uploadSongs("Featured_Artists", "Amrit Maan", arraylist)
-            uploadSongs("Featured_Artists", "Post_Malone", arraylist)
-            uploadSongs("Featured_Artists", "Neha_Kakkar", arraylist)
-            uploadSongs("Featured_Artists", "Kishore Kumar", arraylist)
-            uploadSongs("Featured_Artists", "Arijit_Singh", arraylist)
-
-            uploadSongs("Discover", "RETRO", arraylist)
-            uploadSongs("Discover", "INDIE", arraylist)
-            uploadSongs("Discover", "DANCE", arraylist)
-            uploadSongs("Discover", "ROCK", arraylist)
-            uploadSongs("Discover", "EDM", arraylist)
-            uploadSongs("Discover", "KIDS", arraylist)
-            uploadSongs("Discover", "WEDDING", arraylist)
-            uploadSongs("Discover", "GHAZAL", arraylist)
-*/
-
-
+        var i = Intent()
+        i.setType("audio/*")
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
+            i.setAction(Intent.ACTION_PICK)
         }
-
-
-        binding?.uploadImage?.setOnClickListener {
-            var i= Intent()
-            i.setType("audio/*")
-            i.setAction(Intent.ACTION_PICK )
-            luancher.launch(i)
-
+        else {
+            i.setAction(Intent.ACTION_GET_CONTENT)
         }
-        binding?.smallUploadImage?.setOnClickListener {
-            var i= Intent()
-            i.setType("audio/*")
-            i.setAction(Intent.ACTION_PICK )
-            luancher.launch(i)
+        luancher.launch(i)
+        //startActivityForResult(i, 100)
+
+    }
+//}
+
+            binding?.smallUploadImage?.setOnClickListener {
+                var i = Intent()
+                i.setType("audio/*")
+                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
+                    i.setAction(Intent.ACTION_PICK)
+                }
+                else {
+                    i.setAction(Intent.ACTION_GET_CONTENT)
+                }
+                luancher.launch(i)
         }
 
         binding?.uploadButton?.setOnClickListener {
-            var metaDataBuilder=StorageMetadata.Builder()
-          var metaDat=metaDataBuilder.setCustomMetadata("Name",songName).build()
-
-            mRefernce?.child("New Playlist")?.child("New Folder")?.putFile(songUri!!,metaDat)?.addOnSuccessListener {
-                Log.d("YoPo",it.toString()+"HOGYA")
-            }?.addOnProgressListener {
-                binding?.cardViewForHidenView?.visibility=View.VISIBLE
-
-                var doublee=(100*it.bytesTransferred)/it.totalByteCount
-                binding?.progressTextViewUpload?.setText("${doublee.toInt()}%")
-                binding?.progressBarUpload?.setProgress(doublee.toInt())
-
-                binding?.uploadButton?.visibility=View.GONE
-                binding?.progressBarUpload?.visibility=View.VISIBLE
-                binding?.progressTextViewUpload?.visibility=View.VISIBLE
-
-            }?.addOnSuccessListener {
-                binding?.uploadButton?.visibility=View.VISIBLE
-                binding?.cardViewForHidenView?.visibility=View.VISIBLE
-
-                binding?.progressBarUpload?.visibility=View.VISIBLE
-                binding?.progressTextViewUpload?.visibility=View.VISIBLE
-
-
-            }
+            showBottomSheetDialog()
         }
+
+
 
     }  //onViewCreated finshes
 
 
-    suspend fun uploadSongs(playlist:String,folder:String,songsList:ArrayList<Songs>)= withContext(Dispatchers.Default)
+    //for Uploading songs in bunch to firebase Storage
+  /* suspend fun uploadSongs(playlist:String,folder:String,songsList:ArrayList<Songs>)= withContext(Dispatchers.Default)
     {
         for(i in 0..songsList.size)
         {
@@ -260,14 +219,14 @@ class ContentUpload_Fragment : Fragment()
 
                     //
 
-                   /* if (bitmap)
+                   *//**//* if (bitmap)
                     {
                         metaDataBuilder.setCustomMetadata("Bitmap", songsList.get(i).bitmap.toString()
                         )
                     } else
                     {
                         metaDataBuilder.setCustomMetadata("Bitmap", "bitmap")
-                    }*/
+                    }*//**//*
                     try{
                         if(bitmap!=null) {
                             var bitmapstring = encodeBitmapToString(bitmap)
@@ -298,7 +257,7 @@ class ContentUpload_Fragment : Fragment()
                 }
             }
         }
-
+*/
     suspend fun uploadSongs(playlist:String,folder:String,songsList:ArrayList<Songs>,view:View)= withContext(Dispatchers.Default)
     {
        var songs:Songs=songsList.get(0)
@@ -323,6 +282,37 @@ class ContentUpload_Fragment : Fragment()
         }
     }
 
+    fun  uploadASong(playlist:String,folder:String)
+    {
+        var metaDataBuilder=StorageMetadata.Builder()
+        var metaData=metaDataBuilder.setCustomMetadata("Name",songName).build()
+
+        mRefernce?.child(playlist)?.child(folder)?.child(songName)?.putFile(songUri!!,metaData)?.addOnSuccessListener {
+            Log.d("YoPo",it.toString()+"HOGYA")
+        }?.addOnProgressListener {
+            binding?.cardViewForHidenView?.visibility=View.VISIBLE
+
+            var doublee=(100*it.bytesTransferred)/it.totalByteCount
+            binding?.progressTextViewUpload?.setText("${doublee.toInt()}%")
+            binding?.progressBarUpload?.setProgress(doublee.toInt())
+
+            binding?.uploadButton?.visibility=View.GONE
+            binding?.progressBarUpload?.visibility=View.VISIBLE
+            binding?.progressTextViewUpload?.visibility=View.VISIBLE
+
+        }?.addOnSuccessListener {
+            binding?.uploadButton?.visibility=View.VISIBLE
+            binding?.cardViewForHidenView?.visibility=View.VISIBLE
+
+            binding?.progressBarUpload?.visibility=View.VISIBLE
+            binding?.progressTextViewUpload?.visibility=View.VISIBLE
+
+
+        }
+
+
+    }  //function finished
+
     suspend fun encodeBitmapToString(bitmap:Bitmap):String= withContext(Dispatchers.Default)
     {
 
@@ -336,7 +326,212 @@ class ContentUpload_Fragment : Fragment()
         return@withContext bitmapString!!
     }
 
+    fun showBottomSheetDialog() {
+        bottomDialog = BottomSheetDialog(requireContext(), R.style.Theme_Design_BottomSheetDialog)
+        val bottomview = layoutInflater.inflate(
+            R.layout.bottom_sheet_for_contentupload,
+            activity?.findViewById(R.id.mainConstraintLayout),
+            false
+        )
+        bottomDialog.setContentView(bottomview)
 
-}
+        bottomDialog.show()
+
+              uploadOnItemSelected(bottomDialog,"Trending_Playlist")
+             uploadOnItemSelected(bottomDialog,"Top_Charts")
+             uploadOnItemSelected(bottomDialog,"Discover")
+             uploadOnItemSelected(bottomDialog,"Moods&Collection")
+             uploadOnItemSelected(bottomDialog,"Featured_Artists")
+
+    }
+
+        fun uploadOnItemSelected(bottomSheetDialog: BottomSheetDialog, playlist: String) {
+            when (playlist) {
+                "Trending_Playlist" -> {
+
+                    val trendingspinner =
+                        bottomSheetDialog.findViewById<Spinner>(R.id.TrendingSpinner)
+                    trendingspinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                            ) {
+                                Log.d("hello", parent?.selectedItem.toString())
+                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                                // sheet then default selected item will be 1st mean Trending
+                                {
+                                } else {
+                                    if (parent?.selectedItem?.equals(playlist) == true) {
+                                    } else {
+                                        uploadASong(playlist, parent?.selectedItem.toString())
+                                    }
+                                    val itemName: String = parent?.selectedItem.toString()
+                                    bottomSheetDialog.hide()
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                TODO("Not yet implemented")
+                            }
+                        }
+                }
+                "Top_Charts" -> {
+                    val topchartsSpinner =
+                        bottomSheetDialog.findViewById<Spinner>(R.id.topChartsSpinner)
+                    topchartsSpinner?.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                Log.d("hello", parent?.selectedItem.toString())
+                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                                // sheet then default selected item will be 1st mean Trending
+                                {
+                                } else {
+                                    if (parent?.selectedItem?.equals(playlist) == true) {
+                                    } else {
+                                        uploadASong(playlist, parent?.selectedItem.toString())
+                                    }
+                                    val itemName: String = parent?.selectedItem.toString()
+                                    bottomSheetDialog.hide()
+                                }
+                                if (parent?.selectedItem?.equals("English") == true) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        parent?.selectedItem?.toString(),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    bottomSheetDialog.hide()
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                TODO("Not yet implemented")
+                            }
+                        }
+                }
+                "Discover" -> {
+                    val DiscoverSpinner =
+                        bottomSheetDialog.findViewById<Spinner>(R.id.discoverSpinner)
+                    DiscoverSpinner?.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                Log.d("hello", parent?.selectedItem.toString())
+                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                                // sheet then default selected item will be 1st mean Trending
+                                {
+                                } else {
+                                    if (parent?.selectedItem?.equals(playlist) == true) {
+                                    } else {
+                                        uploadASong(playlist, parent?.selectedItem.toString())
+                                    }
+                                    val itemName: String = parent?.selectedItem.toString()
+                                    bottomSheetDialog.hide()
+                                }
+                                if (parent?.selectedItem?.equals("English") == true) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        parent?.selectedItem?.toString(),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    bottomSheetDialog.hide()
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                TODO("Not yet implemented")
+                            }
+                        }
+                }
+                "Moods&Collection" -> {
+                    val MoodsSpinner = bottomSheetDialog.findViewById<Spinner>(R.id.MoodsSpinner)
+                    MoodsSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                Log.d("hello", parent?.selectedItem.toString())
+                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                                // sheet then default selected item will be 1st mean Trending
+                                {   Log.d("SPINNER",parent?.selectedItem.toString()+"1")
+                                } else {
+                                    if (parent?.selectedItem?.equals(playlist) == true) {
+                                        Log.d("SPINNER",parent?.selectedItem.toString()+"2")
+
+                                    } else {
+                                        Log.d("SPINNER",parent?.selectedItem.toString()+"3")
+
+                                        uploadASong("Moods&Collection", parent?.selectedItem.toString()
+                                        )
+                                    }
+                                    val itemName: String = parent?.selectedItem.toString()
+                                    bottomSheetDialog.hide()
+                                }
+                                if (parent?.selectedItem?.equals("English") == true) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        parent?.selectedItem?.toString(),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    bottomSheetDialog.hide()
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                TODO("Not yet implemented")
+                            }
+                        }
+                }
+                "Featured_Artists" -> {
+                    val featuredArtistSpinner =
+                        bottomSheetDialog.findViewById<Spinner>(R.id.featuredArtistSpinner)
+                    featuredArtistSpinner?.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                Log.d("hello", parent?.selectedItem.toString())
+                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                                // sheet then default selected item will be 1st mean Trending
+                                {
+                                } else {
+                                    if (parent?.selectedItem?.equals(playlist) == true) {
+                                    } else {
+                                        uploadASong(playlist, parent?.selectedItem.toString())
+                                    }
+                                    val itemName: String = parent?.selectedItem.toString()
+                                    bottomSheetDialog.hide()
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                TODO("Not yet implemented")
+                            }
+                        }
+                }
+            }
+
+
+        }
+
+    /*override fun onStop() {
+        super.onStop()
+        bottomDialog.hide()
+    }*/
+
+    }
+
+
+
+
+
+
+
     
 

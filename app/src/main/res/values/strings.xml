@@ -6,4 +6,70 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- TODO: Remove or change this placeholder text -->
+
+    <array name="Trending_Playlist">
+        <item>Trending_Playlist</item>
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Punjabi</item>
+    </array>
+    <array name="Discover">
+        <item>Discover</item>
+        <item>DANCE</item>
+        <item>ROCK</item>
+        <item>RETRO</item>
+        <item>INDIE</item>
+        <item>GHAZAL</item>
+        <item>EDM</item>
+        <item>KIDS</item>
+        <item>WEDDING</item>
+        <item>GHAZAL</item>
+
+    </array>
+    <array name="Featured_Artists">
+        <item>Featured_Artists</item>
+        <item>The_Weekend</item>
+        <item>Diljit Dosanjh</item>
+        <item>Justin Beiber</item>
+        <item>Ammy Virk</item>
+        <item>Kygo</item>
+        <item>Ap Dhillo</item>
+        <item>Camila Cabillo</item>
+        <item>Dilpreet Dhillon</item>
+        <item>Jason Derulo</item>
+        <item>Shivjot</item>
+        <item>Tones and I</item>
+        <item>Gurnaam Bhullar</item>
+        <item>Dua Lipa</item>
+        <item>Maninder Buttar</item>
+        <item>Annie Marie</item>
+        <item>Amrit Maan</item>
+        <item>Post_Malone</item>
+        <item>Neha_Kakkar</item>
+        <item>Kishore Kumar</item>
+        <item>Arijit_Singh</item>
+    </array>
+    <array name="MoodsandCollection">
+        <item>Moods&amp;Collection</item>
+        <item>Romance</item>
+        <item>90s&amp;Early2000s</item>
+        <item>Party</item>
+        <item>Hip-Hop</item>
+        <item>Bhakti</item>
+        <item>Music</item>
+        <item>Heals</item>
+        <item>Workout</item>
+
+    </array>
+    <array name="Top_Charts">
+        <item>Top_Charts</item>
+        <item>Dance_Top10</item>
+        <item>Hindi_90s</item>
+        <item>Hindi_Top10</item>
+        <item>International_Top10</item>
+        <item>Punjabi_Top10</item>
+        <item>US_Top10</item>
+
+
+    </array>
 </resources>

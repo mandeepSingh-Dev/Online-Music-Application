@@ -76,20 +76,6 @@ class OnlineMusicFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         mRefernce = storage?.getReference()
 
-      /*  //delete this after
-        mRefernce?.child("New playplay")?.child("Folder")?.metadata?.addOnSuccessListener {
-            var bitmapStr=it.getCustomMetadata("Bitmap")
-
-            var byteArray=Base64.decode(bitmapStr,Base64.DEFAULT)
-            var finalBitmap=BitmapFactory.decodeByteArray(byteArray,0,byteArray.size)
-
-            _binding?.includeTrendingPunjabi?.songImage1?.setImageBitmap(finalBitmap)
-        }*/
-
-
-
-        //set up of artists images and etc..
-        setUp_FeaturedArtists(view)
         //set color of status bar..
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             activity?.window?.statusBarColor = resources.getColor(R.color.Dark_Red, null)
@@ -100,22 +86,49 @@ class OnlineMusicFragment : Fragment() {
         //getting arraylist of local(device) songs from Music Service..
         var arrlist: ArrayList<Songs>? = MusicService.songsList
 
+        //setUp_TrendingFolder(arrlist!!)
 
-        if (arrlist != null) {
-            //   CoroutineScope(IO).launch {
+
+        //coroutine scope to launch suspend function in it
+        CoroutineScope(Dispatchers.IO).launch {
+
+            //these fubnctions to set data in Trending Layouts
+            set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "English",_binding?.includeTrendingEnglish!!)
+            set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "Punjabi", _binding?.includeTrendingPunjabi!!)
+            set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "Hindi", _binding?.includeTrendingHindi!!)
+
+            //these fubnctions to set data in Trending Layouts
+             setImageToFeaturedArtists("Featured_Artists", "Ammy Virk","ammyvirkimage.jpg","Ammy Virk",_binding?.includeAmmyVirk!!,view)
+            setImageToFeaturedArtists("Featured_Artists", "Amrit Maan","amrit_maan-6.jpg","Amrit Maan",_binding?.includeAmritMaan!!,view)
+            setImageToFeaturedArtists("Featured_Artists", "Annie Marie","annie marie.jpg","Annie Marie",_binding?.includeAnnieMarie!!,view)
+            setImageToFeaturedArtists("Featured_Artists", "Ap Dhillon","AP-dhillon-wallpapers-7.jpg","Ap Dhillon",_binding?.includeApdhillon!!,view)
+            setImageToFeaturedArtists("Featured_Artists", "Arijit_Singh","arijit singh.jpg","Arijit Singh",_binding?.includeArijitSingh!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Camila Cabillo","camilla cabillo.jpg","Camila Cabillo",_binding?.includeCamilacabillo!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Diljit Dosanjh","Diljit-Dosanjh13.jpg","Diljit Dosanjh",_binding?.includeDiljitDosanjh!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Dilpreet Dhillon","dilpreet dhilon.jpg","Dilpreet Dhillon",_binding?.includeDilpreetdhillon!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Dua Lipa","dua lipa.jpg","Dua Lipa",_binding?.includeDuaLipa!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Gurnaam Bhullar","gurnaam bhullar.jpg","Gurnaam Bhullar",_binding?.includeGurnaamBhullar!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Jason Derulo","jason derulo.jpg","Jason Derulo",_binding?.includeJasonDerulo!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Justin Beiber","justin beiber.jpg","Justin Beiber",_binding?.includeJustinBeiber!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Kishore Kumar","kishore_Kumar.jpg","Kishore Kumar",_binding?.includeKishoreKumar!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Kygo","kygo.jpg","Kygo",_binding?.includeKygo!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Maninder Buttar","maninder.jpg","Maninder Buttar",_binding?.includeManinderButtar!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Neha_Kakkar","neha kakkr.jpg","Neha Kakkar",_binding?.includeNehaKakkar!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Post_Malone","post malone.jpg","Post Malone",_binding?.includePostMalone!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Shivjot","shivjot.jpg","Shivjot",_binding?.includeShivjot!!,view)
+            setImageToFeaturedArtists("Featured_Artists","The_Weekend","the weekend.jpg","The Weeknd",_binding?.includeTheWeeknd!!,view)
+            setImageToFeaturedArtists("Featured_Artists","Tones and I","tones and i.jpg","Tones and I",_binding?.includeTonesAndI!!,view)
+        }
+
+
             Log.d("YOTHREAD", Thread.currentThread().toString())
-            setDataToRecentPlayedList(arrlist, view)
-            setDataToNewReleasePlayedList(arrlist, view)
-            // }
-        }
+            setDataToRecentPlayedList(arrlist!!, view)
+            setDataToNewReleasePlayedList(arrlist!!, view)
 
 
-        //for setting Trending layout & its data
-        if (arrlist != null) {
-            setUp_TrendingFolder(arrlist)
-        }
 
-        //for setting Top Charts Folders(include layouts)
+
+       //setting Top Charts Folders(include layouts)
         setUp_TopChartsFolder(view)
         //for setting Top Charts Folders(include layouts)
 
@@ -123,20 +136,8 @@ class OnlineMusicFragment : Fragment() {
         setUp_DiscoverFolders(view)
         setUp_MoodFolders(view)
 
-        //coroutine scope to launch suspend function in it
 
-          CoroutineScope(Dispatchers.Main).launch{
-        set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "Punjabi", _binding?.includeTrendingPunjabi!!)
-              set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "English", _binding?.includeTrendingEnglish!!)
-              set_Arraylist_ToTrendingLayouts(mRefernce!!, "Trending_Playlist", "Hindi", _binding?.includeTrendingHindi!!)
 
-          }
-        /* includeEnglishTrendingLayout.background =
-            resources.getDrawable(R.drawable.gradient_includetrending_eng, null)
-        includePunjabiTrendingLayout.background =
-            resources.getDrawable(R.drawable.gradient_includetrending_punjabi)
-        includeHindiTrendingLayout.background =
-            resources.getDrawable(R.drawable.gradient_includetrending_hindi, null)*/
 
     }  //onViewClosed
 
@@ -171,7 +172,7 @@ class OnlineMusicFragment : Fragment() {
     }
 
 
-    //function to setUp Trending folders(include layouts)
+   /* //function to setUp Trending folders(include layouts)
     fun setUp_TrendingFolder(arrlist: ArrayList<Songs>) {
 
 
@@ -199,7 +200,7 @@ class OnlineMusicFragment : Fragment() {
             _binding?.includeTrendingPunjabi?.songName4?.setText(arrlist.get(3).songName)
             _binding?.includeTrendingPunjabi?.songName5?.setText(arrlist.get(4).songName)
         }
-    }
+    }*/
 
     //function to setUp Top Charts folders(include layouts)
     fun setUp_TopChartsFolder(view: View) {
@@ -306,7 +307,7 @@ class OnlineMusicFragment : Fragment() {
             var list = it.items
             for (i in 0..list.size - 1) {
                 list.get(i).metadata.addOnSuccessListener {
-                    Log.d("NAMEFIREEE",it.getCustomMetadata("SongName")!!)
+                   // Log.d("NAMEFIREEE",it.getCustomMetadata("SongName")!!)
                     var songName=it.getCustomMetadata("SongName")!!
                     var artist:String=it.getCustomMetadata("Artist")!!
                     var bitmapstr:String=it.getCustomMetadata("Bitmap")!!
@@ -352,7 +353,16 @@ class OnlineMusicFragment : Fragment() {
                 }//for loop closed
              }
 
-                } //class finished here
+    suspend fun setImageToFeaturedArtists(playlist:String,folder:String,imageName:String,artistName:String,layout:FolderFeaturedArtistLayoutBinding,view:View)=
+        withContext(Dispatchers.Default)
+        {
+            mRefernce?.child(playlist)?.child(folder)?.child(imageName)?.downloadUrl?.addOnSuccessListener{
+                Glide.with(view).asBitmap().load(it).into(layout.singerImage)
+                layout.singerName.setText(artistName)
+            }
+        }
+
+} //class finished here
 
 
 
