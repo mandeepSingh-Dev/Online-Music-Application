@@ -95,6 +95,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     View bottomSHEET;
 
     CircleImageView playPauseButton;
+
     ImageView prev_Button;
     ImageView next_Button;
     TextView positionTextview;
@@ -566,8 +567,6 @@ try {
                     });
                 }
             });
-
-
         }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

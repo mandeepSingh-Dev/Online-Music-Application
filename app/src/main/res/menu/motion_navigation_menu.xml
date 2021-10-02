@@ -14,13 +14,20 @@
         android:icon="@drawable/ic_outline_search_24"
         android:enabled="true"
         />
+
+    <item
+        android:id="@+id/library_Fragment"
+        android:title="library"
+        android:icon="@drawable/upload_plus"
+        android:enabled="true"
+        />
+
     <item
         android:id="@+id/contentUpload_Fragment"
-
-        android:title="Library"
-        android:icon="@drawable/ic_outline_library_music_24"
+        android:title="Upload"
+        android:icon="@drawable/ic_baseline_cloud_upload_24"
         android:enabled="true"
-       />
+        />
     <!--android:id="@+id/library_Fragment"
 -->
 </menu>

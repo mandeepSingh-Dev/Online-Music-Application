@@ -673,6 +673,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
+                android:background="@drawable/outline_button"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                app:layout_constraintTop_toBottomOf="@id/discover_LinearLayout"
@@ -681,14 +682,16 @@
                     android:id="@+id/songLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Song Language"
+                    android:text="Upload Songs Online"
                     android:textColor="@color/white"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
-                    android:textSize="20sp"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="25sp"
                     android:fontFamily="@font/baloo_chettan"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
                 <ImageView
                     android:id="@+id/songlang_Icon"
                     android:layout_width="25dp"
@@ -699,7 +702,32 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="15dp"
                     />
+                <!--<TextView
+                    android:id="@+id/contentUploadButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Upload Songs Online"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/baloo_chettan"
+                    app:layout_constraintTop_toBottomOf="@id/songLanguage"
+                    app:layout_constraintLeft_toLeftOf="@id/songLanguage"/>
+                <ImageView
+                    android:id="@+id/uploadSongArrowIcon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                    app:layout_constraintRight_toRightOf="parent"
+                   app:layout_constraintTop_toBottomOf="@id/songlang_Icon"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="15dp"
+                    />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 
 
@@ -712,7 +740,7 @@
             <View
     android:id="@+id/lastView"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="170dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"/>

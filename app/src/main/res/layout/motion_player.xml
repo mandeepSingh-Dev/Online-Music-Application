@@ -216,8 +216,7 @@
 
 
 
-
-        <de.hdodenhof.circleimageview.CircleImageView
+            <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/play_pause_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -249,7 +248,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
-            android:layout_height="59dp"
+            android:layout_height="79dp"
             app:itemIconTint="#E9E6ED"
             app:itemRippleColor="@color/white"
             app:itemIconSize="30dp"

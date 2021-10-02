@@ -32,6 +32,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_pause_circle_filled_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.25833333333333336" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_arrow_249.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_circle_24_float.xml" value="0.2037037037037037" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_play_circle_filled_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.2101851851851852" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_skip_next_24.xml" value="0.25833333333333336" />
@@ -81,10 +82,11 @@
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_content_upload_.xml" value="0.176" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_library_.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_music.xml" value="0.1" />
-        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_offline_music.xml" value="0.2152777777777778" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_offline_music.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music2.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_search_.xml" value="0.2152777777777778" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_songs.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/header_layout.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_items_music.xml" value="0.17114914425427874" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_online_items_fragment.xml" value="0.264" />
@@ -92,7 +94,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_items.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_layout.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/motion_music_layout.xml" value="0.1" />
-        <entry key="..\:/MyApp2/app/src/main/res/layout/motion_player.xml" value="0.16" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/motion_player.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/menu/motion_navigation_menu.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/xml/provider_paths.xml" value="0.21232876712328766" />
       </map>

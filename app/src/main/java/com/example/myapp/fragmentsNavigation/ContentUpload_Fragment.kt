@@ -35,8 +35,10 @@ import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
 import java.io.File
 import android.app.Activity
+import android.media.MediaPlayer
 import androidx.activity.OnBackPressedCallback
 import kotlinx.coroutines.*
+import java.time.Duration
 
 
 class ContentUpload_Fragment : Fragment()
@@ -189,6 +191,9 @@ class ContentUpload_Fragment : Fragment()
         binding?.uploadButton?.setOnClickListener {
             showBottomSheetDialog()
         }
+
+        gettingSongsfromFireBase("Trending_Playlist","English")
+
 
 
 
@@ -545,8 +550,34 @@ class ContentUpload_Fragment : Fragment()
         super.onStop()
         bottomDialog.hide()
     }*/
+    fun gettingSongsfromFireBase(playlist: String,folder: String)
+    {
+        mRefernce?.child(playlist)?.child(folder)?.listAll()?.addOnSuccessListener {
 
+            for(item in it.items)
+            {
+              item.metadata.addOnSuccessListener {
+                  songName=it.getCustomMetadata("SongName").toString()
+                  artistName=it.getCustomMetadata("Artist").toString()
+                  bitmapStr=it.getCustomMetadata("Bitmap").toString()
+                  songSizeStr=it.getCustomMetadata("Size").toString()
+                  durationStr=it.getCustomMetadata("Duration").toString()
+                  songUriStr=it.getCustomMetadata("Uri").toString()
+
+                  Log.d("HEJKKGO",it.getCustomMetadata("SongName").toString())
+
+               }
+
+           }
+            }
+        }
+    lateinit var bitmapStr:String
+    lateinit var songSizeStr:String
+    lateinit var durationStr:String
+    lateinit var songUriStr:String
     }
+
+
 
 
 
