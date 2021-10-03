@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#322D2D"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/songImagee"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/Dark_Red"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+        android:id="@+id/songNamee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Churi"
+        android:textSize="25sp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:fontFamily="@font/baloo_chettan"
+        android:textColor="@color/white"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toRightOf="@id/songImagee"
+        app:layout_constraintTop_toTopOf="@id/songImagee"/>
+    <TextView
+        android:id="@+id/artistNamee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Khan Bhaini,Shipra Goyal"
+        android:textSize="18sp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:fontFamily="@font/kanit_thin"
+        android:textColor="#C5A4A4"
+        app:layout_constraintLeft_toLeftOf="@id/songNamee"
+        app:layout_constraintTop_toBottomOf="@id/songNamee"/>
+
+    <ImageView
+        android:id="@+id/downloadImagee"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_outline_download_24"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/songImagee"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
