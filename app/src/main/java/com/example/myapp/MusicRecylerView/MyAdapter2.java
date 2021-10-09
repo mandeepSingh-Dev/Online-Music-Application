@@ -34,7 +34,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
     @Override
     public MyAdapter2.MyViewHolder2 onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         Log.d("SIIZE",arrayList.size()+"SIZE");
-        View view=LayoutInflater.from(context).inflate(R.layout.list_practise_items,parent,false);
+        View view=LayoutInflater.from(context).inflate(R.layout.list_items_for_songsfragment,parent,false);
         MyViewHolder2 viewHolder=new MyViewHolder2(view);
         return viewHolder;
     }
@@ -95,7 +95,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
         public MyViewHolder2(@NonNull @NotNull View itemView) {
             super(itemView);
             Log.d("SIIZE",arrayList.size()+"SIZE");
-            songName=itemView.findViewById(R.id.songNametext22);
+            songName=itemView.findViewById(R.id.songNamee);
 
         }
     }
