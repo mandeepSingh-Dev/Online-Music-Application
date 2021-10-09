@@ -1,16 +1,24 @@
 package com.example.myapp.MusicRecylerView;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapp.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageMetadata;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,11 +27,13 @@ import java.util.ArrayList;
 public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
 {
 
-    ArrayList<Songs> arrayList;
+    ArrayList<Songs_FireBase> arrayList;
     Context context;
+    LocalBroadcastManager manager;
+    Intent intent;
 
 
-    public MyAdapter2(Context context, ArrayList<Songs> arrayList)
+    public MyAdapter2(Context context, ArrayList<Songs_FireBase> arrayList)
     {
         super();
         this.arrayList=arrayList;
@@ -41,44 +51,40 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
 
     @Override
     public void onBindViewHolder(@NonNull MyAdapter2.MyViewHolder2 holder, int position) {
-        Songs song=arrayList.get(position);
+        Songs_FireBase songs_fireBase=arrayList.get(position);
         Log.d("SIIZE",arrayList.size()+"SIZE");
 
-        String name=song.getSongName();
-        Log.d("MYADAPTER_NNAME",name+"f,lhb");
-        holder.songName.setText(name);
+        manager=LocalBroadcastManager.getInstance(context);
+        intent=new Intent("SENDING_BITMAPSTR");
+
+          songs_fireBase.getStorageMetadataa().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+              @Override
+              public void onSuccess(StorageMetadata storageMetadata) {
+              String name=storageMetadata.getCustomMetadata("SongName");
+              String bitmapstr=storageMetadata.getCustomMetadata("Bitmap");
+              Bitmap bitmap=convertToBitmap(bitmapstr);
+                  holder.songName.setText(name);
+                  holder.songImagee.setImageBitmap(bitmap);
+                  intent.putExtra("BITMAPSTR",bitmapstr);
+                  manager.sendBroadcast(intent);
+              }
+          });
+        /*Log.d("MYADAPTER_NNAME",name+"f,lhb");
+        holder.songName.setText(name);*/
 
     }
-
-   /* @Override
-    public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
-        Songs song=arrayList.get(position);
-        Log.d("SIIZE",arrayList.size()+"SIZE");
-
-        String name=song.getSongName();
-
-        String artist=song.getArtist();
-        Bitmap bitmap=song.getBitmap();
-        Uri uri=song.getSonguri();
-
-        if(!(bitmap ==null))
-        {
-            //Glide.with(context).asBitmap().load(bitmap).into(holder.imageView);
-            holder.imageView.setImageBitmap(bitmap);
-            Log.d("NAMEandBitmap",name+bitmap.toString());
-        }
-        else{
-            holder.imageView.setBackgroundResource(R.drawable.artist_person_icon);
-            Log.d("NAMEandBitmap",name+"kfhvfjk");
-
-        }
-
-        holder.songName.setText(name);
-
-        // holder.artist.setText(artist);
-    }
-
-*/
+    public Bitmap convertToBitmap(String bitmapstr)
+    {
+    Bitmap bitmap1=null;
+    try {
+       // Log.d("bitMAPSTR",bitmapstr);
+        byte[] byteArray = Base64.decode(bitmapstr, Base64.DEFAULT);
+        bitmap1= BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        //Log.d("BITMMAP",bitmap1.toString());
+    }catch (Exception e){}
+//    Log.d("HHELO",bitmap1.toString());
+    return bitmap1;
+}
 
 
     @Override
@@ -91,11 +97,13 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
     public class MyViewHolder2 extends RecyclerView.ViewHolder
     {
         TextView songName;
+        ImageView songImagee;
 
         public MyViewHolder2(@NonNull @NotNull View itemView) {
             super(itemView);
             Log.d("SIIZE",arrayList.size()+"SIZE");
             songName=itemView.findViewById(R.id.songNamee);
+            songImagee=itemView.findViewById(R.id.songImagee);
 
         }
     }

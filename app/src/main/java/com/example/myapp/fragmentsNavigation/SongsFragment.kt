@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -25,6 +26,7 @@ import com.bumptech.glide.Glide
 import com.example.myapp.MusicRecylerView.MyAdapter
 import com.example.myapp.MusicRecylerView.MyAdapter2
 import com.example.myapp.MusicRecylerView.Songs
+import com.example.myapp.MusicRecylerView.Songs_FireBase
 import com.example.myapp.R
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -46,27 +48,43 @@ class SongsFragment : Fragment() {
     var recylrView: RecyclerView? = null
     var adpter:MyAdapter?=null
 
+    var addpter:MyAdapter2?=null
+
+    var songsFireList:ArrayList<Songs_FireBase>?=null
+
+    var toolbarimageview:ImageView?=null
+    var toolbarimageview2:ImageView?=null
+    var toolbarimageview3:ImageView?=null
+    var toolbarimageview4:ImageView?=null
 
 
-var receiver=object: BroadcastReceiver(){
+
+
+
+    var receiver=object: BroadcastReceiver(){
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        if(intent?.action.equals("SENDINGFIRESONGDATA"))
+        if(intent?.action.equals("SENDING_BITMAPSTR"))
         {
+                var bitmapstrr=intent?.getStringExtra("BITMAPSTR")
+            var bitmap=convertToBitmap(bitmapstrr)
+            toolbarimageview?.setImageBitmap(bitmap)
+            toolbarimageview2?.setImageBitmap(bitmap)
+            toolbarimageview3?.setImageBitmap(bitmap)
+            toolbarimageview4?.setImageBitmap(bitmap)
+
 
         }
         else if(intent?.action.equals("SENDING_FIRENAME"))
         {
-            Log.d("JOJOJO","OOOPS"+intent?.getStringExtra("songName"))
-         var arrlist:ArrayList<Songs> = intent?.getSerializableExtra("SERIALLIST") as ArrayList<Songs>
-            Log.d("KFHG",arrlist.get(0).songName)
-            songsList=intent?.getSerializableExtra("SERIALLIST") as ArrayList<Songs>
+           /* Log.d("kfgjkfjkjfk","OOOPS"+intent?.getStringExtra("metasongName"))
+            var str=intent?.getStringExtra("metasongName")
+            songsList?.add(Songs(str))
 
-           val adaapter: MyAdapter2 = MyAdapter2(context,songsList)
-            Log.d("JGHJ",songsList?.get(3)?.songName!!)
-            recylrView?.layoutManager =
-                GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
-            recylrView?.adapter = adaapter
+            //Log.d("LIISTDFDFD",songsList?.get(0)?.songName!!)
+
+            var sognfirelist:ArrayList<Songs_FireBase> = intent?.getSerializableExtra("songFirebaseList") as ArrayList<Songs_FireBase>
+                Log.d("sizeRECIERFIRELIST",songsFireList?.size.toString()+"f;blhf")*/
         }
 
     }
@@ -85,8 +103,9 @@ var receiver=object: BroadcastReceiver(){
     ): View? {
         // Inflate the layout for this fragment
         songsList = ArrayList<Songs>()
+        songsFireList= ArrayList()
         storage = FirebaseStorage.getInstance()
-         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter("SENDING_FIRENAME"))
+         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter("SENDING_BITMAPSTR"))
         return inflater.inflate(R.layout.fragment_songs, container, false)
     }
 
@@ -94,11 +113,18 @@ var receiver=object: BroadcastReceiver(){
         super.onViewCreated(view, savedInstanceState)
 
         recylrView=view.findViewById<RecyclerView>(R.id.songsRecyclerView)
+        toolbarimageview=view.findViewById(R.id.songImageOnToolbar1)
+        toolbarimageview2=view.findViewById(R.id.songImageOnToolbar2)
+        toolbarimageview3=view.findViewById(R.id.songImageOnToolbar3)
+        toolbarimageview4=view.findViewById(R.id.songImageOnToolbar4)
 
-      /*  var bitmapppa = BitmapFactory.decodeResource(resources, R.drawable.album_icon)
-        var imageview = view.findViewById<ImageView>(R.id.songImageOnToolbar)
-        imageview.setImageResource(R.drawable.album_icon)
-*/
+
+
+
+        /*  var bitmapppa = BitmapFactory.decodeResource(resources, R.drawable.album_icon)
+          var imageview = view.findViewById<ImageView>(R.id.songImageOnToolbar)
+          imageview.setImageResource(R.drawable.album_icon)
+  */
         /*  con=true
         LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(Intent("BOOLEAN").putExtra("CON",con))
 */
@@ -129,8 +155,8 @@ var receiver=object: BroadcastReceiver(){
      var size:Long?=null
      var uri: Uri?=null
      var bitmap:Bitmap?=null
-    fun gettingSongsListfromFireBase(playlist: String, folder: String) {
-
+    fun gettingSongsListfromFireBase(playlist: String, folder: String)
+    {
         //initStorageReference(storage!!) //initialization of mReference
          mReference=storage?.getReference()
         var songsListtti = ArrayList<Songs>()
@@ -139,136 +165,30 @@ var receiver=object: BroadcastReceiver(){
         var intent=Intent("SENDING_FIRENAME")
         var manager=LocalBroadcastManager.getInstance(requireContext())
 
-
-        /* songsList.add(Songs("mandeep"))
-        songsList.add(Songs("amardeep"))*/
-
-        //val taskarr= arrayOf<Task<StorageMetadata>>()
-        //val arrlist=ArrayList<Task<ListResult>>()
-
-           // var dfhd = mReference?.child(playlist!!)?.child(folder)?.listAll()
-
-     /*   mReference?.child(playlist)?.child(folder)?.listAll()
-            ?.addOnSuccessListener(object :  OnSuccessListener<ListResult> {
-                override fun onSuccess(p0: ListResult?) {
-                   Log.d("JE BAT",p0?.items?.get(0)?.downloadUrl.toString())
-                }
-            })*/
         var metadatalist=ArrayList<Songs>()
-        mReference?.child(playlist)?.child(folder)?.listAll()
-            ?.addOnSuccessListener(object : OnSuccessListener<ListResult>{
-                override fun onSuccess(p0: ListResult?) {
-                    p0?.items?.forEach {
-
-                        Log.d("HJFGIK", it.downloadUrl.toString() + "dfdf")
-                        songsListtti.add(Songs(it.downloadUrl.toString()))
-                        intent.putExtra("songName",it.downloadUrl.toString())
-
-                        it?.metadata?.addOnSuccessListener(object:OnSuccessListener<StorageMetadata>{
-                            override fun onSuccess(md: StorageMetadata?) {
-                                Log.d("NNNAEM",md?.getCustomMetadata("SongName").toString())
-                            metadatalist.add(Songs(md?.getCustomMetadata("SongName").toString()))
-                            }
-                        })
+        mReference?.child(playlist)?.child(folder)?.listAll()?.addOnSuccessListener(object:OnSuccessListener<ListResult> {
+            override fun onSuccess(listResult: ListResult?) {
+                listResult?.items?.forEach{
+                    songsFireList?.add(Songs_FireBase(it.metadata, it.downloadUrl))
+                  //  Log.d("SIFIRE", songsFireList?.size.toString())
+                   // intent.putExtra("songFirebaseList", songsFireList)
+                   // manager.sendBroadcast(intent)
                     }
+                addpter=MyAdapter2(context,songsFireList)
+                recylrView?.layoutManager =
+                    GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
+                recylrView?.adapter = addpter
 
-                    Log.d("HOHOH",songsListtti.get(0).songName)
-                    intent.putExtra("SERIALLIST",songsListtti)
-                    manager.sendBroadcast(intent)
-                }
-            })
-        var listt:ArrayList<Songs> = ArrayList<Songs>()
-        /* mReference?.child(playlist)?.child(folder)?.listAll()
-            ?.addOnSuccessListener{
-                    Log.d("HJFGIK","dfdf")
-                    it.items.forEach {
+            }
+        })
 
-                        Log.d("HJFGIK", it.downloadUrl.toString() + "dfdf")
-                        songsListtti.add(Songs(it.downloadUrl.toString()))
-                    }
-                Log.d("HOHOH",songsListtti.get(0).songName)
-                activity?.runOnUiThread(object : Runnable{
-                    override fun run() {
-                        var myApter=MyAdapter(requireContext(),songsListtti)
-                        recylrView?.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-                        recylrView?.adapter = myApter
-                    }
-                })
-            }*/
-
-
-
-               /* if(songsListtti.size<14)
-                {
-                    Log.d("HJFghgGIK",songsListtti.get(1).songName+"dfdf")
-
-                }*/
-
-                /*for (i in 0..it.items.size-1) {
-
-                    it.items[i].metadata.addOnSuccessListener { storageMetadata ->
-                         songName = storageMetadata.getCustomMetadata("SongName").toString()
-                         artistName = storageMetadata.getCustomMetadata("Artist").toString()
-                         bitmapStr = storageMetadata.getCustomMetadata("Bitmap").toString()
-                         songSizeStr = storageMetadata.getCustomMetadata("Size").toString()
-                         durationStr = storageMetadata.getCustomMetadata("Duration").toString()
-                         songUriStr = storageMetadata.getCustomMetadata("Uri").toString()
-                         creationDate = storageMetadata.creationTimeMillis
-                         duration = durationStr?.toLong()
-                         size = songSizeStr?.toLong()
-
-
-                         bitmap = convertToBitmap(bitmapStr)
-                        Log.d("BMAP", bitmap.toString())
-
-                        Log.d("HEJKKGO", storageMetadata.getCustomMetadata("SongName").toString() + folder)
-
-                        it.items[i].downloadUrl.addOnSuccessListener {
-                            //now getting downloadedUri of song 1 by 1
-                            var uri = it
-                        }
-
-                        //if (bitmap != null) {
-                        songsList?.add(Songs(songName, bitmap))
-
-                        // } else {
-                        //  songsList?.add(Songs(songName, bitmap))
-                        // }
-                        Log.d("HEJJJUIGUY", songName!!)
-                        Log.d("HEuyuyuJJJUIGUY", songsList?.get(i)?.songName!!)
-
-
-                    }
-                    //getting metadata of song 1 by 1
-
-
-                } //for loop finishes here
-                //Log.d("SONGLISTT",songsList?.get(0)?.songName!!)
-                var adapter1 = MyAdapter(context, songsList)
-
-                 recylrView?.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-                recylrView?.adapter = adapter1
-*/
-
-    }
-
-
-    // Log.d("HDFH",listResult.get(0).name)
-
-        //Log.d("SONGLISTT",songsList.get(0).songName)
-
-     //gettingSon.....function closed
-
-
-    fun initStorageReference(storage1: FirebaseStorage) {
-        mReference = storage1.reference
-    }
+    } //gettingSon.....function closed
 
     fun convertToBitmap(bitmapStr: String?): Bitmap? {
         var bitmap1:Bitmap?=null
         try {
-            Log.d("bitMAPSTR",bitmapStr!!)
-            val byteArray = Base64.decode(bitmapStr!!, Base64.NO_WRAP)
+           // Log.d("bitMAPSTR",bitmapStr!!)
+            val byteArray = Base64.decode(bitmapStr!!, Base64.DEFAULT)
              bitmap1= BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
             Log.d("BITMMAP",bitmap1.toString())
         }catch (e:Exception){}
