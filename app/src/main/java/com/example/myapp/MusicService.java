@@ -25,6 +25,7 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.util.Log;
 import android.util.Size;
 
 import androidx.annotation.Nullable;
@@ -499,6 +500,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                             Bitmap bitmap = null;
                             if (bytes != null) {
                                 bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);   //geting Bitmap
+                                Log.d("Hjei",bitmap.toString());
                             } else {
                                 bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.music_two_tonne);
                             }
@@ -507,6 +509,8 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                             Long duration = Long.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
                             //getting last modified date of file/song.
                             Long dateModified=fileAL.get(i).lastModified();
+
+
                             long songSize=fileAL.get(i).length();
                             // now adding data to Arraylist..
                             if (bitmap != null) {

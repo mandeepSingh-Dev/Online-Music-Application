@@ -5,7 +5,7 @@
         android:radius="10dp"/>
     <gradient
         android:startColor="@android:color/transparent"
-        android:endColor="#731111"
+        android:endColor="@color/Mint_green"
         android:angle="90"
         >
     </gradient>

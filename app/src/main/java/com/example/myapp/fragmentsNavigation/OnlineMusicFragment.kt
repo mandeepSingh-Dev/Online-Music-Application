@@ -43,7 +43,7 @@ import java.io.File
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
-class OnlineMusicFragment : Fragment() {
+class OnlineMusicFragment : Fragment()  {
 
     //view binding
     private var _binding: FragmentOnlineMusicBinding? = null
@@ -78,15 +78,13 @@ class OnlineMusicFragment : Fragment() {
 
         //set color of status bar..
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            activity?.window?.statusBarColor = resources.getColor(R.color.Dark_Red, null)
+            activity?.window?.statusBarColor = resources.getColor(R.color.Mint_green, null)
         } else {
-            activity?.window?.statusBarColor = resources.getColor(R.color.Dark_Red)
+            activity?.window?.statusBarColor = resources.getColor(R.color.Mint_green)
 
         }
         //getting arraylist of local(device) songs from Music Service..
         var arrlist: ArrayList<Songs>? = MusicService.songsList
-
-        //setUp_TrendingFolder(arrlist!!)
 
 
         //coroutine scope to launch suspend function in it
@@ -135,6 +133,7 @@ class OnlineMusicFragment : Fragment() {
         // CtentResolver resolver=getContext().getContentResolver();
         setUp_DiscoverFolders(view)
         setUp_MoodFolders(view)
+
 
 
 
@@ -210,6 +209,10 @@ class OnlineMusicFragment : Fragment() {
         _binding?.includeUSTop10?.languageTextviewFolder?.setText("US")
         _binding?.includeDanceTop10?.languageTextviewFolder?.setText("Dance")
         _binding?.includeHindi90sTop10?.languageTextviewFolder?.setText("Hindi 90s")
+
+        _binding?.includeEnglishTop10?.languageTextviewFolder?.setOnClickListener{
+
+        }
 
     }
 

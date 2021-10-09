@@ -119,6 +119,8 @@ public class SignUpActivity extends AppCompatActivity {
                     //will encode byteArray to String and decode to byteArray
                     String bitmapstr = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 
+                    Log.d("SIGNUPBITMAP",bitmapstr);
+
                     SharedPreferences sharedPreferences = getSharedPreferences("demo", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("bitmap", bitmapstr);
@@ -382,7 +384,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
             Bitmap bitmapp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
+              Log.d("SongupBitmap",bitmapp.toString());
 
             runOnUiThread(new Runnable() {
                 @Override

@@ -30,7 +30,7 @@
             >
             <!--app:title="BullDog"-->
             <ImageView
-                android:id="@+id/imageOnToolBar"
+                android:id="@+id/songImageOnToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
@@ -54,15 +54,31 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/songsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:clipToPadding="false"/>
-    <com.getbase.floatingactionbutton.FloatingActionButton
+        <ProgressBar
+            android:id="@+id/progresses"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center"
+            />
+
+</LinearLayout>
+
+
+
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,5 +92,6 @@
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 

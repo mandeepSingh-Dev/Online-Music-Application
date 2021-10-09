@@ -29,6 +29,10 @@
         android:name="com.example.myapp.fragmentsNavigation.ContentUpload_Fragment"
         android:label="fragment_content_upload_"
         tools:layout="@layout/fragment_content_upload_" />
+    <fragment
+        android:id="@+id/songsFragment"
+        android:name="com.example.myapp.fragmentsNavigation.SongsFragment"
+        android:label="SongsFragment" />
 
 
 </navigation>

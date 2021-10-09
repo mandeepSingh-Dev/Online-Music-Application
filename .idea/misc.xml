@@ -38,6 +38,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_skip_next_24.xml" value="0.25833333333333336" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_baseline_skip_previous_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_myimage_background.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_outline_download_24.xml" value="0.20925925925925926" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_outline_library_music_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_outline_search_24.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/ic_outline_settings_24.xml" value="0.20925925925925926" />
@@ -88,8 +89,10 @@
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_search_.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_songs.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/header_layout.xml" value="0.1" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/list_items_for_songsfragment.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_items_music.xml" value="0.17114914425427874" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_online_items_fragment.xml" value="0.264" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/list_practise_items.xml" value="0.21232876712328766" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_Layout.xml" value="0.21232876712328766" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_items.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_trending_layout.xml" value="0.264" />

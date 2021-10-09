@@ -38,6 +38,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
     @NotNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        Log.d("SIIZE",arrayList.size()+"SIZE");
         View view=LayoutInflater.from(context).inflate(R.layout.list_items_music,parent,false);
           MyViewHolder viewHolder=new MyViewHolder(view);
           return viewHolder;
@@ -46,30 +47,38 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
     @Override
     public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
         Songs song=arrayList.get(position);
+        Log.d("SIIZE",arrayList.size()+"SIZE");
 
-        Uri uri=song.getSonguri();
         String name=song.getSongName();
+
        String artist=song.getArtist();
        Bitmap bitmap=song.getBitmap();
-
+        Uri uri=song.getSonguri();
 
       if(!(bitmap ==null))
         {
-            holder.imageView.setImageBitmap(bitmap);
+            //Glide.with(context).asBitmap().load(bitmap).into(holder.imageView);
+           holder.imageView.setImageBitmap(bitmap);
+           Log.d("NAMEandBitmap",name+bitmap.toString());
         }
       else{
-          holder.imageView.setBackgroundResource(R.drawable.musictwo_ton);
+          holder.imageView.setBackgroundResource(R.drawable.artist_person_icon);
+          Log.d("NAMEandBitmap",name+"kfhvfjk");
+
       }
 
-        holder.songName.setText(name);
-      holder.artist.setText(artist);
+          holder.songName.setText(name);
 
-        }
+         // holder.artist.setText(artist);
+    }
+
 
 
 
     @Override
     public int getItemCount() {
+        Log.d("SIIZE",arrayList.size()+"SIZE");
+
         return arrayList.size();
     }
 
@@ -83,6 +92,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
 
         public MyViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+            Log.d("SIIZE",arrayList.size()+"SIZE");
             imageView=itemView.findViewById(R.id.thumbnailimageview);
             songName=itemView.findViewById(R.id.songNametext);
             artist=itemView.findViewById(R.id.artistNametext);

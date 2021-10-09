@@ -155,6 +155,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
 
 
+
         View view=inflater.inflate(R.layout.fragment_offline_music, container, false);
         recyclerView = view.findViewById(R.id.rexcylerviewMusic);
         return view;

@@ -2,8 +2,12 @@ package com.example.myapp.MusicRecylerView;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Songs
+import java.io.Serializable;
+
+public class Songs implements Serializable, Parcelable
 {
     Uri songuri;
     String songName;
@@ -13,11 +17,19 @@ public class Songs
     String dateModified;
     long songSize;
 
+    public Songs(){}
+    public Songs(String songName)
+    {
+        this.songName=songName;
+    }
+
+
     public Songs(String dateModified,String songName){
         this.dateModified=dateModified;
         this.songName=songName;
     }
-    public Songs(String songName, String artist,Uri songuri){
+    public Songs(String songName, String artist,Uri songuri)
+    {
         this.songName=songName;
         this.artist=artist;
         this.songuri=songuri;
@@ -45,15 +57,38 @@ public class Songs
     }
 
     //for pracise only
-    public Songs(String songName)
+    public Songs(String songName,Bitmap bitmap)
     {
         this.songName=songName;
+        this.bitmap=bitmap;
     }
 
 
+    protected Songs(Parcel in) {
+        songuri = in.readParcelable(Uri.class.getClassLoader());
+        songName = in.readString();
+        artist = in.readString();
+        if (in.readByte() == 0) {
+            duration = null;
+        } else {
+            duration = in.readLong();
+        }
+        bitmap = in.readParcelable(Bitmap.class.getClassLoader());
+        dateModified = in.readString();
+        songSize = in.readLong();
+    }
 
+    public static final Creator<Songs> CREATOR = new Creator<Songs>() {
+        @Override
+        public Songs createFromParcel(Parcel in) {
+            return new Songs(in);
+        }
 
-
+        @Override
+        public Songs[] newArray(int size) {
+            return new Songs[size];
+        }
+    };
 
     public void setArtist(String artist) {
         this.artist = artist;
@@ -105,5 +140,26 @@ public class Songs
 
     public long getSongSize() {
         return songSize;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(songuri, flags);
+        dest.writeString(songName);
+        dest.writeString(artist);
+        if (duration == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(duration);
+        }
+        dest.writeParcelable(bitmap, flags);
+        dest.writeString(dateModified);
+        dest.writeLong(songSize);
     }
 }

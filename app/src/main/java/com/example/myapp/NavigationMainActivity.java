@@ -1,11 +1,14 @@
 package com.example.myapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +31,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,13 +41,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.List;
 
 public class NavigationMainActivity extends AppCompatActivity {
     Toolbar toolbar;
     DrawerLayout drawerLayout;
-    NavigationView  navigationView;
+    NavigationView navigationView;
     public static Handler mHandler;
 
     FirebaseAuth firebaseAuth;
@@ -60,6 +69,20 @@ BottomNavigationView bottomNavigationMotion;
 
 
 LocalBroadcastManager broadcastManager;
+    private FirebaseStorage storage;
+    private StorageReference mReference;
+    private String songName;
+    private String artistName;
+    private String bitmapStr;
+    private String songSizeStr;
+    private String durationStr;
+    private String songUriStr;
+    private long creationDate;
+    private long duration;
+    private long size;
+    private Uri urii;
+
+
 
 
     @Override
@@ -71,6 +94,10 @@ LocalBroadcastManager broadcastManager;
 
         setContentView(R.layout.activity_navigation_main);
 
+        storage=FirebaseStorage.getInstance();
+
+
+       // gettingSongsListfromFireBase("Trending_Playlist", "Punjabi");
 
         if (getActionBar() != null) {
             getSupportActionBar().hide();
@@ -94,7 +121,6 @@ LocalBroadcastManager broadcastManager;
 
         /*intenttt=new Intent(this, MusicService.class);
         startService(intenttt);*/
-        broadcastManager = LocalBroadcastManager.getInstance(this);
 
         // View bottomLayoutView= findViewById(R.id.bottom_sheet_Include);
         // SeekBar seekBar=bottomLayoutView.findViewById(R.id.seekbar);
@@ -126,7 +152,8 @@ LocalBroadcastManager broadcastManager;
 
         } catch (Exception e) {
         }
-          }else{Toast.makeText(this,"User not logged",Toast.LENGTH_SHORT).show();}
+          }else{
+              Toast.makeText(this,"User not logged",Toast.LENGTH_SHORT).show();}
 
 
         //getting list of emails from realtime datbase
@@ -188,7 +215,7 @@ LocalBroadcastManager broadcastManager;
 
     }// onCreate closed here
     //MyHandler class for receivemessage from musicFragment..
-    public static class MyHandler extends Handler
+    public static class MyHandler extends android.os.Handler
     {
 
         @Override
@@ -201,6 +228,73 @@ LocalBroadcastManager broadcastManager;
 
         }
     }
+
+    public void gettingSongsListfromFireBase( String playlist, String folder)
+    {
+        initStorageReference(storage);  //initialization of mReference
+     LocalBroadcastManager manager=  LocalBroadcastManager.getInstance(NavigationMainActivity.this);
+        mReference.child(playlist).child(folder).listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+
+            @Override
+            public void onSuccess(ListResult listResult) {
+
+                List<StorageReference> list = listResult.getItems();
+
+                for (int i = 0; i < list.size() - 1; i++) {
+                    list.get(i).getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+                        @Override
+                        public void onSuccess(StorageMetadata storageMetadata) {
+
+                            songName = storageMetadata.getCustomMetadata("SongName").toString();
+                            artistName = storageMetadata.getCustomMetadata("Artist").toString();
+                            bitmapStr = storageMetadata.getCustomMetadata("Bitmap").toString();
+                            songSizeStr = storageMetadata.getCustomMetadata("Size").toString();
+                            durationStr = storageMetadata.getCustomMetadata("Duration").toString();
+                            songUriStr = storageMetadata.getCustomMetadata("Uri").toString();
+                            creationDate = storageMetadata.getCreationTimeMillis();
+
+                            duration = Long.parseLong(durationStr);
+                            size = Long.parseLong(songSizeStr);
+                            // bitmap=convertToBitmap(bitmapStr)
+
+
+
+                            Intent intent=new Intent("SENDINGFIRESONGDATA");
+                            intent.putExtra("songName",songName);
+                          manager.sendBroadcast(intent);
+
+
+
+                            Log.d("HEJKKGO", storageMetadata.getCustomMetadata("SongName").toString() + folder);
+                        }
+                    });
+                    //getting metadata of song 1 by 1
+                    list.get(i).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri)
+                        {//now getting downloadedUri of song 1 by 1
+                            urii = uri;
+                        }
+                    });
+
+                } //for loop finishes here
+            }
+        });
+    } //gettingSon.....function closed
+
+
+    public void  initStorageReference(FirebaseStorage storage1)
+    {
+        mReference = storage1.getReference();
+    }
+
+    public Bitmap convertToBitmap(String bitmapStr)
+    {
+        byte[] byteArray= Base64.decode(bitmapStr,Base64.DEFAULT);
+         Bitmap bitmap= BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+        return bitmap;
+    }
+
 
 
     @Override
@@ -220,6 +314,8 @@ LocalBroadcastManager broadcastManager;
 
         }
     }
+
+
 
 
 }
