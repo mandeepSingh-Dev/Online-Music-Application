@@ -78,6 +78,8 @@
         android:layout_height="match_parent"
         android:id="@+id/navdrawer"
         android:fitsSystemWindows="true"
+        app:menu="@menu/nav_drawer_items"
+        android:background="@drawable/gradient_navdarwer"
         app:headerLayout="@layout/header_layout"
         android:layout_gravity="start"
         />

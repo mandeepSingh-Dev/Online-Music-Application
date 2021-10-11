@@ -17,9 +17,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.NavArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -35,10 +40,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 class SongsFragment : Fragment() {
@@ -56,6 +58,7 @@ class SongsFragment : Fragment() {
     var toolbarimageview2:ImageView?=null
     var toolbarimageview3:ImageView?=null
     var toolbarimageview4:ImageView?=null
+    var toolbar:Toolbar?=null
 
 
 
@@ -67,11 +70,14 @@ class SongsFragment : Fragment() {
         if(intent?.action.equals("SENDING_BITMAPSTR"))
         {
                 var bitmapstrr=intent?.getStringExtra("BITMAPSTR")
-            var bitmap=convertToBitmap(bitmapstrr)
-            toolbarimageview?.setImageBitmap(bitmap)
-            toolbarimageview2?.setImageBitmap(bitmap)
-            toolbarimageview3?.setImageBitmap(bitmap)
-            toolbarimageview4?.setImageBitmap(bitmap)
+
+            CoroutineScope(Dispatchers.Main).launch {
+                var bitmap = convertToBitmap(bitmapstrr)
+                toolbarimageview?.setImageBitmap(bitmap)
+                toolbarimageview2?.setImageBitmap(bitmap)
+                toolbarimageview3?.setImageBitmap(bitmap)
+                toolbarimageview4?.setImageBitmap(bitmap)
+            }
 
 
         }
@@ -96,11 +102,7 @@ class SongsFragment : Fragment() {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         songsList = ArrayList<Songs>()
         songsFireList= ArrayList()
@@ -112,35 +114,33 @@ class SongsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recylrView=view.findViewById<RecyclerView>(R.id.songsRecyclerView)
-        toolbarimageview=view.findViewById(R.id.songImageOnToolbar1)
-        toolbarimageview2=view.findViewById(R.id.songImageOnToolbar2)
-        toolbarimageview3=view.findViewById(R.id.songImageOnToolbar3)
-        toolbarimageview4=view.findViewById(R.id.songImageOnToolbar4)
+       var animation = AnimationUtils.loadAnimation(context, R.anim.opening_anim)
+        var rootLayout=view.findViewById<CoordinatorLayout>(R.id.songFragmentRootLay)
+        rootLayout.animation=animation
 
 
+        recylrView = view.findViewById<RecyclerView>(R.id.songsRecyclerView)
+        toolbarimageview = view.findViewById(R.id.songImageOnToolbar1)
+        toolbarimageview2 = view.findViewById(R.id.songImageOnToolbar2)
+        toolbarimageview3 = view.findViewById(R.id.songImageOnToolbar3)
+        toolbarimageview4 = view.findViewById(R.id.songImageOnToolbar4)
 
+        toolbar = view.findViewById<Toolbar>(R.id.toolbarSongsFragment)
+        if (arguments != null) {
+            var playlist = arguments?.get("Playlist").toString()
+            var folder = arguments?.getString("Folder").toString()
+            toolbar?.setTitle(folder)
 
-        /*  var bitmapppa = BitmapFactory.decodeResource(resources, R.drawable.album_icon)
-          var imageview = view.findViewById<ImageView>(R.id.songImageOnToolbar)
-          imageview.setImageResource(R.drawable.album_icon)
-  */
-        /*  con=true
-        LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(Intent("BOOLEAN").putExtra("CON",con))
-*/
-       // recylrView = view.findViewById(R.id.songsRecyclerView)
-        Log.d("JHJDF","LKH")
-        gettingSongsListfromFireBase("Trending_Playlist", "English")
-        /* if(songsList!=null) {
-            var adapter = MyAdapter(requireContext(), songsList)
-            recylrView.layoutManager =
-                GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-            recylrView.adapter = adapter
+            CoroutineScope(Dispatchers.Main).launch {
+                gettingSongsListfromFireBase(playlist, folder)
+            }
         }
-        Log.d("jopo",songsList?.get(0)?.songName!!)*/
-
+        else{
+            toolbar?.setTitle("Music")
+        }
 
     }
+
 
     var storage: FirebaseStorage? = null
     var mReference: StorageReference? = null
@@ -155,17 +155,16 @@ class SongsFragment : Fragment() {
      var size:Long?=null
      var uri: Uri?=null
      var bitmap:Bitmap?=null
-    fun gettingSongsListfromFireBase(playlist: String, folder: String)
+
+    suspend fun gettingSongsListfromFireBase(playlist: String ="Trending_Playlist", folder: String="English")= withContext(Dispatchers.Main)
     {
         //initStorageReference(storage!!) //initialization of mReference
          mReference=storage?.getReference()
-        var songsListtti = ArrayList<Songs>()
-        Log.d("JHJDF",mReference.toString()+storage.toString())
 
-        var intent=Intent("SENDING_FIRENAME")
-        var manager=LocalBroadcastManager.getInstance(requireContext())
 
-        var metadatalist=ArrayList<Songs>()
+
+
+
         mReference?.child(playlist)?.child(folder)?.listAll()?.addOnSuccessListener(object:OnSuccessListener<ListResult> {
             override fun onSuccess(listResult: ListResult?) {
                 listResult?.items?.forEach{
@@ -175,8 +174,7 @@ class SongsFragment : Fragment() {
                    // manager.sendBroadcast(intent)
                     }
                 addpter=MyAdapter2(context,songsFireList)
-                recylrView?.layoutManager =
-                    GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
+                recylrView?.layoutManager = GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
                 recylrView?.adapter = addpter
 
             }
@@ -184,7 +182,7 @@ class SongsFragment : Fragment() {
 
     } //gettingSon.....function closed
 
-    fun convertToBitmap(bitmapStr: String?): Bitmap? {
+   suspend fun convertToBitmap(bitmapStr: String?): Bitmap?= withContext(Dispatchers.Default) {
         var bitmap1:Bitmap?=null
         try {
            // Log.d("bitMAPSTR",bitmapStr!!)
@@ -193,8 +191,8 @@ class SongsFragment : Fragment() {
             Log.d("BITMMAP",bitmap1.toString())
         }catch (e:Exception){}
         Log.d("HHELO",bitmap1.toString())
-    return bitmap1
-    }
+    return@withContext bitmap1
+   }
 
 
 }

@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,9 +52,10 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyAdapter2.MyViewHolder2 holder, int position) {
+    public void onBindViewHolder(@NonNull MyAdapter2.MyViewHolder2 holder,int position) {
         Songs_FireBase songs_fireBase=arrayList.get(position);
         Log.d("SIIZE",arrayList.size()+"SIZE");
+        int positiondup=position;
 
         manager=LocalBroadcastManager.getInstance(context);
         intent=new Intent("SENDING_BITMAPSTR");
@@ -65,8 +68,12 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
               Bitmap bitmap=convertToBitmap(bitmapstr);
                   holder.songName.setText(name);
                   holder.songImagee.setImageBitmap(bitmap);
-                  intent.putExtra("BITMAPSTR",bitmapstr);
-                  manager.sendBroadcast(intent);
+                  if(positiondup==0)
+                  {
+                      intent.putExtra("BITMAPSTR",bitmapstr);
+                    manager.sendBroadcast(intent);
+
+                  }
               }
           });
         /*Log.d("MYADAPTER_NNAME",name+"f,lhb");
@@ -104,6 +111,9 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
             Log.d("SIIZE",arrayList.size()+"SIZE");
             songName=itemView.findViewById(R.id.songNamee);
             songImagee=itemView.findViewById(R.id.songImagee);
+
+            Animation animation= AnimationUtils.loadAnimation(context,R.anim.opening_anim);
+            itemView.setAnimation(animation);
 
         }
     }

@@ -3,6 +3,10 @@ plugins {
     id 'kotlin-android'
 }
 apply plugin: 'com.google.gms.google-services'
+apply plugin: "androidx.navigation.safeargs"
+
+
+
 
 android {
     compileSdkVersion 30

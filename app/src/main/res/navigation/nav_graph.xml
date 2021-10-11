@@ -7,32 +7,65 @@
         android:id="@+id/onlineMusicFragment"
         android:name="com.example.myapp.fragmentsNavigation.OnlineMusicFragment"
         android:label="fragment_online_music"
-        tools:layout="@layout/fragment_online_music" />
+        tools:layout="@layout/fragment_online_music" >
+        <action
+            android:id="@+id/action_onlineMusicFragment_to_search_Fragment"
+            app:destination="@id/search_Fragment" />
+        <action
+            android:id="@+id/action_onlineMusicFragment_to_songsFragment"
+            app:destination="@id/songsFragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/OfflineMusicFragment"
         android:name="com.example.myapp.fragmentsNavigation.OfflineMusicFragment"
         android:label="fragment_wallp"
-        tools:layout="@layout/fragment_offline_music" ></fragment>
+        tools:layout="@layout/fragment_offline_music" >
+        <action
+            android:id="@+id/action_OfflineMusicFragment_to_onlineMusicFragment2"
+            app:destination="@id/onlineMusicFragment" />
+    </fragment>
     <fragment
         android:id="@+id/search_Fragment"
         android:name="com.example.myapp.fragmentsNavigation.Search_Fragment"
         android:label="fragment_search_"
-        tools:layout="@layout/fragment_search_" />
+        tools:layout="@layout/fragment_search_" >
+        <action
+            android:id="@+id/action_search_Fragment_to_library_Fragment"
+            app:destination="@id/library_Fragment" />
+    </fragment>
     <fragment
         android:id="@+id/library_Fragment"
         android:name="com.example.myapp.fragmentsNavigation.Library_Fragment"
         android:label="fragment_library_"
-        tools:layout="@layout/fragment_library_" />
+        tools:layout="@layout/fragment_library_" >
+        <action
+            android:id="@+id/action_library_Fragment_to_contentUpload_Fragment"
+            app:destination="@id/contentUpload_Fragment" />
+    </fragment>
     <fragment
         android:id="@+id/contentUpload_Fragment"
         android:name="com.example.myapp.fragmentsNavigation.ContentUpload_Fragment"
         android:label="fragment_content_upload_"
-        tools:layout="@layout/fragment_content_upload_" />
+        tools:layout="@layout/fragment_content_upload_" >
+        <action
+            android:id="@+id/action_contentUpload_Fragment_to_songsFragment"
+            app:destination="@id/songsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/songsFragment"
         android:name="com.example.myapp.fragmentsNavigation.SongsFragment"
-        android:label="SongsFragment" />
+        android:label="SongsFragment" >
+        <action
+            android:id="@+id/action_songsFragment_to_OfflineMusicFragment"
+            app:destination="@id/OfflineMusicFragment" />
+
+        <argument
+            android:name="playlist_n_folder_message"
+            app:argType="string"
+            android:defaultValue="English"/>
+    </fragment>
 
 
 </navigation>

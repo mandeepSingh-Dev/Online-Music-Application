@@ -16,6 +16,11 @@ import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -57,11 +62,7 @@ class OnlineMusicFragment : Fragment()  {
     var trendingHindiArraylist: ArrayList<Songs>? = null
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_online_music, container, false)
         _binding = FragmentOnlineMusicBinding.inflate(inflater, container, false)
@@ -84,7 +85,36 @@ class OnlineMusicFragment : Fragment()  {
 
         }
         //getting arraylist of local(device) songs from Music Service..
+
+      //  var fragmentManager=parentFragmentManager
+///        var navHostFragment:NavHostFragment=fragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+
+
+
         var arrlist: ArrayList<Songs>? = MusicService.songsList
+
+        //getting nav controller to navigate to other fragments..
+        val navController:NavController = Navigation.findNavController(view)
+
+
+        _binding?.includeTrendingEnglish?.rootLayoutTrending?.setOnClickListener {
+            var bundle =Bundle()
+           bundle.putString("Playlist","Trending_Playlist")
+           bundle.putString("Folder","English")
+           navController.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
+       }
+        _binding?.includeTrendingPunjabi?.rootLayoutTrending?.setOnClickListener {
+            var bundle =Bundle()
+            bundle.putString("Playlist","Trending_Playlist")
+            bundle.putString("Folder","Punjabi")
+            navController.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
+        }
+        _binding?.includeTrendingHindi?.rootLayoutTrending?.setOnClickListener {
+            var bundle =Bundle()
+            bundle.putString("Playlist","Trending_Playlist")
+            bundle.putString("Folder","Hindi")
+            navController.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
+        }
 
 
         //coroutine scope to launch suspend function in it
@@ -116,15 +146,12 @@ class OnlineMusicFragment : Fragment()  {
             setImageToFeaturedArtists("Featured_Artists","Shivjot","shivjot.jpg","Shivjot",_binding?.includeShivjot!!,view)
             setImageToFeaturedArtists("Featured_Artists","The_Weekend","the weekend.jpg","The Weeknd",_binding?.includeTheWeeknd!!,view)
             setImageToFeaturedArtists("Featured_Artists","Tones and I","tones and i.jpg","Tones and I",_binding?.includeTonesAndI!!,view)
+            Log.d("YOTHREAD", Thread.currentThread().toString())
         }
 
-
-            Log.d("YOTHREAD", Thread.currentThread().toString())
+        Log.d("YOTHREAD", Thread.currentThread().toString())
             setDataToRecentPlayedList(arrlist!!, view)
             setDataToNewReleasePlayedList(arrlist!!, view)
-
-
-
 
        //setting Top Charts Folders(include layouts)
         setUp_TopChartsFolder(view)
@@ -133,10 +160,6 @@ class OnlineMusicFragment : Fragment()  {
         // CtentResolver resolver=getContext().getContentResolver();
         setUp_DiscoverFolders(view)
         setUp_MoodFolders(view)
-
-
-
-
 
     }  //onViewClosed
 
@@ -305,6 +328,11 @@ class OnlineMusicFragment : Fragment()  {
     suspend fun set_Arraylist_ToTrendingLayouts(refernce: StorageReference, playlistName: String, folderName: String, view: ListTrendingLayoutBinding) = withContext(Dispatchers.Default)
     {
 
+        activity?.runOnUiThread {
+            view.InLanguageTextView.setText("In "+folderName +"(15)")
+
+        }
+        //getting five five  songs for every tredning playlist
         refernce?.child(playlistName)?.child(folderName)?.listAll()?.addOnSuccessListener {
 
             var list = it.items
@@ -328,6 +356,7 @@ class OnlineMusicFragment : Fragment()  {
                     {
                         0 -> {view.songName1.setText(songName)
                               view.artistName1.setText(artist)
+
                         view.songImage1.setImageBitmap(finalBitmap)
                         }
                         1 -> {

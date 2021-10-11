@@ -62,7 +62,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
            Log.d("NAMEandBitmap",name+bitmap.toString());
         }
       else{
-          holder.imageView.setBackgroundResource(R.drawable.artist_person_icon);
+          holder.imageView.setBackgroundResource(R.drawable.musictwo_ton);
           Log.d("NAMEandBitmap",name+"kfhvfjk");
 
       }

@@ -26,7 +26,7 @@
    android:id="@+id/upperConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/gradint_for_recylerview"
+    android:background="@drawable/gradent_for_rootlay"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent">

@@ -3,32 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     android:id="@+id/header_ConstraintLayout"
-    android:background="#36718C"
-    android:paddingTop="60dp"
-    android:orientation="vertical"
+    android:background="@drawable/gradient_splashscreen"
+    android:fitsSystemWindows="true"
+    android:orientation="horizontal"
    >
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_gravity="center"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/profile_pic"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="7dp"
         android:src="@drawable/ic_baseline_account_circle_24"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/Profile_Name"
        />
+
     <TextView
         android:id="@+id/Profile_Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-android:layout_marginLeft="10dp"
-android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="7dp"
-        android:text="Name "
-        android:textSize="20dp"
+        android:fontFamily="cursive"
+        android:text="Mandeep Singh"
         android:textColor="@color/white"
+        android:textSize="22dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/profile_pic"
+        app:layout_constraintLeft_toRightOf="@id/profile_pic"
+        app:layout_constraintTop_toTopOf="@id/profile_pic"
 
-      />
+        />
 
 
 

@@ -16,7 +16,7 @@
         />
 
     <item
-        android:id="@+id/songsFragment"
+        android:id="@+id/action_onlineMusicFragment_to_songsFragment"
         android:title="library"
         android:icon="@drawable/upload_plus"
         android:enabled="true"

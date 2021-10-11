@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item
+    android:title="General">
+
+    <menu>
+
+<group
+    android:id="@+id/firstgRUp"
+    android:orderInCategory="1"
+    android:enabled="true"
+    >
+    <item
+        android:id="@+id/offlineSong"
+        android:orderInCategory="1"
+        android:title="Offline Songs"
+        android:icon="@drawable/ringtone_icon"
+        android:iconTint="@color/Mint_green"/>
+
+    <item
+        android:id="@+id/uploadSongs"
+        android:orderInCategory="2"
+        android:title="Upload"
+        android:icon="@drawable/ic_baseline_cloud_upload_24"
+        android:iconTint="@color/Mint_green"/>
+    <item
+        android:id="@+id/download"
+        android:orderInCategory="3"
+        android:title="Downloads"
+        android:icon="@drawable/ic_outline_file_download_24"
+        android:iconTint="@color/Mint_green"/>
+
+    <item
+        android:id="@+id/notification"
+        android:orderInCategory="4"
+        android:title="Notifications"
+        android:icon="@drawable/ic_twotone_circle_notifications_24"
+        android:iconTint="@color/Mint_green"/>
+</group>
+    </menu>
+</item>
+
+    <item
+        android:title="User Details">
+        <menu>
+    <group
+        android:id="@+id/logsignip"
+        android:menuCategory="container"
+        android:enabled="true">
+        <item
+            android:id="@+id/Login"
+            android:orderInCategory="4"
+            android:title="Login"
+            android:icon="@drawable/ic_baseline_login_24"
+            android:iconTint="@color/Mint_green"/>
+
+        <item
+            android:id="@+id/Signup"
+            android:orderInCategory="4"
+            android:title="SignUp"
+            android:icon="@drawable/signup_icon"
+            android:iconTint="@color/Mint_green"/>
+
+    </group>
+        </menu>
+</item>
+
+
+
+</menu>
