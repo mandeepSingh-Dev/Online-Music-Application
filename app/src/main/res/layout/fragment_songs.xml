@@ -3,13 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/songFragmentRootLay"
+    android:id="@+id/songFragmentRootLay1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#322D2D"
     tools:context=".fragmentsNavigation.OfflineMusicFragment"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/songFragmentRootLay"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="#322D2D"
+        tools:context=".fragmentsNavigation.OfflineMusicFragment"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/Appbar"
         android:layout_width="match_parent"
@@ -140,18 +149,21 @@
         android:layout_weight="1"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:clipToPadding="false"/>
-        <ProgressBar
-            android:id="@+id/progresses"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_songs_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        app:lottie_autoPlay="true"
+        android:paddingTop="100dp"
+        android:layout_gravity="center"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/meditate_wait"
+        />
 
     <View
         android:id="@+id/lastView"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:background="#322D2D"
         android:layout_weight="1"
        />
@@ -176,7 +188,7 @@
 
 
 
-
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

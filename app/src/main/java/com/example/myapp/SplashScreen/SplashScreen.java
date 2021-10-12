@@ -39,7 +39,9 @@ public class SplashScreen extends AppCompatActivity {
 
         LottieAnimationView lottieAnimationView = (LottieAnimationView) findViewById(R.id.lottie);
         lottieAnimationView.setImageAssetsFolder("images/");
-        lottieAnimationView.setAnimation(R.raw.girlmusiclottie);
+        //lottieAnimationView.setAnimation(R.raw.girlmusiclottie);
+        lottieAnimationView.setAnimation(R.raw.music_symb_lottie);
+
         lottieAnimationView.loop(false);
         lottieAnimationView.playAnimation();
 

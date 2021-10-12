@@ -10,7 +10,7 @@
         android:layout_width="165dp"
         android:layout_height="90dp"
         android:background="@drawable/shape_universe"
-        android:src="@color/Dark_Red"
+        android:src="#17569E"
         android:scaleType="fitXY"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"

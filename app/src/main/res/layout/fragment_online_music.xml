@@ -37,10 +37,9 @@
         android:text="Music"
         android:fontFamily="@font/baloo_chettan"
         android:textColor="@color/white"
-        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:textSize="40sp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/lottie2"
         app:layout_constraintTop_toTopOf="parent"/>
     <ImageView
         android:id="@+id/setting_Icon"
@@ -50,8 +49,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/upperTitle"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp"
-       />
+        android:layout_marginTop="15dp"/>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie2"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/upperTitle"
+        app:layout_constraintBottom_toBottomOf="@id/upperTitle"
+        app:lottie_autoPlay="true"
+        app:barrierDirection="start"
+        app:lottie_loop="true"
+        app:lottie_colorFilter="@color/white"
+        app:lottie_rawRes="@raw/music_symb_lottie"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
             <!--Recent Played List-->
             <LinearLayout

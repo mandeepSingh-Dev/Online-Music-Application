@@ -27,6 +27,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.myapp.MusicRecylerView.MyAdapter
 import com.example.myapp.MusicRecylerView.MyAdapter2
@@ -59,6 +60,7 @@ class SongsFragment : Fragment() {
     var toolbarimageview3:ImageView?=null
     var toolbarimageview4:ImageView?=null
     var toolbar:Toolbar?=null
+    var lottie:LottieAnimationView?=null
 
 
 
@@ -118,6 +120,8 @@ class SongsFragment : Fragment() {
         var rootLayout=view.findViewById<CoordinatorLayout>(R.id.songFragmentRootLay)
         rootLayout.animation=animation
 
+       lottie=view.findViewById(R.id.lottie_songs_fragment)
+
 
         recylrView = view.findViewById<RecyclerView>(R.id.songsRecyclerView)
         toolbarimageview = view.findViewById(R.id.songImageOnToolbar1)
@@ -173,6 +177,8 @@ class SongsFragment : Fragment() {
                    // intent.putExtra("songFirebaseList", songsFireList)
                    // manager.sendBroadcast(intent)
                     }
+                lottie?.visibility=View.GONE
+
                 addpter=MyAdapter2(context,songsFireList)
                 recylrView?.layoutManager = GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
                 recylrView?.adapter = addpter
