@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.myapp.MainActivity;
 import com.example.myapp.MusicService;
 import com.example.myapp.R;
@@ -35,6 +36,12 @@ public class SplashScreen extends AppCompatActivity {
         mBinding=ActivitySplashScreenBinding.inflate(getLayoutInflater());
         View view=mBinding.getRoot();
         setContentView(view);
+
+        LottieAnimationView lottieAnimationView = (LottieAnimationView) findViewById(R.id.lottie);
+        lottieAnimationView.setImageAssetsFolder("images/");
+        lottieAnimationView.setAnimation(R.raw.girlmusiclottie);
+        lottieAnimationView.loop(false);
+        lottieAnimationView.playAnimation();
 
         //TODO GETTING CUSTOM STYLE PERMISSION FOR STORAGE..
         int permission=ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);

@@ -10,9 +10,9 @@
 
 
 
-    <alpha
+   <!-- <alpha
         android:fromAlpha="0.1"
         android:toAlpha="0.9"
-        android:duration="1300"/>
+        android:duration="1300"/>-->
 
 </set>

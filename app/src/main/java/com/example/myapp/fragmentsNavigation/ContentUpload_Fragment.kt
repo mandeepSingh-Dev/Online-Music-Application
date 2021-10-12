@@ -38,6 +38,7 @@ import android.app.Activity
 import android.media.MediaPlayer
 import androidx.activity.OnBackPressedCallback
 import kotlinx.coroutines.*
+import java.io.FileNotFoundException
 import java.time.Duration
 
 
@@ -95,12 +96,22 @@ class ContentUpload_Fragment : Fragment()
                     songSize =cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
 
                     try {
-                        bitmap = resolver?.loadThumbnail(it, Size(180, 180), null)
-                        Log.d("kdfhj", bitmap.toString())
+                        var bitmap1 = resolver?.loadThumbnail(it, Size(180, 180), null)
+                         bitmap=bitmap1
+                        Log.d("kdfhj", bitmap.toString()+"ui")
+
                         binding?.songImageUpload?.setImageBitmap(bitmap)
 
-                    } catch (e: Exception) {
-                    }
+                   } catch (e: Exception)
+                   {
+                       if(e.javaClass.name.equals("java.io.FileNotFoundException"))
+                           Log.d("occur",e.javaClass.name)
+                       bitmap=BitmapFactory.decodeResource(resources,R.drawable.circle_top)
+                       Log.d("ojdo", bitmap.toString()+"\nj")
+                       binding?.songImageUpload?.setImageBitmap(bitmap)
+
+
+                   }
                 }
             }
             //FOR  BELOW ANDROID Q
@@ -334,12 +345,15 @@ class ContentUpload_Fragment : Fragment()
     {
 
         var bitmapString:String?=null
+        Log.d("BBIITMAP",bitmap.toString())
         try {
             var byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
 
             bitmapString = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
         }catch (e:java.lang.Exception){}
+        Log.d("BBIITMAP",bitmapString!!)
+
         return@withContext bitmapString!!
     }
 
