@@ -37,7 +37,7 @@
             android:layout_height="200dp"
             android:background="@color/Mint_green"
             android:fitsSystemWindows="true"
-            app:contentScrim="#614747"
+            app:contentScrim="#6A1B9A"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             >
             <!--app:title="BullDog"-->
@@ -64,7 +64,6 @@
                         android:id="@+id/songImageOnToolbar1"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                         android:scaleType="centerCrop"
                         android:layout_gravity="center|end"
 
@@ -77,7 +76,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                         android:scaleType="centerCrop"
                         android:layout_gravity="center|end"
 
@@ -97,7 +95,6 @@
                         android:id="@+id/songImageOnToolbar3"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                         android:scaleType="centerCrop"
                         android:layout_gravity="center|end"
 
@@ -112,7 +109,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_gravity="center|end"
-                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                         android:scaleType="centerCrop"
                         android:fitsSystemWindows="true"
                         app:layout_collapseMode="parallax"/>
@@ -126,7 +122,6 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarSongsFragment"
                 android:background="@android:color/transparent"
-                android:foreground="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:title="Music"
@@ -179,8 +174,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="-60dp"
         android:layout_marginRight="16dp"
-        app:fab_colorNormal="#DD0A0A"
-        app:fab_colorPressed="@color/teal_200"
+        app:fab_colorNormal="#D34A20"
+        app:fab_colorPressed="#558B2F"
         app:fab_icon="@drawable/play_notification"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:layout_anchor="@id/Appbar"

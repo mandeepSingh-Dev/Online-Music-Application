@@ -7,6 +7,6 @@
       android:endColor="@color/Green"
       android:angle="90"
       android:startColor="@color/Green"
-      android:centerColor="@color/teal_200"/>
+      android:centerColor="#781F3E"/>
 
 </shape>

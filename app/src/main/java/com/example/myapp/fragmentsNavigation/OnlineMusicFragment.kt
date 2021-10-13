@@ -1,48 +1,30 @@
 package com.example.myapp.fragmentsNavigation
 
-import android.content.ContentResolver
-import android.database.Cursor
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.*
-import android.widget.*
-import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.NavHost
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
-import com.example.myapp.MusicRecylerView.MyAdapter
+import com.example.myapp.MusicRecylerView.MyAdapter3
 import com.example.myapp.MusicRecylerView.Songs
 import com.example.myapp.MusicService
 import com.example.myapp.R
 import com.example.myapp.databinding.FolderFeaturedArtistLayoutBinding
+import com.example.myapp.databinding.FolderLayoutNormalBinding
 import com.example.myapp.databinding.FragmentOnlineMusicBinding
 import com.example.myapp.databinding.ListTrendingLayoutBinding
-import com.google.android.gms.auth.api.signin.internal.Storage
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
+import kotlinx.coroutines.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -60,6 +42,8 @@ class OnlineMusicFragment : Fragment()  {
     var trendingPunjabiArraylist: ArrayList<Songs>? = null
     var trendingEnglishArraylist: ArrayList<Songs>? = null
     var trendingHindiArraylist: ArrayList<Songs>? = null
+
+    var navController:NavController?=null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -86,34 +70,30 @@ class OnlineMusicFragment : Fragment()  {
         }
         //getting arraylist of local(device) songs from Music Service..
 
-      //  var fragmentManager=parentFragmentManager
-///        var navHostFragment:NavHostFragment=fragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-
+        //getting nav controller to navigate to other fragments..
+        navController = Navigation.findNavController(view)
 
 
         var arrlist: ArrayList<Songs>? = MusicService.songsList
-
-        //getting nav controller to navigate to other fragments..
-        val navController:NavController = Navigation.findNavController(view)
 
 
         _binding?.includeTrendingEnglish?.rootLayoutTrending?.setOnClickListener {
             var bundle =Bundle()
            bundle.putString("Playlist","Trending_Playlist")
            bundle.putString("Folder","English")
-           navController.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
+           navController?.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
        }
         _binding?.includeTrendingPunjabi?.rootLayoutTrending?.setOnClickListener {
             var bundle =Bundle()
             bundle.putString("Playlist","Trending_Playlist")
             bundle.putString("Folder","Punjabi")
-            navController.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
+            navController?.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
         }
         _binding?.includeTrendingHindi?.rootLayoutTrending?.setOnClickListener {
             var bundle =Bundle()
             bundle.putString("Playlist","Trending_Playlist")
             bundle.putString("Folder","Hindi")
-            navController.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
+            navController?.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
         }
 
 
@@ -147,7 +127,7 @@ class OnlineMusicFragment : Fragment()  {
             setImageToFeaturedArtists("Featured_Artists","The_Weekend","the weekend.jpg","The Weeknd",_binding?.includeTheWeeknd!!,view)
             setImageToFeaturedArtists("Featured_Artists","Tones and I","tones and i.jpg","Tones and I",_binding?.includeTonesAndI!!,view)
             Log.d("YOTHREAD", Thread.currentThread().toString())
-        }
+       }
 
         Log.d("YOTHREAD", Thread.currentThread().toString())
             setDataToRecentPlayedList(arrlist!!, view)
@@ -169,13 +149,13 @@ class OnlineMusicFragment : Fragment()  {
         arraylist: ArrayList<Songs>,
         view: View
     )/*= withContext(Dispatchers.IO)*/ {
-        val myAdapter: MyAdapter = MyAdapter(context, arraylist)
+        val myAdapter3: MyAdapter3 = MyAdapter3(context, arraylist)
 
         // withContext(Dispatchers.Main){
         val recycelrView = view.findViewById<RecyclerView>(R.id.Recently_RecylerView)
         recycelrView.layoutManager =
             GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
-        recycelrView.adapter = myAdapter
+        recycelrView.adapter = myAdapter3
         // }
     }
 
@@ -184,12 +164,12 @@ class OnlineMusicFragment : Fragment()  {
         arraylist: ArrayList<Songs>,
         view: View
     )/*= withContext(Dispatchers.IO)*/ {
-        val myAdapter: MyAdapter = MyAdapter(context, arraylist)
+        val myAdapter3: MyAdapter3 = MyAdapter3(context, arraylist)
         // withContext(Dispatchers.Main){
         val recycelrView = view.findViewById<RecyclerView>(R.id.newRelease_RecylerView)
         recycelrView.layoutManager =
             GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
-        recycelrView.adapter = myAdapter
+        recycelrView.adapter = myAdapter3
         // }
     }
 
@@ -233,11 +213,41 @@ class OnlineMusicFragment : Fragment()  {
         _binding?.includeDanceTop10?.languageTextviewFolder?.setText("Dance")
         _binding?.includeHindi90sTop10?.languageTextviewFolder?.setText("Hindi 90s")
 
-        _binding?.includeEnglishTop10?.languageTextviewFolder?.setOnClickListener{
 
+        foldersOnClickedListened(_binding?.includeDanceTop10!!,"Top_Charts","Dance_Top10")
+        foldersOnClickedListened(_binding?.includeHindi90sTop10!!,"Top_Charts","Hindi_90s")
+        foldersOnClickedListened(_binding?.includeHindiTop10!!,"Top_Charts","Hindi_Top10")
+        foldersOnClickedListened(_binding?.includeEnglishTop10!!,"Top_Charts","International_Top10")
+        foldersOnClickedListened(_binding?.includePunjabiTop10!!,"Top_Charts","Punjabi_Top10")
+        foldersOnClickedListened(_binding?.includeUSTop10!!,"Top_Charts","US_Top10")
+
+    }
+          //navigate to song list ftragment on click top charts folders
+        fun  foldersOnClickedListened(folderLayoutNormalBinding: FolderLayoutNormalBinding,playlist:String,folder:String)
+        {
+            folderLayoutNormalBinding?.folderLayout.setOnClickListener{
+                var bundle =Bundle()
+                bundle.putString("Playlist",playlist)
+                bundle.putString("Folder",folder)
+                navController?.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
+            }
+
+        }
+    fun  foldersArtistOnClickedListened(folderLayoutNormalBinding: FolderFeaturedArtistLayoutBinding,playlist:String,folder:String)
+    {
+        folderLayoutNormalBinding?.folderLayout.setOnClickListener{
+            var bundle =Bundle()
+            bundle.putString("Playlist",playlist)
+            bundle.putString("Folder",folder)
+            navController?.navigate(R.id.action_onlineMusicFragment_to_songsFragment,bundle)
         }
 
     }
+
+
+
+
+
 
     //function to setUp Top Charts folders(include layouts)
     fun setUp_DiscoverFolders(view: View) {
@@ -262,9 +272,22 @@ class OnlineMusicFragment : Fragment()  {
         _binding?.includeHeals?.languageTextviewFolder?.setText("Heals")
         _binding?.includePunjabiHits?.languageTextviewFolder?.setText("Punjabi Top Hits")
         _binding?.includeWorkout?.languageTextviewFolder?.setText("Workout")
+
+        foldersOnClickedListened(_binding?.includeRomance!!,"Top_Charts","US_Top10")
+        foldersOnClickedListened(_binding?.include90sAndEarly!!,"Top_Charts","US_Top10")
+        foldersOnClickedListened(_binding?.includeParty!!,"Top_Charts","US_Top10")
+        foldersOnClickedListened(_binding?.includeHipHop!!,"Top_Charts","US_Top10")
+        foldersOnClickedListened(_binding?.includeBhakti!!,"Top_Charts","US_Top10")
+        foldersOnClickedListened(_binding?.includeMusic!!,"Top_Charts","US_Top10")
+        foldersOnClickedListened(_binding?.includeHeals!!,"Top_Charts","US_Top10")
+        foldersOnClickedListened(_binding?.includePunjabiHits!!,"Top_Charts","US_Top10")
+        foldersOnClickedListened(_binding?.includeWorkout!!,"Top_Charts","US_Top10")
+
+
     }
 
-    fun setUp_FeaturedArtists(view: View) {
+    //this method is for offline data for artist folders
+   /* fun setUp_FeaturedArtists(view: View) {
         _binding?.includeTheWeeknd?.singerName?.setText("The Weekend")
         _binding?.includeDiljitDosanjh?.singerName?.setText("Diljit Dosanjh")
         _binding?.includeJustinBeiber?.singerName?.setText("The Justin Beiber")
@@ -310,21 +333,9 @@ class OnlineMusicFragment : Fragment()  {
         set_ImageToFeaturedArtist(featured_Artist, "Tones and I", "tones and i.jpg", _binding?.includeTonesAndI!!, view)
 
 
-    }
+    }*/
 
-    fun set_ImageToFeaturedArtist(
-        playlistName: String,
-        artistName: String,
-        imageName: String,
-        layout: FolderFeaturedArtistLayoutBinding,
-        view: View
-    ) {
-        mRefernce?.child(playlistName)?.child(artistName)
-            ?.child(imageName)?.downloadUrl?.addOnSuccessListener {
-                Glide.with(view).asBitmap().load(it).into(layout.singerImage)
-                Log.d("FUNDD", "fnction run secuucfdfully")
-            }
-    }
+
     suspend fun set_Arraylist_ToTrendingLayouts(refernce: StorageReference, playlistName: String, folderName: String, view: ListTrendingLayoutBinding) = withContext(Dispatchers.Default)
     {
 
@@ -385,13 +396,48 @@ class OnlineMusicFragment : Fragment()  {
                 }//for loop closed
              }
 
-    suspend fun setImageToFeaturedArtists(playlist:String,folder:String,imageName:String,artistName:String,layout:FolderFeaturedArtistLayoutBinding,view:View)=
-        withContext(Dispatchers.Default)
-        {
-            mRefernce?.child(playlist)?.child(folder)?.child(imageName)?.downloadUrl?.addOnSuccessListener{
+
+    //this method is for online data for artist folders but this is for
+    fun set_ImageToFeaturedArtist(playlistName: String, artistName: String, imageName: String, layout: FolderFeaturedArtistLayoutBinding, view: View) {
+        mRefernce?.child(playlistName)?.child(artistName)
+            ?.child(imageName)?.downloadUrl?.addOnSuccessListener {
                 Glide.with(view).asBitmap().load(it).into(layout.singerImage)
-                layout.singerName.setText(artistName)
+                Log.d("FUNDD", "fnction run secuucfdfully")
             }
+    }
+    suspend fun setImageToFeaturedArtists(playlist:String, folder:String, imageName:String, artistName:String, artistlayout:FolderFeaturedArtistLayoutBinding, view:View)=
+        withContext(Dispatchers.Main)
+        {
+            mRefernce?.child(playlist)?.child(folder)?.child(imageName)?.downloadUrl?.addOnSuccessListener {
+
+                context?.let { it1 -> Glide.with(it1).asBitmap().load(it).into(artistlayout.singerImage) }
+               // }
+                artistlayout.singerName.setText(artistName)
+                //foldersArtistOnClickedListened(artistlayout,playlist,folder)
+            }
+
+           /* foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Amrit Maan")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Annie Marie")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Ap Dhillon")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Arijit_Singh")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Camila Cabillo")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Diljit Dosanjh")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Dilpreet Dhillon")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Dua Lipa")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Gurnaam Bhullar")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Jason Derulo")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Justin Beiber")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Kishore Kumar")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Kygo")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Maninder Buttar")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Neha_Kakkar")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Post_Malone")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Shivjot")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","The_Weekend")
+            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Tones and I")*/
+
+
+
         }
 
 } //class finished here

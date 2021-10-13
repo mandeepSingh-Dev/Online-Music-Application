@@ -309,10 +309,14 @@ Log.d("soongssize",String.valueOf(songSize));
                                      public void onGenerated(Palette p) {
 
 
+                                         try {
                                              setPaletteColor(p);
                                              motionCardView.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
                                              lastSpace.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
-                                     }
+                                         }catch (Exception e){
+                                             Toast.makeText(context,e.getCause().toString(),Toast.LENGTH_SHORT).show();
+                                         }
+                                         }
 
                                  });
                              }catch (Exception e){}

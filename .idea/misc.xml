@@ -65,6 +65,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_buttons.xml" value="0.2101851851851852" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cardview.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_cover_image.xml" value="0.22962962962962963" />
+        <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_recntlayout.xml" value="0.1787037037037037" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_recyclerview.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_for_trending_page.xml" value="0.22962962962962963" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/shape_imageview.xml" value="0.2" />
@@ -94,6 +95,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_songs.xml" value="0.264" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/header_layout.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_folder_songs_items.xml" value="0.21232876712328766" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/list_item_online.xml" value="0.4915254237288136" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_items_for_songsfragment.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_items_music.xml" value="0.17114914425427874" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/list_online_items_fragment.xml" value="0.264" />

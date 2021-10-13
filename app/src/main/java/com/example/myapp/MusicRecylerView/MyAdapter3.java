@@ -19,15 +19,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
+public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.MyViewHolder>
 {
 
     ArrayList<Songs> arrayList;
     Context context;
 
-     CustomItemClickListener itemClickListener;
+    CustomItemClickListener itemClickListener;
 
-    public MyAdapter(Context context, ArrayList<Songs> arrayList)
+    public MyAdapter3(Context context, ArrayList<Songs> arrayList)
     {
         super();
         this.arrayList=arrayList;
@@ -38,9 +38,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
     @NotNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view=LayoutInflater.from(context).inflate(R.layout.list_items_music,parent,false);
-          MyViewHolder viewHolder=new MyViewHolder(view);
-          return viewHolder;
+        View view=LayoutInflater.from(context).inflate(R.layout.list_item_online,parent,false);
+        MyViewHolder viewHolder=new MyViewHolder(view);
+        return viewHolder;
     }
 
     @Override
@@ -50,7 +50,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
 
             String name = song.getSongName();
 
-            String artist = song.getArtist();
             Bitmap bitmap = song.getBitmap();
             Uri uri = song.getSonguri();
 
@@ -64,7 +63,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
 
             holder.songName.setText(name);
 
-            holder.artist.setText(artist);
         }
     }
 
@@ -84,41 +82,28 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
 
     public class MyViewHolder extends RecyclerView.ViewHolder
     {
-          ImageView imageView;
-          TextView songName;
-          TextView artist;
-          View view;
+        ImageView imageView;
+        TextView songName;
+
+        View view;
 
 
         public MyViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            imageView=itemView.findViewById(R.id.thumbnailimageview);
-            songName=itemView.findViewById(R.id.songNametext);
-            artist=itemView.findViewById(R.id.artistNametext);
+            imageView=itemView.findViewById(R.id.song_img);
+            songName=itemView.findViewById(R.id.song_nme);
             view=itemView;
 
-
-
-
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-           itemClickListener.onItemClick(getAdapterPosition(),imageView);
-
-                }
-            });
         }
     }
-   public void setOnItemClickListener(CustomItemClickListener customItemClickListener)
-   {
-       itemClickListener=customItemClickListener;
-   }
-   public interface CustomItemClickListener
-   {
-     void onItemClick(int position,View imageview);
-   }
+    public void setOnItemClickListener(CustomItemClickListener customItemClickListener)
+    {
+        itemClickListener=customItemClickListener;
+    }
+    public interface CustomItemClickListener
+    {
+        void onItemClick(int position,View imageview);
+    }
 
 
 }

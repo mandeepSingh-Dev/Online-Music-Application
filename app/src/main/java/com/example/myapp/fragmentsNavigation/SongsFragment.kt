@@ -8,6 +8,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.Image
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -61,6 +62,9 @@ class SongsFragment : Fragment() {
     var toolbarimageview4:ImageView?=null
     var toolbar:Toolbar?=null
     var lottie:LottieAnimationView?=null
+    var lottie2:LottieAnimationView?=null
+
+
 
 
 
@@ -106,6 +110,7 @@ class SongsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+
         songsList = ArrayList<Songs>()
         songsFireList= ArrayList()
         storage = FirebaseStorage.getInstance()
@@ -178,6 +183,8 @@ class SongsFragment : Fragment() {
                    // manager.sendBroadcast(intent)
                     }
                 lottie?.visibility=View.GONE
+                lottie2?.visibility=View.GONE
+
 
                 addpter=MyAdapter2(context,songsFireList)
                 recylrView?.layoutManager = GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
