@@ -12,27 +12,27 @@
     android:enabled="true"
     >
     <item
-        android:id="@+id/offlineSong"
+        android:id="@+id/OfflineMusicFragment"
         android:orderInCategory="1"
         android:title="Offline Songs"
         android:icon="@drawable/ringtone_icon"
         android:iconTint="@color/Mint_green"/>
 
     <item
-        android:id="@+id/uploadSongs"
+        android:id="@+id/contentUpload_Fragment"
         android:orderInCategory="2"
         android:title="Upload"
         android:icon="@drawable/ic_baseline_cloud_upload_24"
         android:iconTint="@color/Mint_green"/>
     <item
-        android:id="@+id/download"
+        android:id="@+id/songsFragment"
         android:orderInCategory="3"
         android:title="Downloads"
         android:icon="@drawable/ic_outline_file_download_24"
         android:iconTint="@color/Mint_green"/>
 
     <item
-        android:id="@+id/notification"
+        android:id="@+id/splashScreen"
         android:orderInCategory="4"
         android:title="Notifications"
         android:icon="@drawable/ic_twotone_circle_notifications_24"
@@ -49,14 +49,14 @@
         android:menuCategory="container"
         android:enabled="true">
         <item
-            android:id="@+id/Login"
+            android:id="@+id/mainActivity"
             android:orderInCategory="4"
             android:title="Login"
             android:icon="@drawable/ic_baseline_login_24"
             android:iconTint="@color/Mint_green"/>
 
         <item
-            android:id="@+id/Signup"
+            android:id="@+id/signUpActivity"
             android:orderInCategory="4"
             android:title="SignUp"
             android:icon="@drawable/signup_icon"

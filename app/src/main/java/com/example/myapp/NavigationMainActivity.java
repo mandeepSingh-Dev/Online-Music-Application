@@ -1,15 +1,15 @@
 package com.example.myapp;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,13 +25,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,11 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.List;
 
 public class NavigationMainActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -81,6 +77,8 @@ LocalBroadcastManager broadcastManager;
     private long duration;
     private long size;
     private Uri urii;
+
+    private NavController navController;
 
 
 
@@ -128,6 +126,13 @@ LocalBroadcastManager broadcastManager;
 
 
         //getting motion layout from <include/>
+
+       /* FragmentManager manager=getSupportFragmentManager();
+        NavHostFragment navHostFragment=(NavHostFragment)manager.findFragmentById(R.id.fragmentContainerView);
+        NavController navController=navHostFragment.getNavController();*/
+
+
+
         motionLayout = findViewById(R.id.inccluddeMotion);
         bottomNavigationMotion=motionLayout.findViewById(R.id.bottomNavigation);
 
@@ -206,12 +211,14 @@ LocalBroadcastManager broadcastManager;
 
         }//if block closed..
         else{Toast.makeText(this,"User data not available",Toast.LENGTH_LONG).show();}
-
+          //for navigating the fragments..using NavigationView and BottomNavigationBar
         FragmentManager fragmentManager=getSupportFragmentManager();
         NavHostFragment navHostFragment=(NavHostFragment)fragmentManager.findFragmentById(R.id.fragmentContainerView);
-        NavController controller=navHostFragment.getNavController();
+         navController=navHostFragment.getNavController();
 
-        NavigationUI.setupWithNavController(bottomNavigationMotion,controller);
+        NavigationUI.setupWithNavController(bottomNavigationMotion,navController);
+        NavigationUI.setupWithNavController(navigationView, navController);
+        //onNavigationItemClickListened();
 
     }// onCreate closed here
     //MyHandler class for receivemessage from musicFragment..
@@ -229,7 +236,7 @@ LocalBroadcastManager broadcastManager;
         }
     }
 
-    public void gettingSongsListfromFireBase( String playlist, String folder)
+  /*  public void gettingSongsListfromFireBase( String playlist, String folder)
     {
         initStorageReference(storage);  //initialization of mReference
      LocalBroadcastManager manager=  LocalBroadcastManager.getInstance(NavigationMainActivity.this);
@@ -293,7 +300,7 @@ LocalBroadcastManager broadcastManager;
         byte[] byteArray= Base64.decode(bitmapStr,Base64.DEFAULT);
          Bitmap bitmap= BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
         return bitmap;
-    }
+    }*/
 
 
 
@@ -313,6 +320,85 @@ LocalBroadcastManager broadcastManager;
 
 
         }
+    }
+
+    public void  onNavigationItemClickListened()
+    {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                NavOptions navOptions=new NavOptions.Builder().setPopUpTo(R.id.onlineMusicFragment,true).build();
+
+                switch(item.getItemId())
+                {
+                    case R.id.OfflineMusicFragment :
+                    {
+
+
+                        //here songsFragment id is navHost id of songfragmnet
+                        navController.navigate(R.id.OfflineMusicFragment);
+                        drawerLayout.closeDrawer(Gravity.START);
+                        break;
+
+                    }
+                    case R.id.contentUpload_Fragment :
+                    {
+                        navController.navigate(R.id.contentUpload_Fragment,null,navOptions);
+                        drawerLayout.closeDrawer(Gravity.START);
+
+                        break;
+
+                    }
+                    case R.id.songsFragment :
+                    {
+                        navController.navigate(R.id.songsFragment,null,navOptions);
+                        drawerLayout.closeDrawer(Gravity.START);
+
+
+                        break;
+
+                    }
+                    case R.id.splashScreen :
+                    {
+                        navController.navigate(R.id.splashScreen,null,navOptions);
+                        Toast.makeText(NavigationMainActivity.this, "No Activity Assigned", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(Gravity.START);
+
+                        break;
+
+                    }
+                    case R.id.mainActivity :
+                    {
+                        navController.navigate(R.id.mainActivity,null,navOptions);
+                        drawerLayout.closeDrawer(Gravity.START);
+
+
+                        break;
+
+                    }
+                    case R.id.signUpActivity :
+                    {
+                        navController.navigate(R.id.signUpActivity,null,navOptions);
+                        drawerLayout.closeDrawer(Gravity.START);
+
+                        break;
+
+                    }
+                    default:
+                        {
+                            Toast.makeText(NavigationMainActivity.this, "Deafult Cond", Toast.LENGTH_SHORT).show();
+                            drawerLayout.closeDrawer(Gravity.START);
+                        }
+
+                }
+               // drawerLayout.closeDrawer(Gravity.CENTER);
+                //  return true;
+
+                return false;
+            }
+        });
+
     }
 
 

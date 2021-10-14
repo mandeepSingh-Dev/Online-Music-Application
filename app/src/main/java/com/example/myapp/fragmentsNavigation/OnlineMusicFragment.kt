@@ -1,14 +1,19 @@
 package com.example.myapp.fragmentsNavigation
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Base64
 import android.util.Log
 import android.view.*
+import android.view.Gravity.START
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,6 +27,8 @@ import com.example.myapp.databinding.FolderFeaturedArtistLayoutBinding
 import com.example.myapp.databinding.FolderLayoutNormalBinding
 import com.example.myapp.databinding.FragmentOnlineMusicBinding
 import com.example.myapp.databinding.ListTrendingLayoutBinding
+import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.*
@@ -44,6 +51,8 @@ class OnlineMusicFragment : Fragment()  {
     var trendingHindiArraylist: ArrayList<Songs>? = null
 
     var navController:NavController?=null
+    var navigationView:NavigationView?=null
+    var drawerLayout: DrawerLayout? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -68,11 +77,16 @@ class OnlineMusicFragment : Fragment()  {
             activity?.window?.statusBarColor = resources.getColor(R.color.Mint_green)
 
         }
+
+        navigationView=activity?.findViewById(R.id.navdrawer)
+        navigationView?.setBackgroundColor(Color.WHITE)
+       // onNavigationItemClickListened()
+      //  drawerLayout = activity?.findViewById<DrawerLayout>(R.id.drawer)
+
         //getting arraylist of local(device) songs from Music Service..
 
         //getting nav controller to navigate to other fragments..
         navController = Navigation.findNavController(view)
-
 
         var arrlist: ArrayList<Songs>? = MusicService.songsList
 
@@ -273,15 +287,16 @@ class OnlineMusicFragment : Fragment()  {
         _binding?.includePunjabiHits?.languageTextviewFolder?.setText("Punjabi Top Hits")
         _binding?.includeWorkout?.languageTextviewFolder?.setText("Workout")
 
-        foldersOnClickedListened(_binding?.includeRomance!!,"Top_Charts","US_Top10")
-        foldersOnClickedListened(_binding?.include90sAndEarly!!,"Top_Charts","US_Top10")
-        foldersOnClickedListened(_binding?.includeParty!!,"Top_Charts","US_Top10")
-        foldersOnClickedListened(_binding?.includeHipHop!!,"Top_Charts","US_Top10")
-        foldersOnClickedListened(_binding?.includeBhakti!!,"Top_Charts","US_Top10")
-        foldersOnClickedListened(_binding?.includeMusic!!,"Top_Charts","US_Top10")
-        foldersOnClickedListened(_binding?.includeHeals!!,"Top_Charts","US_Top10")
-        foldersOnClickedListened(_binding?.includePunjabiHits!!,"Top_Charts","US_Top10")
-        foldersOnClickedListened(_binding?.includeWorkout!!,"Top_Charts","US_Top10")
+        foldersOnClickedListened(_binding?.includeRomance!!,"Moods&Collection","Romance")
+        foldersOnClickedListened(_binding?.include90sAndEarly!!,"Moods&Collection","90s&Early2000s")
+        foldersOnClickedListened(_binding?.includeParty!!,"Moods&Collection","Party")
+        foldersOnClickedListened(_binding?.includeHipHop!!,"Moods&Collection","Hip-Hop")
+        foldersOnClickedListened(_binding?.includeBhakti!!,"Moods&Collection","Bhakti")
+        foldersOnClickedListened(_binding?.includeMusic!!,"Moods&Collection","Music")
+        foldersOnClickedListened(_binding?.includeHeals!!,"Moods&Collection","Heals")
+        foldersOnClickedListened(_binding?.includePunjabiHits!!,"Moods&Collection","Workout")
+        foldersOnClickedListened(_binding?.includeWorkout!!,"Moods&Collection","Workout")
+
 
 
     }
@@ -413,32 +428,56 @@ class OnlineMusicFragment : Fragment()  {
                 context?.let { it1 -> Glide.with(it1).asBitmap().load(it).into(artistlayout.singerImage) }
                // }
                 artistlayout.singerName.setText(artistName)
-                //foldersArtistOnClickedListened(artistlayout,playlist,folder)
+                foldersArtistOnClickedListened(artistlayout,playlist,folder)
             }
 
-           /* foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Amrit Maan")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Annie Marie")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Ap Dhillon")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Arijit_Singh")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Camila Cabillo")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Diljit Dosanjh")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Dilpreet Dhillon")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Dua Lipa")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Gurnaam Bhullar")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Jason Derulo")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Justin Beiber")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Kishore Kumar")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Kygo")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Maninder Buttar")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Neha_Kakkar")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Post_Malone")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Shivjot")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","The_Weekend")
-            foldersArtistOnClickedListened(artistlayout,"Featured_Artists","Tones and I")*/
-
-
-
         }
+
+    /* fun  onNavigationItemClickListened()
+            {
+                navigationView?.setNavigationItemSelectedListener {
+                    return@setNavigationItemSelectedListener when(it.itemId)
+                    {
+               R.id.offlineSong -> {
+                  navController?.navigate(R.id.action_onlineMusicFragment_to_OfflineMusicFragment)
+                  // drawerLayout?.closeDrawer(Gravity.CENTER)
+
+                     true
+                }
+                R.id.uploadSongs ->
+                {
+                    Toast.makeText(context, "uploadSongs Songs", Toast.LENGTH_SHORT).show()
+                   true
+                }
+                R.id.download ->
+                {
+                    Toast.makeText(context, "download Songs", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.notification ->
+                {
+                    Toast.makeText(context, "notification Songs", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.Login ->
+                {
+                    Toast.makeText(context, "Login Songs", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.Signup ->
+                {
+                    Toast.makeText(context, "Signup Songs", Toast.LENGTH_SHORT).show()
+                     true
+                }
+                else -> {
+                     false
+                }
+
+
+            }
+        }
+    }*/
+
 
 } //class finished here
 
