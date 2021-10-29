@@ -314,7 +314,7 @@ Log.d("soongssize",String.valueOf(songSize));
                                              motionCardView.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
                                              lastSpace.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
                                          }catch (Exception e){
-                                             Toast.makeText(context,e.getCause().toString(),Toast.LENGTH_SHORT).show();
+                                             //Toast.makeText(context,e.getCause().toString(),Toast.LENGTH_SHORT).show();
                                          }
                                          }
 

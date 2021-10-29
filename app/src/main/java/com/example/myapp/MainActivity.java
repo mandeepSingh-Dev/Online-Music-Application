@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     TextInputLayout textInputLayoutpassword;
     ProgressBar progressBar;
 
+
     FirebaseDatabase database;
     DatabaseReference mReference;
 
@@ -144,8 +145,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-
 
     }  //onCreate Closed...
 

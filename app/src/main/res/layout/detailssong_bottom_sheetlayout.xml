@@ -18,211 +18,211 @@
         android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-          <ImageView
-              android:id="@+id/upperMiniLine"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-              android:layout_gravity="center"
-              android:src="@drawable/ic_baseline_linear_scale_24"
-              android:layout_marginTop="2dp"/>
-       <ImageView
-           android:id="@+id/songImageBottomSheet"
-           android:layout_width="150dp"
-           android:layout_height="150dp"
-           android:layout_marginTop="10dp"
-           android:layout_gravity="center"
-           android:src="@drawable/photu"/>
-        <TextView
-            android:id="@+id/songNamebottomsheet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Binding Glow"
-            android:layout_marginTop="15dp"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:singleLine="true"
-            android:ellipsize="end"/>
-        <TextView
-            android:id="@+id/artistbottomsheet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Binding Glow"
-            android:textSize="13sp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/white" />
-
-
-
         <LinearLayout
-            android:id="@+id/artistLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="27dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
             <ImageView
-                android:id="@+id/artist_iconImageview"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/artist_person_icon"/>
+                android:id="@+id/upperMiniLine"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_linear_scale_24"
+                android:layout_marginTop="2dp"/>
+            <ImageView
+                android:id="@+id/songImageBottomSheet"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:src="@drawable/photu"/>
             <TextView
-                android:id="@+id/artist_textview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|start"
-                android:layout_marginLeft="15dp"
-                android:text="Artist: Tarsem Jassar(DJJOHAL.COMM)"
-                android:ellipsize="end"
+                android:id="@+id/songNamebottomsheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Binding Glow"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="15sp"
                 android:singleLine="true"
-                android:textColor="@color/white"/>
+                android:ellipsize="end"/>
+            <TextView
+                android:id="@+id/artistbottomsheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Binding Glow"
+                android:textSize="13sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white" />
+
+
+
+            <LinearLayout
+                android:id="@+id/artistLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/artist_iconImageview"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/artist_person_icon"/>
+                <TextView
+                    android:id="@+id/artist_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginLeft="15dp"
+                    android:text="Artist: Tarsem Jassar(DJJOHAL.COMM)"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/albumLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:id="@+id/album_iconImageview"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="20dp"
+
+                    android:src="@drawable/album_icon"/>
+                <TextView
+                    android:id="@+id/album_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginLeft="15dp"
+                    android:text="Album: Happiness(DJJOHAL.COMM)"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/DurationLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:id="@+id/Duration_iconImageview"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="20dp"
+
+                    android:src="@drawable/duration_icon"/>
+                <TextView
+                    android:id="@+id/Duration_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginLeft="15dp"
+                    android:text="3:35"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/songSizelayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:id="@+id/songSize_iconImageview"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="20dp"
+
+                    android:src="@drawable/ic_baseline_crop_square_24"/>
+                <TextView
+                    android:id="@+id/songSize_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginLeft="15dp"
+                    android:text="8 mb"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/setAsRingtoneLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:id="@+id/ringtone_iconImageview"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="20dp"
+
+                    android:src="@drawable/ringtone_icon"/>
+                <TextView
+                    android:id="@+id/ringtone_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginLeft="15dp"
+                    android:text="set as ringtone"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shareAudioFileLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:id="@+id/share_iconImageview"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="20dp"
+
+                    android:src="@drawable/ic_baseline_share_24"/>
+                <TextView
+                    android:id="@+id/share_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|start"
+                    android:layout_marginLeft="15dp"
+                    android:text="Share song file "
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/albumLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
-            <ImageView
-                android:id="@+id/album_iconImageview"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="20dp"
-
-                android:src="@drawable/album_icon"/>
-            <TextView
-                android:id="@+id/album_textview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|start"
-                android:layout_marginLeft="15dp"
-                android:text="Album: Happiness(DJJOHAL.COMM)"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/white"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/DurationLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
-            <ImageView
-                android:id="@+id/Duration_iconImageview"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="20dp"
-
-                android:src="@drawable/duration_icon"/>
-            <TextView
-                android:id="@+id/Duration_textview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|start"
-                android:layout_marginLeft="15dp"
-                android:text="3:35"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/white"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/songSizelayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
-            <ImageView
-                android:id="@+id/songSize_iconImageview"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="20dp"
-
-                android:src="@drawable/ic_baseline_crop_square_24"/>
-            <TextView
-                android:id="@+id/songSize_textview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|start"
-                android:layout_marginLeft="15dp"
-                android:text="8 mb"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/white"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-        android:id="@+id/setAsRingtoneLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp">
-        <ImageView
-            android:id="@+id/ringtone_iconImageview"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="20dp"
-
-            android:src="@drawable/ringtone_icon"/>
-        <TextView
-            android:id="@+id/ringtone_textview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center|start"
-            android:layout_marginLeft="15dp"
-            android:text="set as ringtone"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textColor="@color/white"/>
-
-    </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/shareAudioFileLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
-            <ImageView
-                android:id="@+id/share_iconImageview"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="20dp"
-
-                android:src="@drawable/ic_baseline_share_24"/>
-            <TextView
-                android:id="@+id/share_textview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|start"
-                android:layout_marginLeft="15dp"
-                android:text="Share song file "
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/white"/>
-
-        </LinearLayout>
-        <View
-    android:layout_width="match_parent"
-    android:layout_height="30dp"/>
-
-    </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

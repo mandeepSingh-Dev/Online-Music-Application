@@ -220,6 +220,11 @@ LocalBroadcastManager broadcastManager;
         NavigationUI.setupWithNavController(navigationView, navController);
         //onNavigationItemClickListened();
 
+        if(firebaseUser!=null && firebaseUser.getEmail()!=null)
+        {
+          // Toast.makeText(NavigationMainActivity.this,navigationView.getMenu().getItem(1).toString(),Toast.LENGTH_SHORT).show();
+        }
+
     }// onCreate closed here
     //MyHandler class for receivemessage from musicFragment..
     public static class MyHandler extends android.os.Handler
@@ -304,6 +309,7 @@ LocalBroadcastManager broadcastManager;
 
 
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onBackPressed() {
         long endState=motionLayout.getEndState();
@@ -312,14 +318,16 @@ LocalBroadcastManager broadcastManager;
         //if(endState==2131361981L)
         if(endState==motionLayout.getCurrentState()) {
             motionLayout.transitionToStart();
-
-
         }
-            else{
+        else if(drawerLayout.isOpen())
+        {
+            drawerLayout.closeDrawer(Gravity.START);
+        }
+        else{
             super.onBackPressed();
-
-
         }
+
+
     }
 
     public void  onNavigationItemClickListened()
@@ -387,7 +395,7 @@ LocalBroadcastManager broadcastManager;
                     }
                     default:
                         {
-                            Toast.makeText(NavigationMainActivity.this, "Deafult Cond", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NavigationMainActivity.this, "Default Condition", Toast.LENGTH_SHORT).show();
                             drawerLayout.closeDrawer(Gravity.START);
                         }
 

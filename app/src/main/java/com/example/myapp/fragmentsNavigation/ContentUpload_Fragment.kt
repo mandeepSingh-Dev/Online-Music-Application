@@ -37,6 +37,7 @@ import java.io.File
 import android.app.Activity
 import android.media.MediaPlayer
 import androidx.activity.OnBackPressedCallback
+import com.example.myapp.StorageReferenceSingleton
 import kotlinx.coroutines.*
 import java.io.FileNotFoundException
 import java.time.Duration
@@ -148,7 +149,7 @@ class ContentUpload_Fragment : Fragment()
         // Inflate the layout for this fragment
            binding=FragmentContentUploadBinding.inflate(inflater,container,false)
         storage= FirebaseStorage.getInstance()
-        mRefernce=storage?.getReference()
+        mRefernce= StorageReferenceSingleton().getStroageReference()
 
        // return inflater.inflate(R.layout.fragment_content_upload_, container, false)
     return binding?.root

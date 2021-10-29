@@ -15,9 +15,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
-<!--
-    android:src="@drawable/imagindragons"
--->
+    <!--
+        android:src="@drawable/imagindragons"
+    -->
 
 
     <TextView
@@ -30,7 +30,7 @@
         android:textAllCaps="true"
         android:textColor="#FFFFFF"
         app:layout_constraintLeft_toLeftOf="@id/folder_image"
-  app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="10dp"/>
 

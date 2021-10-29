@@ -7,7 +7,6 @@
     <menu>
 
 <group
-    android:id="@+id/firstgRUp"
     android:orderInCategory="1"
     android:enabled="true"
     >
@@ -45,7 +44,6 @@
         android:title="User Details">
         <menu>
     <group
-        android:id="@+id/logsignip"
         android:menuCategory="container"
         android:enabled="true">
         <item

@@ -733,8 +733,10 @@ public void showNotification(int possition,int play_pauseICON) {
         inntent.setAction("ACTION_STOP");
         startService(inntent);*/
         if(player!=null)
-        {player.reset();
-        player.release();}
+        {
+            player.reset();
+            player.release();
+        }
        // changeMusic(-1);
         stopForeground(true);
         stopSelf();

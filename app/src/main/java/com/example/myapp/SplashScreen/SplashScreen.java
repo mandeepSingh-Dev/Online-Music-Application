@@ -20,12 +20,18 @@ import androidx.core.content.ContextCompat;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.myapp.MainActivity;
 import com.example.myapp.MusicService;
+import com.example.myapp.NavigationMainActivity;
 import com.example.myapp.R;
 import com.example.myapp.databinding.ActivitySplashScreenBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashScreen extends AppCompatActivity {
-    Animation animation,bottom_anim;
-    ActivitySplashScreenBinding mBinding;
+    private Animation animation,bottom_anim;
+    private ActivitySplashScreenBinding mBinding;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -33,6 +39,8 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         MediaPlayer.create(getApplicationContext(),R.raw.welcomesong).start();
+        firebaseAuth=FirebaseAuth.getInstance();
+         user=firebaseAuth.getCurrentUser();
 
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -71,9 +79,17 @@ public class SplashScreen extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Intent i=new Intent(SplashScreen.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
+                    if(user!=null && user.getEmail()!=null) {
+                        Intent i = new Intent(SplashScreen.this, NavigationMainActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                    else{
+                        Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+
                 }
             });
             thread.start();
@@ -116,7 +132,7 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onDestroy();
+        finish();
         //stopService(intenttt);
     }
 
@@ -129,9 +145,11 @@ public class SplashScreen extends AppCompatActivity {
             {
                 if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED)
                 {
-                    Intent intenttt=new Intent(this, MusicService.class);
-                    intenttt.setAction("ACTION_START_FROM_SPLASHSCREEN");
-                    startService(intenttt);
+
+                        Intent intenttt = new Intent(this, MusicService.class);
+                        intenttt.setAction("ACTION_START_FROM_SPLASHSCREEN");
+                        startService(intenttt);
+
 
                     //MainActivity will start after seconds
                    /* Thread thread=new Thread(new Runnable() {
@@ -142,9 +160,16 @@ public class SplashScreen extends AppCompatActivity {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }*/
-                            Intent i=new Intent(SplashScreen.this, MainActivity.class);
-                            startActivity(i);
-                           finish();
+                    if(user!=null && user.getEmail()!=null) {
+                        Intent i = new Intent(SplashScreen.this, NavigationMainActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                    else{
+                        Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
                         /*}
                     });
                     thread.start();*/

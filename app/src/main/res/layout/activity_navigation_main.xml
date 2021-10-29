@@ -16,17 +16,17 @@
         >
 
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbarr"
-                android:background="@android:color/transparent"
-                android:foreground="@android:color/transparent"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:visibility="gone"
-                app:title="Music"
-                app:popupTheme="@style/Theme.AppCompat.Light"
-                app:layout_collapseMode="pin"
-                />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarr"
+            android:background="@android:color/transparent"
+            android:foreground="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            app:title="Music"
+            app:popupTheme="@style/Theme.AppCompat.Light"
+            app:layout_collapseMode="pin"
+            />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
@@ -42,21 +42,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/relativeLayout"
-
         >-->
-<include
+    <include
 
-    android:id="@+id/inccluddeMotion"
-    layout="@layout/motion_player"
+        android:id="@+id/inccluddeMotion"
+        layout="@layout/motion_player"
 
-   /><!--android:visibility="invisible"-->
-       <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:id="@+id/bottomNavigation"
-            android:layout_below="@id/inccluddeMotion"
-            android:background="#01ECCC"/>
-    </RelativeLayout>-->
+        /><!--android:visibility="invisible"-->
+    <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
+         android:layout_width="match_parent"
+         android:layout_height="80dp"
+         android:id="@+id/bottomNavigation"
+         android:layout_below="@id/inccluddeMotion"
+         android:background="#01ECCC"/>
+ </RelativeLayout>-->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorlayoutFor_bottomSheet"
         android:layout_width="match_parent"
@@ -68,10 +67,10 @@
             />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-   <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"-->
+    <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
+         android:id="@+id/bottomNavigation"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"-->
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
@@ -84,10 +83,10 @@
         android:layout_gravity="start"
         />
 </androidx.drawerlayout.widget.DrawerLayout>
-<!--
-<com.google.android.material.bottomnavigation.BottomNavigationView
-android:layout_width="match_parent"
-android:layout_height="80dp"
-android:id="@+id/bottomNavigation"
-android:background="#01ECCC"
-android:layout_gravity="bottom"/>-->
+    <!--
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:id="@+id/bottomNavigation"
+    android:background="#01ECCC"
+    android:layout_gravity="bottom"/>-->

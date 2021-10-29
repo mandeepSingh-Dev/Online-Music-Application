@@ -47,7 +47,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detailstext">
             <LinearLayout
-                android:id="@+id/cardview_motionn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -56,7 +55,6 @@
                 >
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_CircularImage"
                     android:layout_width="180dp"
                     android:layout_height="180dp"
                     android:layout_gravity="center"
@@ -74,7 +72,6 @@
                 <EditText
                     android:layout_width="260dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Name"
                     android:hint="Name"
                     android:paddingLeft="14dp"
                     android:keyboardNavigationCluster="false"
@@ -91,7 +88,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textinputlayoutemail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true"
@@ -111,7 +107,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textinputlayoutpassword"
                     android:layout_width="260dp"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true"
@@ -130,7 +125,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textinputlayout_Confirm_password"
                     android:layout_width="260dp"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true">
@@ -150,7 +144,6 @@
 
 
                 <Button
-                    android:id="@+id/signupbutton"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="260dp"
                     android:layout_height="wrap_content"

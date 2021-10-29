@@ -73,6 +73,9 @@
         <entry key="..\:/MyApp2/app/src/main/res/drawable/top_background.xml" value="0.2264840182648402" />
         <entry key="..\:/MyApp2/app/src/main/res/drawable/useless_gradiebnt.xml" value="0.20925925925925926" />
         <entry key="..\:/MyApp2/app/src/main/res/font/fonts.xml" value="0.23881278538812786" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout-land/activity_navigation_main.xml" value="0.16" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout-land/fragment_songs.xml" value="0.2388888888888889" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout-land/motion_player_xml_constraintlayout_scene.xml" value="0.2361111111111111" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/activity_navigation_main.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/activity_sign_up.xml" value="0.21232876712328766" />
@@ -89,7 +92,7 @@
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_library_.xml" value="0.2" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_music.xml" value="0.1" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_offline_music.xml" value="0.1" />
-        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music.xml" value="0.2" />
+        <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music.xml" value="0.1145124716553288" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_online_music2.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_search_.xml" value="0.2152777777777778" />
         <entry key="..\:/MyApp2/app/src/main/res/layout/fragment_songs.xml" value="0.264" />

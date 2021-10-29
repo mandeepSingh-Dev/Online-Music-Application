@@ -8,7 +8,7 @@
     android:background="@drawable/gradient_splashscreen"
     android:fitsSystemWindows="true"
     android:orientation="horizontal"
-   >
+    >
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_gravity="center"
         android:layout_width="100dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/Profile_Name"
-       />
+        />
 
     <TextView
         android:id="@+id/Profile_Name"

@@ -22,91 +22,91 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-   android:id="@+id/upperConstraintLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/gradent_for_rootlay"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
-    <TextView
-        android:id="@+id/upperTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Music"
-        android:fontFamily="@font/baloo_chettan"
-        android:textColor="@color/white"
-        android:layout_marginTop="10dp"
-        android:textSize="40sp"
-        app:layout_constraintLeft_toRightOf="@id/lottie2"
-        app:layout_constraintTop_toTopOf="parent"/>
-    <ImageView
-        android:id="@+id/setting_Icon"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/btn_4"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/upperTitle"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp"/>
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie2"
-        android:layout_width="80dp"
-        android:layout_height="60dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/upperTitle"
-        app:layout_constraintBottom_toBottomOf="@id/upperTitle"
-        app:lottie_autoPlay="true"
-        app:barrierDirection="start"
-        app:lottie_loop="true"
-        app:lottie_colorFilter="@color/white"
-        app:lottie_rawRes="@raw/music_symb_lottie"
-        />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/upperConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gradent_for_rootlay"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <TextView
+                    android:id="@+id/upperTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Music"
+                    android:fontFamily="@font/baloo_chettan"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:textSize="40sp"
+                    app:layout_constraintLeft_toRightOf="@id/lottie2"
+                    app:layout_constraintTop_toTopOf="parent"/>
+                <ImageView
+                    android:id="@+id/setting_Icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/btn_4"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/upperTitle"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="15dp"/>
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie2"
+                    android:layout_width="80dp"
+                    android:layout_height="60dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/upperTitle"
+                    app:layout_constraintBottom_toBottomOf="@id/upperTitle"
+                    app:lottie_autoPlay="true"
+                    app:barrierDirection="start"
+                    app:lottie_loop="true"
+                    app:lottie_colorFilter="@color/white"
+                    app:lottie_rawRes="@raw/music_symb_lottie"
+                    />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <!--Recent Played List-->
             <LinearLayout
-        android:id="@+id/RecentPlayed_LinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/upperConstraintLayout">
-      <androidx.constraintlayout.widget.ConstraintLayout
-          android:id="@+id/Recent_Constraintlayout"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal">
+                android:id="@+id/RecentPlayed_LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/upperConstraintLayout">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Recent_Constraintlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-          <TextView
-              android:id="@+id/RecentlyPlayedTextView"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginLeft="16dp"
-              android:layout_marginTop="8dp"
-              android:layout_weight="1"
-              android:text="Recently Played"
-              android:textColor="@color/white"
-              android:textSize="20sp"
-              android:fontFamily="@font/baloo_chettan"
-              app:layout_constraintLeft_toLeftOf="parent"
-              app:layout_constraintTop_toTopOf="@id/Recent_Constraintlayout" />
+                    <TextView
+                        android:id="@+id/RecentlyPlayedTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="Recently Played"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/baloo_chettan"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/Recent_Constraintlayout" />
 
-          <ImageView
-              android:id="@+id/arrowImageView"
-              android:layout_width="30dp"
-              android:layout_height="30dp"
-              android:layout_weight="1"
-              android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-              app:layout_constraintRight_toRightOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              android:layout_marginRight="20dp"
-              android:layout_marginTop="10dp"/>
+                    <ImageView
+                        android:id="@+id/arrowImageView"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="10dp"/>
 
-      </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Recently_RecylerView"
@@ -153,10 +153,10 @@
                         android:layout_marginTop="10dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            <!-- <androidx.recyclerview.widget.RecyclerView
-                 android:id="@+id/trending_RecylerView"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content" />-->
+                <!-- <androidx.recyclerview.widget.RecyclerView
+                     android:id="@+id/trending_RecylerView"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content" />-->
 
                 <HorizontalScrollView
                     android:id="@+id/Scrolled_TrendingLayouts"
@@ -188,9 +188,9 @@
                         <include
                             android:id="@+id/include_TrendingHindi"
                             layout="@layout/list_trending_layout"
-/>
-
                             />
+
+                        />
                     </LinearLayout>
                 </HorizontalScrollView>
 
@@ -237,52 +237,52 @@
                         android:layout_marginTop="10dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-               <!-- <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/TopCharts_RecylerView"
+                <!-- <androidx.recyclerview.widget.RecyclerView
+                     android:id="@+id/TopCharts_RecylerView"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent">
+                 </androidx.recyclerview.widget.RecyclerView>-->
+                <HorizontalScrollView
+                    android:id="@+id/Scrolled_TopCharts"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </androidx.recyclerview.widget.RecyclerView>-->
-            <HorizontalScrollView
-                android:id="@+id/Scrolled_TopCharts"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:measureAllChildren="false"
-                android:fillViewport="false"
-                android:scrollbars="none"
-                >
-            <LinearLayout
-                android:id="@+id/Linear_TopCharts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <include
-                    android:id="@+id/include_EnglishTop10"
-                    layout="@layout/folder_layout_normal"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:measureAllChildren="false"
+                    android:fillViewport="false"
+                    android:scrollbars="none"
+                    >
+                    <LinearLayout
+                        android:id="@+id/Linear_TopCharts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <include
+                            android:id="@+id/include_EnglishTop10"
+                            layout="@layout/folder_layout_normal"/>
 
-                <include
-                    android:id="@+id/include_PunjabiTop10"
-                    layout="@layout/folder_layout_normal"
-                   />
+                        <include
+                            android:id="@+id/include_PunjabiTop10"
+                            layout="@layout/folder_layout_normal"
+                            />
 
-                <include
-                    android:id="@+id/include_HindiTop10"
+                        <include
+                            android:id="@+id/include_HindiTop10"
 
-                    layout="@layout/folder_layout_normal"/>
-                <include
-                    android:id="@+id/include_USTop10"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_USTop10"
 
-                    layout="@layout/folder_layout_normal"/>
-                <include
-                    android:id="@+id/include_DanceTop10"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_DanceTop10"
 
-                    layout="@layout/folder_layout_normal"/>
-                <include
-                    android:id="@+id/include_Hindi90sTop10"
+                            layout="@layout/folder_layout_normal"/>
+                        <include
+                            android:id="@+id/include_Hindi90sTop10"
 
-                    layout="@layout/folder_layout_normal"/>
-            </LinearLayout>
-            </HorizontalScrollView>
+                            layout="@layout/folder_layout_normal"/>
+                    </LinearLayout>
+                </HorizontalScrollView>
             </LinearLayout>
             <!--Moods & Collection List-->
             <LinearLayout
@@ -327,10 +327,10 @@
                         android:layout_marginTop="10dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-               <!-- <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/Moods_RecylerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">-->
+                <!-- <androidx.recyclerview.widget.RecyclerView
+                     android:id="@+id/Moods_RecylerView"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent">-->
                 <HorizontalScrollView
                     android:id="@+id/Scrolled_Moods"
                     android:layout_width="match_parent"
@@ -389,7 +389,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/Moods_LinearLayout"
-               >
+                >
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Artists_Constraintlayout"
                     android:layout_width="match_parent"
@@ -494,7 +494,7 @@
                         <include
                             android:id="@+id/include_GurnaamBhullar"
                             layout="@layout/folder_featured_artist_layout"
-                           />
+                            />
 
                         <include
                             android:id="@+id/include_DuaLipa"
@@ -637,7 +637,7 @@
                         <include
                             android:id="@+id/include_Indie"
                             layout="@layout/folder_layout_small"
-                           />
+                            />
 
                         <include
                             android:id="@+id/include_EDM"
@@ -689,10 +689,10 @@
                 android:background="@drawable/outline_button"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/discover_LinearLayout"
+                app:layout_constraintTop_toBottomOf="@id/discover_LinearLayout"
                 app:layout_constraintBottom_toTopOf="@id/lastView">
                 <TextView
-                    android:id="@+id/songLanguage"
+                    android:id="@+id/uploadSongText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Upload Songs Online"
@@ -706,7 +706,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
                 <ImageView
-                    android:id="@+id/songlang_Icon"
+                    android:id="@+id/uploadSongArrow"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
@@ -751,12 +751,12 @@
 
 
             <View
-    android:id="@+id/lastView"
-    android:layout_width="match_parent"
-    android:layout_height="170dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"/>
+                android:id="@+id/lastView"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </FrameLayout>
