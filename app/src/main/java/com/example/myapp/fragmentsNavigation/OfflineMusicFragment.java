@@ -72,7 +72,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     SeekBar seekBar;
     ProgressBar progressBar;
 
-    int CurrentPosition=0;
+    int CurrentPosition = 0;
 
     TextView motionSongName;
     ImageView motionImagevIew;
@@ -101,7 +101,6 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     TextView positionTextview;
 
 
-
     AlphaAnimation buttonanimation;
     Intent intent;
 
@@ -114,34 +113,33 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     public LocalBroadcastManager broadcastManager;
 
     BroadcastReceiver receiver;
-    Bitmap recievedBitmap=null;
+    Bitmap recievedBitmap = null;
 
     RecyclerView recyclerView;
     BottomNavigationView bottomNavigationView;
 
 
-
-    Intent i=new Intent("ACTION_POSITION");
+    Intent i = new Intent("ACTION_POSITION");
     Window window;
     CollapsingToolbarLayout toolbarLayout;
 
     public static int mposition = 0;  //for use it globally and for changeMusic method call repeatdely after song comletion/
 
-    ServiceConnection sConnection=new ServiceConnection() {
+    ServiceConnection sConnection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName name, IBinder binder)
-        {
-            Log.d("KPKPKP","onServiceConnected 101");
-            MusicService.MyBinder myBinder=(MusicService.MyBinder)binder;
-            musicService=myBinder.getService();
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            Log.d("KPKPKP", "onServiceConnected 101");
+            MusicService.MyBinder myBinder = (MusicService.MyBinder) binder;
+            musicService = myBinder.getService();
 
 
             //setting total duration to motion total duration textview
         }
+
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.d("KPKPKP","onServiceDisconnected 110");
-           // musicService=null;
+            Log.d("KPKPKP", "onServiceDisconnected 110");
+            // musicService=null;
         }
     };
 
@@ -149,14 +147,12 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.d("KPKPKP","onCreateView 119");
-         songsArrayList = new ArrayList<>();
+        Log.d("KPKPKP", "onCreateView 119");
+        songsArrayList = new ArrayList<>();
         songsArrayList2 = new ArrayList<>();
 
 
-
-
-        View view=inflater.inflate(R.layout.fragment_offline_music, container, false);
+        View view = inflater.inflate(R.layout.fragment_offline_music, container, false);
         recyclerView = view.findViewById(R.id.rexcylerviewMusic);
         return view;
     }
@@ -169,14 +165,14 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Intent intenttt=new Intent(getActivity(), MusicService.class);
-     intenttt.setAction("ACTION_START_FROM_MUSICFRAGMENT");
+        Intent intenttt = new Intent(getActivity(), MusicService.class);
+        intenttt.setAction("ACTION_START_FROM_MUSICFRAGMENT");
         getActivity().startService(intenttt);
 
         //getting arraylist from service but after starting the service
-        songsArrayList2=MusicService.songsList;
+        songsArrayList2 = MusicService.songsList;
         if (Build.VERSION.SDK_INT >= 21) {
-           window= this.getActivity().getWindow();
+            window = this.getActivity().getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(getResources().getColor(R.color.Green));
@@ -184,18 +180,18 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         }
 
 
-      //  Log.d("LLIISSTT",songsArrayList2.size()+"__");
+        //  Log.d("LLIISSTT",songsArrayList2.size()+"__");
 
-        Log.d("YAYA","ONVIEWCREATE");
+        Log.d("YAYA", "ONVIEWCREATE");
 
-        Log.d("KPKPKP","onViewCreated 164");
+        Log.d("KPKPKP", "onViewCreated 164");
         //set defaultbitmap because of no bitmap available in song album image..
 
         //getting motion layout from <include/> navigationActivity.
         MotionLayout motionLayoutt = getActivity().findViewById(R.id.inccluddeMotion);
-        motionCardView =motionLayoutt.findViewById(R.id.cardview);
+        motionCardView = motionLayoutt.findViewById(R.id.cardview);
         motionSongName = motionLayoutt.findViewById(R.id.song_name);
-        motionartistName=motionLayoutt.findViewById(R.id.artist_name_text_view);
+        motionartistName = motionLayoutt.findViewById(R.id.artist_name_text_view);
         motionImagevIew = motionLayoutt.findViewById(R.id.album_art_image_view);
         playPauseButton = motionLayoutt.findViewById(R.id.play_pause_button);
         motionCurrentDuration = motionLayoutt.findViewById(R.id.currentDurationText);
@@ -203,29 +199,29 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         prev_Button = motionLayoutt.findViewById(R.id.prev_image_view);
         next_Button = motionLayoutt.findViewById(R.id.next_image_view);
         motionLayoutt.findViewById(R.id.collapse_image_view);
-        positionTextview=motionLayoutt.findViewById(R.id.position);
-        lastSpace=motionLayoutt.findViewById(R.id.lastspace);
-         dotsButton=motionLayoutt.findViewById(R.id.DotsButton);
-         bottomNavigationView=motionLayoutt.findViewById(R.id.bottomNavigation);
+        positionTextview = motionLayoutt.findViewById(R.id.position);
+        lastSpace = motionLayoutt.findViewById(R.id.lastspace);
+        dotsButton = motionLayoutt.findViewById(R.id.DotsButton);
+        bottomNavigationView = motionLayoutt.findViewById(R.id.bottomNavigation);
 
         bottomSheetViews();
-          //On 3 dots button clicked then bottom sheet dialog will open
-         bottomSheetDialog = new BottomSheetDialog(getContext(), R.style.Theme_Design_BottomSheetDialog);
+        //On 3 dots button clicked then bottom sheet dialog will open
+        bottomSheetDialog = new BottomSheetDialog(getContext(), R.style.Theme_Design_BottomSheetDialog);
         bottomSheetDialog.setContentView(bottomSHEET);
         dotsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-               bottomSheetDialog.show();
+                bottomSheetDialog.show();
 
-           }
+            }
         });
 
-          //        gradientImageview=motionLayoutt.findViewById(R.id.gradient_imageview);
+        //        gradientImageview=motionLayoutt.findViewById(R.id.gradient_imageview);
 
 
-      //  GradientDrawable gradientDrawable=new GradientDrawable();
-      //  gradientDrawable.setGradientType(GradientDrawable.LINE);
+        //  GradientDrawable gradientDrawable=new GradientDrawable();
+        //  gradientDrawable.setGradientType(GradientDrawable.LINE);
        /* int[] colors = {Color.parseColor("#008000"),Color.parseColor("#ADFF2F")};
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM, colors);
@@ -235,10 +231,10 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         }*/
 
 
-        receiver=new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("KPKPKP","onReceive 127");
+                Log.d("KPKPKP", "onReceive 127");
                 //NOW THIS IF BLOCK IS USELESS.
                /* if(intent.getAction().equals("ACTION_HULLI"))
                 {
@@ -265,87 +261,83 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                         changeMusic(bPosition);
                     }
                 }*/
-                /*else*/ if(intent.getAction().equals("ACTION_SEND"))
-                {
+                /*else*/
+                if (intent.getAction().equals("ACTION_SEND")) {
                     try {
-                    Log.d("PPOOK",String.valueOf(intent.getIntExtra("receivedPosition",1)));
-                    int receivedPosition=intent.getIntExtra("receivedPosition",1);
+                        Log.d("PPOOK", String.valueOf(intent.getIntExtra("receivedPosition", 1)));
+                        int receivedPosition = intent.getIntExtra("receivedPosition", 1);
 
-                    //To send Song Uri to anothher app..
-                    shareSongUri(receivedPosition);
+                        //To send Song Uri to anothher app..
+                        shareSongUri(receivedPosition);
 
-                    int receivedcurrentPosition= intent.getIntExtra("CURRENTDURATION",1000);
-                    positionTextview.setText((receivedPosition+1)+"/"+ songsArrayList2.size());
-                     //setting current position to textview and seekbar
-                    seekBar.setProgress(receivedcurrentPosition);
-                    String currentTimeLabel=createTimeLabel(receivedcurrentPosition);
-                    motionCurrentDuration.setText(currentTimeLabel);
+                        int receivedCurrentPosition = intent.getIntExtra("CURRENTDURATION", 1000);
+                        positionTextview.setText((receivedPosition + 1) + "/" + songsArrayList2.size());
+                        //setting current position to textview and seekbar
+                        seekBar.setProgress(receivedCurrentPosition);
+                        String currentTimeLabel = createTimeLabel(receivedCurrentPosition);
+                        motionCurrentDuration.setText(currentTimeLabel);
 
-                    //SETTING Total duration to seekbar and TextView
-                    seekBar.setMax(musicService.getDuration());
-                    motionTotalDuration.setText(createTimeLabel(musicService.getDuration()));
-                    Log.d("DDUURATION",musicService.getDuration()+"__dud");
+                        //SETTING Total duration to seekbar and TextView
+                        seekBar.setMax(musicService.getDuration());
+                        motionTotalDuration.setText(createTimeLabel(musicService.getDuration()));
+                        Log.d("DDUURATION", musicService.getDuration() + "__dud");
 
-                    motionSongName.setText(songsArrayList2.get(receivedPosition).getSongName());
-                    motionartistName.setText(songsArrayList2.get(receivedPosition).getArtist());
+                        motionSongName.setText(songsArrayList2.get(receivedPosition).getSongName());
+                        motionartistName.setText(songsArrayList2.get(receivedPosition).getArtist());
 
-                    artistSheetText.setText(songsArrayList2.get(receivedPosition).getArtist());
-                    albumSheetText.setText(songsArrayList2.get(receivedPosition).getSongName());
-                    durationSheetText.setText(createTimeLabel(musicService.getDuration()));
-                    long songSize=songsArrayList2.get(receivedPosition).getSongSize();
-Log.d("soongssize",String.valueOf(songSize));
-                    songSizeSheet.setText(byteToMB(songSize)+"mb");
+                        artistSheetText.setText(songsArrayList2.get(receivedPosition).getArtist());
+                        albumSheetText.setText(songsArrayList2.get(receivedPosition).getSongName());
+                        durationSheetText.setText(createTimeLabel(musicService.getDuration()));
+                        long songSize = songsArrayList2.get(receivedPosition).getSongSize();
+                        Log.d("soongssize", String.valueOf(songSize));
+                        songSizeSheet.setText(byteToMB(songSize) + "mb");
 
-                     recievedBitmap=songsArrayList2.get(receivedPosition).getBitmap();
+                        recievedBitmap = songsArrayList2.get(receivedPosition).getBitmap();
 
-                         if (recievedBitmap != null) {
+                        if (recievedBitmap != null) {
                             // Glide.with(getContext()).asBitmap().load(recievedBitmap).into(motionImagevIew);
-                             motionImagevIew.setImageBitmap(recievedBitmap);
+                            motionImagevIew.setImageBitmap(recievedBitmap);
+                            Log.d("revicerdBitmap", recievedBitmap.toString());
+                            //setting pallette color to motionlayout
+                            try {
+                                Palette.from(recievedBitmap).generate(new Palette.PaletteAsyncListener() {
+                                    public void onGenerated(Palette p) {
+                                        try {
+                                            setPaletteColor(p);
+                                            motionCardView.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
+                                            lastSpace.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
+                                        } catch (Exception e) {
+                                            //Toast.makeText(context,e.getCause().toString(),Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            } catch (Exception e) {
+                            }
 
-                             Log.d("revicerdBitmap",recievedBitmap.toString());
-                          //setting pallette color to motionlayout
-                             try {
-                                 Palette.from(recievedBitmap).generate(new Palette.PaletteAsyncListener() {
-                                     public void onGenerated(Palette p) {
-
-
-                                         try {
-                                             setPaletteColor(p);
-                                             motionCardView.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
-                                             lastSpace.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
-                                         }catch (Exception e){
-                                             //Toast.makeText(context,e.getCause().toString(),Toast.LENGTH_SHORT).show();
-                                         }
-                                         }
-
-                                 });
-                             }catch (Exception e){}
-
-                         } else {
-                             motionImagevIew.setImageDrawable(getResources().getDrawable(R.drawable.music_two_tonne));
-                         }
-                     }catch (Exception e){}
+                        } else {
+                            motionImagevIew.setImageDrawable(getResources().getDrawable(R.drawable.music_two_tonne));
+                        }
+                    } catch (Exception e) {
+                    }
                 }
             }
         };
         //register LocalBroadcastManager to receive data from MusicService.
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver,new IntentFilter("ACTION_SEND"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver, new IntentFilter("ACTION_SEND"));
 
         //Initialize broadcastManager to send data to MusicService.
-       broadcastManager=LocalBroadcastManager.getInstance(getContext());
+        broadcastManager = LocalBroadcastManager.getInstance(getContext());
 
-          buttonanimation = new AlphaAnimation(1F, 0.5F);
+        buttonanimation = new AlphaAnimation(1F, 0.5F);
 
-         //recyclerView = view.findViewById(R.id.rexcylerviewMusic);
+        //recyclerView = view.findViewById(R.id.rexcylerviewMusic);
         progressBar = view.findViewById(R.id.progressbar);
 
-         // songsArrayList = new ArrayList<>();
+        // songsArrayList = new ArrayList<>();
         myThread = new MyThread();
         myThread.start();
 
         seekBar = getActivity().findViewById(R.id.seekbar);
-
-
 
 
         //To set duration of song to motion layout textviews
@@ -406,61 +398,62 @@ Log.d("soongssize",String.valueOf(songSize));
 
                     }*/ //while loop closed
 
-try {
-    if (!songsArrayList2.isEmpty()) {
-        songsArrayList2.sort(new Comparator<Songs>() {
-            @Override
-            public int compare(Songs lhs, Songs rhs) {
-                String lhsName = lhs.getSongName();
-                String rhsName = rhs.getSongName();
-                byte[] lhsByteArray = lhsName.getBytes();
-                byte[] rhsByteArray = rhsName.getBytes();
+                    try {
+                        if (!songsArrayList2.isEmpty()) {
+                            songsArrayList2.sort(new Comparator<Songs>() {
+                                @Override
+                                public int compare(Songs lhs, Songs rhs) {
+                                    String lhsName = lhs.getSongName();
+                                    String rhsName = rhs.getSongName();
+                                    byte[] lhsByteArray = lhsName.getBytes();
+                                    byte[] rhsByteArray = rhsName.getBytes();
 
-                Log.d("compsuyrtddys", lhsName.compareTo(rhsName) + "djfkd");
-                return rhs.getDateModified().compareTo(lhs.getDateModified());
+                                    Log.d("compsuyrtddys", lhsName.compareTo(rhsName) + "djfkd");
+                                    return rhs.getDateModified().compareTo(lhs.getDateModified());
 
-            }
-        });
-    }
-}catch (Exception e){}
+                                }
+                            });
+                        }
+                    } catch (Exception e) {
+                    }
 
-        MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
-try {
-    getActivity().runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-            ImageView imageOnToolbar=view.findViewById(R.id.imageOnToolBar);
-            recyclerView.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(myAdapter);
-           //To give different view look to recyleview list
-            imageOnToolbar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false));
+                    MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ImageView imageOnToolbar = view.findViewById(R.id.imageOnToolBar);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.GONE);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                                recyclerView.setAdapter(myAdapter);
+                                //To give different view look to recyleview list
+                                imageOnToolbar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
 
-                }
-            });
+                                    }
+                                });
 
 
-        }
-    });
-}catch(Exception e){
-    Log.d("djkh",e.getMessage());
-}
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.d("djkh", e.getMessage());
+                    }
 
 
                     //user defined setOnItemClickListener Method and Interface in MyAdapter.
                     myAdapter.setOnItemClickListener(new MyAdapter.CustomItemClickListener() {
                         @Override
                         public void onItemClick(int position, View v) {
-                            Log.d("KPKPKP","onItemClick 275");
+                            Log.d("KPKPKP", "onItemClick 275");
 
                             mposition = position;
                             //SENDING POSITION TO MUSIC SERVICE THROUGH BROADCAST MANAGER.
-                           // Intent i=new Intent("ACTION_POSITION");
-                            i.putExtra("Position",position);
+                            // Intent i=new Intent("ACTION_POSITION");
+                            i.putExtra("Position", position);
                             broadcastManager.sendBroadcast(i);
                             playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
 
@@ -477,7 +470,7 @@ try {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
 
 
-           //File file = Environment.getExternalStorageDirectory();
+            //File file = Environment.getExternalStorageDirectory();
 
             // File file = Environment.getRootDirectory();
             ExecutorSingleton.getInstance().execute(new Runnable() {
@@ -529,12 +522,12 @@ try {
                     songsArrayList2.sort(new Comparator<Songs>() {
                         @Override
                         public int compare(Songs lhs, Songs rhs) {
-                            String lhsName=lhs.getSongName();
-                            String rhsName= rhs.getSongName();
-                            byte[] lhsByteArray=lhsName.getBytes();
-                            byte[] rhsByteArray=rhsName.getBytes();
+                            String lhsName = lhs.getSongName();
+                            String rhsName = rhs.getSongName();
+                            byte[] lhsByteArray = lhsName.getBytes();
+                            byte[] rhsByteArray = rhsName.getBytes();
 
-                            Log.d("compsuyrtddys",lhsName.compareTo(rhsName)+"djfkd");
+                            Log.d("compsuyrtddys", lhsName.compareTo(rhsName) + "djfkd");
                             return rhs.getDateModified().compareTo(lhs.getDateModified());
 
                         }
@@ -554,9 +547,9 @@ try {
                         public void onItemClick(int position, View imageview) {
                             motionLayoutt.setVisibility(View.VISIBLE);
                             mposition = position;
-                           // Intent i=new Intent("ACTION_POSITION");  //setting this globally..
+                            // Intent i=new Intent("ACTION_POSITION");  //setting this globally..
 
-                            i.putExtra("Position",position);
+                            i.putExtra("Position", position);
                             broadcastManager.sendBroadcast(i);
                             playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
 
@@ -577,8 +570,7 @@ try {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser)
-                {
+                if (fromUser) {
                     musicService.seekTo(progress);
                 }
             }
@@ -589,7 +581,7 @@ try {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-           seekBar.setBackground(null);
+                seekBar.setBackground(null);
             }
         });
 
@@ -603,7 +595,7 @@ try {
         lastSpace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Lastspace","lastSpace view clicked");
+                Log.d("Lastspace", "lastSpace view clicked");
             }
         });
     }    //onViewCreated closed
@@ -653,14 +645,14 @@ try {
             mediaPlayer = new MediaPlayer();
         }
         try {
-            Log.d("KPKPKP","playMusic 438");
+            Log.d("KPKPKP", "playMusic 438");
             //When we call mediaPlayer.reset() mediaPlayer goes to IDLE state
             musicService.reset(); //now mediaplayer in uninitialized  state  Means mediaplayer ke andar ka sara source mal pani nikal jaeyga mtlab reset ho jaeyga  lekin mediaplayer object delete nhi hoga bs.
             //and every tym we click item this method
             // reset the mediaplayer .you don’t need to do this operation for the first time, but I choose to use it for reusability
             //sending message to naviagtionactivity through Handler.
 
-Log.d("pHLE","PPHHLLEE");
+            Log.d("pHLE", "PPHHLLEE");
             String songName = songsArrayList.get(mposition).getSongName();
            /* Bitmap bitmap = songsArrayList.get(mposition).getBitmap();
 
@@ -693,7 +685,7 @@ Log.d("pHLE","PPHHLLEE");
            motionTotalDuration.setText(totalTime);*/
             // timeDuration();
 
-           // seekBar.setMax(musicService.getDuration());
+            // seekBar.setMax(musicService.getDuration());
 
             //sending currentposition to Handler after every 1 second
             /*new Thread(new Runnable() {
@@ -731,29 +723,29 @@ Log.d("pHLE","PPHHLLEE");
             }
         });*/
 
-                  } catch (Exception e) {
+        } catch (Exception e) {
         }
     }//playMusic() method finished here
 
     //Handler to get currentPosition of song to set in timer textview and SeekBar
 
     public void changeMusic(int position) {
-        Log.d("KPKPKP","changeMusic 525");
+        Log.d("KPKPKHUPHUPP", "changeMusic 525");
 
 
         try {
             if (position <= songsArrayList.size() - 1) {
                 Songs songs = songsArrayList.get(position);
                 intent.putExtra("SONG_URI", songs.getSonguri().toString());
-                intent.putExtra("POSITION",position);
+                intent.putExtra("POSITION", position);
 
-                Log.d("JPJP",songs.getSongName());
-                Log.d("JPJP",position+"DDF");
-              //setting songName in motion song name textview
+                Log.d("JPJP", songs.getSongName());
+                Log.d("JPJP", position + "DDF");
+                //setting songName in motion song name textview
                 String songName = songs.getSongName();
                 motionSongName.setText(songName);
 
-                 //setting bitmap to album image of motion layout
+                //setting bitmap to album image of motion layout
                 Bitmap bitmap = songs.getBitmap();
                 if (bitmap != null) {
                     motionImagevIew.setImageBitmap(bitmap);
@@ -761,19 +753,20 @@ Log.d("pHLE","PPHHLLEE");
                     motionImagevIew.setImageDrawable(getResources().getDrawable(R.drawable.musictwo_ton));
                 }
 
-                Log.d("KPKPKP","changeMusic 2ND LOG MSG 545");
+                Log.d("KPKPKP", "changeMusic 2ND LOG MSG 545");
                 //starting service evrytym when song change.
-             //  getActivity().stopService(intent);
-                Log.d("KPKPKP","changeMusic 3rD LOG MSG 548");
+                //  getActivity().stopService(intent);
+                Log.d("KPKPKP", "changeMusic 3rD LOG MSG 548");
 
                 //getActivity().startService(intent);
-                Log.d("KPKPKP","changeMusic 4th LOG MSG 551");
+                Log.d("KPKPKP", "changeMusic 4th LOG MSG 551");
 
                 playMusic(songs);
 
                 //instead of creating playMusic we can recursivly used the changeMusic method with the playMusic code
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
     }
 
@@ -785,9 +778,7 @@ Log.d("pHLE","PPHHLLEE");
                 playPauseButton.startAnimation(buttonanimation);
                 playPauseButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
 
-            }
-           
-            else {
+            } else {
                 musicService.start();
                 playPauseButton.startAnimation(buttonanimation);
                 playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
@@ -804,38 +795,37 @@ Log.d("pHLE","PPHHLLEE");
         int sec = duration / 1000 % 60;
 
         timeLabel += min + ":";
-        if (sec < 10) {timeLabel += "0";}
+        if (sec < 10) {
+            timeLabel += "0";
+        }
 
         timeLabel += sec;
         return timeLabel;
     }
 
-    void prev_Next_Button()
-    {
+    void prev_Next_Button() {
         next_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("sssiize",songsArrayList2.size()+"");
+                Log.d("sssiize", songsArrayList2.size() + "");
                 next_Button.startAnimation(buttonanimation);
-                Log.d("SSIIZE",songsArrayList.size()+"HAPU__");
+                Log.d("SSIIZE", songsArrayList.size() + "HAPU__");
 
                 //this else if block for continue clicking
                 // the next button to next the song
-                if(mposition>=songsArrayList2.size()-1)
-                {
-                    i.putExtra("Position",mposition);
+                if (mposition >= songsArrayList2.size() - 1) {
+                    i.putExtra("Position", mposition);
                     broadcastManager.sendBroadcast(i);
-                    mposition=-1;
-                }
-                 else if((mposition>=-1) &&(mposition<songsArrayList2.size()-1) ) {
+                    mposition = -1;
+                } else if ((mposition >= -1) && (mposition < songsArrayList2.size() - 1)) {
                     playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
-                    Log.d("mposition",mposition+"_");
-                    int size=songsArrayList2.size()-1;
-                    Log.d("HAALO",size+""+mposition+"_");
+                    Log.d("mposition", mposition + "_");
+                    int size = songsArrayList2.size() - 1;
+                    Log.d("HAALO", size + "" + mposition + "_");
                     ++mposition;
-                    i.putExtra("Position",mposition);
+                    i.putExtra("Position", mposition);
                     broadcastManager.sendBroadcast(i);
-                    Log.d("Nichewala","else if condition");
+                    Log.d("Nichewala", "else if condition");
                 }
 
 
@@ -845,22 +835,23 @@ Log.d("pHLE","PPHHLLEE");
             @Override
             public void onClick(View v) {
                 prev_Button.startAnimation(buttonanimation);
-                if(mposition>=1) {
+                if (mposition >= 1) {
                     musicService.reset();
                     playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
 
-                    i.putExtra("Position",--mposition);
+                    i.putExtra("Position", --mposition);
                     broadcastManager.sendBroadcast(i);
 
-                   // changeMusic(--mposition);
+                    // changeMusic(--mposition);
                 }
             }
         });
     }
 
+    //BY ANALYIS OF ALLCODE AGAIN I THINK this onCompletion function is USELESS.
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Log.d("KPKPKP","onCompletion 642LINE METHOD 642");
+        Log.d("KPKPKPCOMPLETE", "onCompletion 642LINE METHOD 642");
         playPauseButton.setImageResource(R.drawable.ic_baseline_play_arrow_24);
         changeMusic(++mposition);
     }
@@ -868,19 +859,18 @@ Log.d("pHLE","PPHHLLEE");
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("KPKPKP","onStart 642LINE METHOD 650");
+        Log.d("KPKPKP", "onStart 642LINE METHOD 650");
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Intent intent1=new Intent(getContext(),MusicService.class);
-        getActivity().bindService(intent1,sConnection, Context.BIND_AUTO_CREATE);
+        Intent intent1 = new Intent(getContext(), MusicService.class);
+        getActivity().bindService(intent1, sConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void setPaletteColor(Palette p)
-    {
+    public void setPaletteColor(Palette p) {
         try {
             motionCardView.setBackgroundColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
             lastSpace.setBackgroundColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
@@ -889,44 +879,43 @@ Log.d("pHLE","PPHHLLEE");
                 window.setNavigationBarColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
             }
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
-      public void bottomSheetViews()
-      {
-          bottomSHEET= LayoutInflater.from(getContext()).inflate(R.layout.detailssong_bottom_sheetlayout,getActivity().findViewById(R.id.sheetConstraintLayout));
-          artistSheetText=bottomSHEET.findViewById(R.id.artist_textview);
-          albumSheetText=bottomSHEET.findViewById(R.id.album_textview);
-          durationSheetText=bottomSHEET.findViewById(R.id.Duration_textview);
-          songSizeSheet=bottomSHEET.findViewById(R.id.songSize_textview);
-          shareSong=bottomSHEET.findViewById(R.id.share_textview);
-      }
+    public void bottomSheetViews() {
+        bottomSHEET = LayoutInflater.from(getContext()).inflate(R.layout.detailssong_bottom_sheetlayout, getActivity().findViewById(R.id.sheetConstraintLayout));
+        artistSheetText = bottomSHEET.findViewById(R.id.artist_textview);
+        albumSheetText = bottomSHEET.findViewById(R.id.album_textview);
+        durationSheetText = bottomSHEET.findViewById(R.id.Duration_textview);
+        songSizeSheet = bottomSHEET.findViewById(R.id.songSize_textview);
+        shareSong = bottomSHEET.findViewById(R.id.share_textview);
+    }
 
-      public String byteToMB(long bytes)
-      {
-          Log.d("SONGSIZE",String.valueOf(bytes));
-          Float bytesfloat=Float.valueOf(String.valueOf(bytes));
-          float mb=bytesfloat/1000000;
-          String mbStr=String.valueOf(mb);
-          String mbsstr =String.valueOf(new DecimalFormat("###.#").format(mb));
+    public String byteToMB(long bytes) {
+        Log.d("SONGSIZE", String.valueOf(bytes));
+        Float bytesfloat = Float.valueOf(String.valueOf(bytes));
+        float mb = bytesfloat / 1000000;
+        String mbStr = String.valueOf(mb);
+        String mbsstr = String.valueOf(new DecimalFormat("###.#").format(mb));
 
-          //TODO make mb showing in perfect way.
-          return mbsstr;
-      }
-      public void shareSongUri(int receivedPosition)
-      {
-          shareSong.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  Uri uri=songsArrayList2.get(receivedPosition).getSonguri();
-                  File file=new File(uri.toString());
-                  Intent intentShare=new Intent(Intent.ACTION_SEND);
-                  intentShare.setType("audio/*");
-                 // if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
-                  //this if block also work for android 7 api 24 but not in 27 ..
-                      Log.d("POPLUPEHLE",file.toString());
-                      intentShare.putExtra(Intent.EXTRA_STREAM,uri);
-                      startActivity(Intent.createChooser(intentShare, "Share Sound File"));
+        //TODO make mb showing in perfect way.
+        return mbsstr;
+    }
+
+    public void shareSongUri(int receivedPosition) {
+        shareSong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = songsArrayList2.get(receivedPosition).getSonguri();
+                File file = new File(uri.toString());
+                Intent intentShare = new Intent(Intent.ACTION_SEND);
+                intentShare.setType("audio/*");
+                // if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
+                //this if block also work for android 7 api 24 but not in 27 ..
+                Log.d("POPLUPEHLE", file.toString());
+                intentShare.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(Intent.createChooser(intentShare, "Share Sound File"));
 
                  /* }else{
                      // Uri urifromProvider=FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider",file);
@@ -941,12 +930,9 @@ Log.d("pHLE","PPHHLLEE");
                          Log.d("exceeption",e.getMessage());
                      }
                   }*/
-              }
-          });
-      }
-
-
-
+            }
+        });
+    }
 
 
 }

@@ -10,6 +10,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.util.Base64
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -49,6 +50,8 @@ import kotlinx.coroutines.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.StorageReferenceSingleton
 import android.os.Parcelable
+import com.example.myapp.MusicService
+import com.example.myapp.MusicService.MyBinder
 import com.example.myapp.databinding.FragmentSongsBinding
 
 
@@ -89,11 +92,28 @@ class SongsFragment : Fragment() {
     var playlist:String?=null
     var folder:String?=null
 
+    var sharedPreferences:SharedPreferences?=null
+    var editor:SharedPreferences.Editor?=null
+    var localBroadcastManager:LocalBroadcastManager?=null
+    var songsfirelist:ArrayList<Songs>?=null
 
+    companion object{
+        var staticSonglistFirebase:ArrayList<Songs_FireBase>?=null
+    }
 
+    lateinit var musicService:MusicService
 
-
-
+    //getting MusicService instance by connecting this class to MusicService class
+    var serviceConnection=object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            Log.d("KPKPKP", "onServiceConnected 101")
+            val myBinder = service as MyBinder
+            musicService = myBinder.service
+        }
+        override fun onServiceDisconnected(name: ComponentName?) {
+            Log.d("KPKPKP", "onServiceDisconnected 110")
+        }
+    }
 
     var receiver=object: BroadcastReceiver(){
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -109,8 +129,6 @@ class SongsFragment : Fragment() {
                 toolbarimageview3?.setImageBitmap(bitmap)
                 toolbarimageview4?.setImageBitmap(bitmap)
             }
-
-
         }
         else if(intent?.action.equals("SENDING_FIRENAME"))
         {
@@ -130,10 +148,7 @@ class SongsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-        // Log.d("Hellodjd",savedInstanceState?.getString("HELLO").toString())
-
+        staticSonglistFirebase=ArrayList()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -149,8 +164,6 @@ class SongsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_songs, container, false)
     }
 
-    var sharedPreferences:SharedPreferences?=null
-    var editor:SharedPreferences.Editor?=null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -171,32 +184,6 @@ class SongsFragment : Fragment() {
 
         toolbar = view.findViewById<Toolbar>(R.id.toolbarSongsFragment)
 
-
-       // recylrView?.scrollToPosition(position!!)
-
-         sharedPreferences=activity?.getSharedPreferences("SHAREE",Context.MODE_PRIVATE)
-         editor=sharedPreferences?.edit()
-        editor?.putInt("INTT",87)
-
-        //getting recyclerview current state position to resume this list when come back to this list
-        recylrView?.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int)
-            {
-                super.onScrolled(recyclerView, dx, dy)
-                editor?.putInt("STATeee",dy)
-
-
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                editor?.putInt("STATEE",newState)
-
-            }
-        })
-      //  mlistState2=savedInstanceState?.getParcelable("LISTSTATE")
-        //Log.d("jdjf",mlistState2.toString())
-
         if (arguments != null) {
              playlist = arguments?.get("Playlist").toString()
              folder = arguments?.getString("Folder").toString()
@@ -204,62 +191,48 @@ class SongsFragment : Fragment() {
 
             CoroutineScope(Dispatchers.Main).launch {
                // gettingSongsListfromFireBase(playlist, folder)
+           gettingSongsListfromFireBase(playlist!!,folder!!)
             }
+
         }
         else{
             toolbar?.setTitle("Music")
         }
 
+    } //onViewCreated Finished
+
+    suspend fun gettingSongsListfromFireBase(playlist: String ="Trending_Playlist", folder: String="English")= withContext(Dispatchers.Main)
+    {
+        localBroadcastManager= LocalBroadcastManager.getInstance(requireContext())
+        var i=Intent("Send_SongsList")
+        //initStorageReference(storage!!) //initialization of mReference
         var factory:MyViewModelFactory= MyViewModelFactory(playlist!!,folder!!/*,mReference!!*/)
-        var myviewmodel=ViewModelProvider(this,factory).get(MyViewModel::class.java)
+        var myviewmodel=ViewModelProvider(this@SongsFragment,factory).get(MyViewModel::class.java)
 
 
-       /*Log.d("VIEWWWMODEL",*/myviewmodel.getLiveList()?.observe(viewLifecycleOwner,Observer {
-             it.get(0).storageMetadataa.addOnCompleteListener {
-               it.addOnSuccessListener {
-                   Log.d("HELLOJBJHDF",it.getCustomMetadata("SongName").toString())
+        myviewmodel.getLiveList()?.observe(viewLifecycleOwner,Observer {
 
-               }
-           }
+            lottie?.visibility=View.GONE
+            lottie2?.visibility=View.GONE
+            staticSonglistFirebase=it
+            //putting arraylist and sending to Music Service
+            i.putParcelableArrayListExtra("songslIst",it)
+            localBroadcastManager?.sendBroadcast(i)
+
             addpter=MyAdapter2(context,it)
             recylrView?.layoutManager = GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
             recylrView?.adapter = addpter
 
 
-       })
+            addpter?.setOnClickListener(object:MyAdapter2.CustomItemClickListener2{
+                override fun customOnItemClick(position: Int) {
+                    var i2=Intent("FIREPOSITION")
+                    i2.putExtra("positionfire",position)
+                    localBroadcastManager?.sendBroadcast(i2)
+                }
+            })
 
 
-
-
-
-
-    } //onViewCreated Finished
-
-
-
-
-    suspend fun gettingSongsListfromFireBase(playlist: String ="Trending_Playlist", folder: String="English")= withContext(Dispatchers.Main)
-    {
-        //initStorageReference(storage!!) //initialization of mReference
-
-
-        mReference?.child(playlist)?.child(folder)?.listAll()?.addOnSuccessListener(object:OnSuccessListener<ListResult> {
-            override fun onSuccess(listResult: ListResult?) {
-                listResult?.items?.forEach{
-                    songsFireList?.add(Songs_FireBase(it.metadata, it.downloadUrl))
-                  //  Log.d("SIFIRE", songsFireList?.size.toString())
-                   // intent.putExtra("songFirebaseList", songsFireList)
-                   // manager.sendBroadcast(intent)
-                    }
-                lottie?.visibility=View.GONE
-                lottie2?.visibility=View.GONE
-
-
-                addpter=MyAdapter2(context,songsFireList)
-                recylrView?.layoutManager = GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
-                recylrView?.adapter = addpter
-
-            }
         })
 
     } //gettingSon.....function closed
@@ -276,44 +249,9 @@ class SongsFragment : Fragment() {
     return@withContext bitmap1
    }
 
-    //globally declared
-    private var mlistState:Parcelable?=null
-    private var mlistState2:Parcelable?=null
-   /* override fun onSaveInstanceState(outState: Bundle)
-    {  super.onSaveInstanceState(outState)
-
-      //  mlistState=recylrView?.layoutManager?.onSaveInstanceState()
-       // outState.putParcelable("LISTSTATE",mlistState)
-recylrView?.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int)
-    {
-        super.onScrolled(recyclerView, dx, dy)
-        Log.d("JJKJG",dy.toString())
-        outState.putString("HELLO",dy.toString())
-
+    override fun onResume() {
+        super.onResume()
+        var intent=Intent(context,MusicService::class.java)
+        activity?.bindService(intent,serviceConnection,Context.BIND_AUTO_CREATE)
     }
-
-    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-        super.onScrollStateChanged(recyclerView, newState)
-        outState.putString("HEL",newState.toString())
-
-    }
-})
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        if (savedInstanceState != null) {
-          *//*  mlistState2=savedInstanceState?.getParcelable("LISTSTATE")
-            Log.d("FJGKJF",mlistState2.toString())
-
-            recylrView?.getLayoutManager()?.onRestoreInstanceState(mlistState2)*//*
-            Log.d("DJFKDJFKD",savedInstanceState.getString("HEL").toString())
-        }    }*/
-
-
-
-
-
-
 }

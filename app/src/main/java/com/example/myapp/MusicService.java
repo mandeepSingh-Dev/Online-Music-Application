@@ -25,6 +25,7 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Size;
 
@@ -33,9 +34,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.myapp.MusicRecylerView.Songs;
+import com.example.myapp.MusicRecylerView.Songs_FireBase;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageMetadata;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,9 +45,10 @@ import java.util.ArrayList;
 public class MusicService extends Service {
     private final MyBinder mBinder = new MyBinder();
     public static ArrayList<Songs> songsList;
+    public static ArrayList<Songs_FireBase> songListFirebase;
+    public ArrayList<Songs> songsFireList;
 
     MediaSessionCompat mediaSessionCompat;
-
 
 
     LocalBroadcastManager manager;
@@ -54,55 +56,98 @@ public class MusicService extends Service {
     MediaPlayer player;
     Intent intent = new Intent("ACTION_SEND");
 
-    boolean play_pauseConn=true;
-    int play_pause_notification=R.drawable.play_notification;
+    boolean play_pauseConn = true;
+    int play_pause_notification=R.drawable.ic_baseline_pause_24;
 
 
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("ACTION_POSITION")) {
+                int pos = intent.getIntExtra("Position", 1);
+                //   Log.d("POSiTION",pos+"__");
+                position = pos;
 
-   public  BroadcastReceiver receiver=new BroadcastReceiver() {
-       @Override
-       public void onReceive(Context context, Intent intent) {
-           if(intent.getAction().equals("ACTION_POSITION"))
-           {
-               int pos=intent.getIntExtra("Position",1);
-            //   Log.d("POSiTION",pos+"__");
-               position=pos;
+                changeMusic(pos);
+            }
+            else if(intent.getAction().equals("Send_SongsList"))
+            {
+                songsFireList=new ArrayList();
 
-               changeMusic(pos);
-           }
-       }
-   };
+                Log.d("HelloARRPARC",intent.getParcelableArrayListExtra("songslIst").size()+"jjdh");
+                songListFirebase=intent.getParcelableArrayListExtra("songslIst");
+                //foreach loop for getting metadata and downloaded uri from Songs_FireBase songListFirebase list
+                // to set in ArrayList<Songs>  songsFireList
+
+              for(Songs_FireBase list:songListFirebase)
+              {
+                  list.getStorageMetadataa().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+                      @Override
+                      public void onSuccess(StorageMetadata storageMetadata) {
+                          String songName=storageMetadata.getCustomMetadata("SongName");
+                          String bitmapstr=storageMetadata.getCustomMetadata("Bitmap");
+                          String dateModifiedd=String.valueOf(storageMetadata.getCreationTimeMillis());
+                          String artist=storageMetadata.getCustomMetadata("Artist");
+                          long durationn=Long.parseLong(storageMetadata.getCustomMetadata("Duration"));
+                          long songSize=Long.parseLong(storageMetadata.getCustomMetadata("Size"));
+                          //converting bitmapstr to set in arraylist as a bitmap
+                          Bitmap bitmap=convertToBitmap(bitmapstr);
+
+                             list.getDownloadedUri().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                 @Override
+                                 public void onSuccess(Uri uri) {
+                                     songsFireList.add(new Songs(uri, songName, artist, durationn, bitmap, dateModifiedd, songSize));
+
+                                 }
+                             });
+                          //checking elements in songFireList is added or not
+                          Log.d("HELEJ",songsFireList.size()+"fjk");
+                      }
+                  });
+              }
+
+            }
+            else if(intent.getAction().equals("FIREPOSITION"))
+            {
+                Log.d("POSTIONFIRE",intent.getIntExtra("positionfire",0)+"k");
+                position = intent.getIntExtra("positionfire",0);
+                changeMusic(position);
+            }
+        }
+    };
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if (player == null){
+        if (player == null) {
             player = new MediaPlayer();
-    }
-           songsList = getSongArrayList();
+        }
+        songsList = getSongArrayList();
 
-           //Initialize LocalBroadcastManager object here
-        manager=LocalBroadcastManager.getInstance(getApplicationContext());
+        //Initialize LocalBroadcastManager object here
+        manager = LocalBroadcastManager.getInstance(getApplicationContext());
 
         //register broadcastReceiver by checking intentFilter "ACTION_POSITION"
-       LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("ACTION_POSITION"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("ACTION_DESTROY"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_POSITION"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_DESTROY"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("Send_SongsList"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("FIREPOSITION"));
 
-        mediaSessionCompat=new MediaSessionCompat(getBaseContext(),"Music Service");
-       // Log.d("KPKPKP", "onCrearte");
+        mediaSessionCompat = new MediaSessionCompat(getBaseContext(), "Music Service");
+        // Log.d("KPKPKP", "onCrearte");
 
 
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-       // songs1=getSongArrayList();
+        // songs1=getSongArrayList();
 
-     //  Log.d("KPKPKP", "onStartCommand 34");
-       // songs = MainActivity.arrayList;
-   // if (!songs1.isEmpty()) {
-       // Log.d("djpkhfdj", songsList.size()+"");
+        //  Log.d("KPKPKP", "onStartCommand 34");
+        // songs = MainActivity.arrayList;
+        // if (!songs1.isEmpty()) {
+        // Log.d("djpkhfdj", songsList.size()+"");
 
         //if(intent.getAction().equals("ACTION_START_FROM_MUSICFRAGMENT")) {
            /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -181,56 +226,26 @@ public class MusicService extends Service {
 // Because at First tym starting service our songsList will be 0
 // But at second tym songlist will be not empty so
 // in above if block we get startservice from MusicFragment.
- /*else*/ if(intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
- {//Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");
-     }
-         // changeMusic(position);
+        /*else*/
+        if (intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN")) {//Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");
+        }
+        // changeMusic(position);
         //this else if block for pending intent.
-else if(intent.getAction().equals("ACTION_PLAY"))
-        {
-            if(player.isPlaying())
-            {
+        else if (intent.getAction().equals("ACTION_PLAY")) {
+            if (player.isPlaying()) {
                 player.pause();
-            }
-            else if(!player.isPlaying())
-            {
+                play_pause_notification=R.drawable.play_notification;
+            } else if (!player.isPlaying()) {
                 player.start();
+                play_pause_notification=R.drawable.ic_baseline_pause_24;
             }
-        }
-else if(intent.getAction().equals("ACTION_PREVIUOS"))
-        {
+        } else if (intent.getAction().equals("ACTION_PREVIUOS")) {
             changeMusic(--position);
-           // Log.d("pendingintentposition",position+"_previous");
-        }
-        else if(intent.getAction().equals("ACTION_NEXT"))
-        {
+            // Log.d("pendingintentposition",position+"_previous");
+        } else if (intent.getAction().equals("ACTION_NEXT")) {
             changeMusic(++position);
-          //  Log.d("pendingintentposition",position+"_next");
+            //  Log.d("pendingintentposition",position+"_next");
         }
-
-
-
-
-
-        // Log.d("djkhfdj", songs.get(position).getSongName() + "   ___" + songs.size());
-       /* player = MediaPlayer.create(this, songs.get(position).getSonguri());
-        player.start();
-
-        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                position += 1;
-                Log.d("dddPOS", position + " D");
-                player = MediaPlayer.create(getApplicationContext(), songs.get(position).getSonguri());
-                player.start();
-            }
-        });*/
-    /*} else {
-        Log.d("djkhfdj", "song1 arraylist is null");
-       // Intent intent1 = new Intent(this, NavigationMainActivity.class);
-       // intent1.setFlags(FLAG_ACTIVITY_NEW_TASK);
-       // startActivity(intent1);
-    }*/
 
 
 /*
@@ -325,15 +340,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 
              }
          });
-     }*/  FirebaseStorage mstorage=FirebaseStorage.getInstance();
-        StorageReference mreference=mstorage.getReference();
-        mreference.child("majhail.mp3").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-               // MediaPlayer.create(getApplicationContext(),uri).start();
-
-            }
-        });
+     }*/
       /*  mreference.child("majhail.mp3").getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
             @Override
             public void onSuccess(StorageMetadata storageMetadata) {
@@ -351,41 +358,35 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                 }
         });*/
 
-    return START_NOT_STICKY;
+        return START_NOT_STICKY;
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
-        }
+    }
 
-   public void stop()
-   {
-     //  Log.d("OOO","ONSTOP MUSICSERVICE");
+    public void stop() {
+        //  Log.d("OOO","ONSTOP MUSICSERVICE");
 
-   }
+    }
 
+    public void reset() {
+        player.reset();
+    }
 
+    public int getDuration() {
+        return player.getDuration();
+    }
 
-  public  void reset()
-   {
-       player.reset();
-   }
-   public int getDuration()
-   {
-     return player.getDuration();
-   }
-   public boolean isPlaying()
-   {
-       return player.isPlaying();
-   }
+    public boolean isPlaying() {
+        return player.isPlaying();
+    }
 
     public int getCurrentPosition() {
         return player.getCurrentPosition();
     }
-
-
 
     public void pause() {
         player.pause();
@@ -395,13 +396,9 @@ if(intent.getAction().equals("ACTION_PLAY")) {
         player.start();
     }
 
-    public void seekTo(int progress)
-    {
+    public void seekTo(int progress) {
         player.seekTo(progress);
     }
-
-
-
 
     //MyBinder inner class for getting MusicService refernce Through
     //// IBinder of onBind and onServiceConnccted
@@ -412,17 +409,14 @@ if(intent.getAction().equals("ACTION_PLAY")) {
         }
     }
 
-
-
-    public ArrayList<Songs> getSongArrayList()
-    {
-           ArrayList<Songs> arrayList=new ArrayList<>();
+    public ArrayList<Songs> getSongArrayList() {
+        ArrayList<Songs> arrayList = new ArrayList<>();
 
         //if block for android version above or equal to Q
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-           new Thread(new Runnable() {
-               @Override
-               public void run() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
 
                     ContentResolver resolver = getContentResolver();
                     Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -437,29 +431,29 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 
                         Long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
 
-                        long songSize=cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
+                        long songSize = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
 
-                         Uri uridata = Uri.withAppendedPath(uri, String.valueOf(id));//getting Uri from _id..
-                      //  Log.d("dfdYYYY", uridata.toString());
-                       // Log.d("TYTYTYT", artist + duration + name);
+                        Uri uridata = Uri.withAppendedPath(uri, String.valueOf(id));//getting Uri from _id..
+                        //  Log.d("dfdYYYY", uridata.toString());
+                        // Log.d("TYTYTYT", artist + duration + name);
 
-                       // Log.d("416line_feature adding",cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))+name);
-                        String dateModified=cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED));
+                        // Log.d("416line_feature adding",cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED))+name);
+                        String dateModified = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED));
 
                         Bitmap bitmap = null;
                         try {
                             Size size = new Size(300, 300);
                             //  Size size = new Size(100, 100);
-                            bitmap = resolver.loadThumbnail(uridata, size,null);
+                            bitmap = resolver.loadThumbnail(uridata, size, null);
 //GITHUB
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         if (bitmap != null && artist != null) {
-                            arrayList.add(new Songs(uridata, name, artist, duration, bitmap,dateModified,songSize));
+                            arrayList.add(new Songs(uridata, name, artist, duration, bitmap, dateModified, songSize));
                         } else {
                             artist = "No Artist";
-                            arrayList.add(new Songs(uridata, name, artist, duration,dateModified,songSize));
+                            arrayList.add(new Songs(uridata, name, artist, duration, dateModified, songSize));
                         }
 
                     }
@@ -469,7 +463,6 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 
 
         }
-
         //if block for android version below Q
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
 
@@ -489,34 +482,34 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                             String name = fileAL.get(i).getName(); //get all files name...
                             // Log.d("nameofSONG",name);
                             Uri uri = Uri.fromFile(fileAL.get(i));
-                          //  Log.d("nameofSONG", uri.toString());//get file and parse into Uri.
+                            //  Log.d("nameofSONG", uri.toString());//get file and parse into Uri.
 
                             MediaMetadataRetriever retriever = new MediaMetadataRetriever();   //For getting Bitmap image from song.
                             retriever.setDataSource(fileAL.get(i).toString());
-                          //  Log.d("HUMBAHOOHUMBA",fileAL.get(i).toString());
+                            //  Log.d("HUMBAHOOHUMBA",fileAL.get(i).toString());
 
 
                             byte[] bytes = retriever.getEmbeddedPicture();
                             Bitmap bitmap = null;
                             if (bytes != null) {
                                 bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);   //geting Bitmap
-                                Log.d("Hjei",bitmap.toString());
+                                Log.d("Hjei", bitmap.toString());
                             } else {
-                                bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.music_two_tonne);
+                                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.music_two_tonne);
                             }
                             //To get metadata(Artist and Duration)
                             String artist = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
                             Long duration = Long.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
                             //getting last modified date of file/song.
-                            Long dateModified=fileAL.get(i).lastModified();
+                            Long dateModified = fileAL.get(i).lastModified();
 
 
-                            long songSize=fileAL.get(i).length();
+                            long songSize = fileAL.get(i).length();
                             // now adding data to Arraylist..
                             if (bitmap != null) {
-                                arrayList.add(new Songs(uri, name, artist, duration, bitmap,String.valueOf(dateModified),songSize));
+                                arrayList.add(new Songs(uri, name, artist, duration, bitmap, String.valueOf(dateModified), songSize));
                             } else {
-                                arrayList.add(new Songs(uri, name, artist, duration,String.valueOf(dateModified),songSize));
+                                arrayList.add(new Songs(uri, name, artist, duration, String.valueOf(dateModified), songSize));
                             }
                         } catch (Exception e) {
                         }
@@ -527,12 +520,13 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 
         return arrayList;
     }
+
     //getting  arraylist of all files from this method.
     // This method for below android Q.
     public ArrayList<File> getDirectories(File file) {
 
         ArrayList<File> fileArrayList;
-       // Log.d("dddddddddd", Thread.currentThread().toString());
+        // Log.d("dddddddddd", Thread.currentThread().toString());
 
         File[] filesarr = file.listFiles();
         fileArrayList = new ArrayList<>();
@@ -546,7 +540,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                 if (singlefile.getName().endsWith(".mp3")) {
 
                     fileArrayList.add(singlefile.getAbsoluteFile());
-                  //  Log.d("sfdfdf", singlefile.getName());
+                    //  Log.d("sfdfdf", singlefile.getName());
 
                     // CtentResolver resolver=getContext().getContentResolver();
                     // Size size=new Size(100,100);
@@ -559,73 +553,56 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 
     }
 
-public void changeMusic(int positionn)
-{
-  // position=positionn;
-  // Log.d("LOLO",position+"_+");
+    public void changeMusic(int positionn) {
+        // position=positionn;
+        // Log.d("LOLO",position+"_+");
    /* if(!songsList.isEmpty())
     {*/
-    if(positionn<=-1)
-    {
-      //  Log.d("reset_position",positionn+"_");
-        player.reset();
-        position=0;
-       // player=null;
-    }
-    else if (positionn <= songsList.size() - 1) {
+        if (positionn <= -1) {
+            //  Log.d("reset_position",positionn+"_");
+            player.reset();
+            position = 0;
+            // player=null;
+        } else if (positionn <= songsList.size() - 1) {
+            intent.putExtra("receivedPosition", positionn);
+            intent.putExtra("TOTAL_DURATION", player.getDuration());
+            intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
 
 
-        // Intent intent = new Intent("ACTION_SEND");
-        intent.putExtra("receivedPosition", positionn);
-        intent.putExtra("TOTAL_DURATION", player.getDuration());
-        intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
+            // Log.d("Hello", positionn + "hello");
+            manager.sendBroadcast(intent);
+            player.reset();
+
+            try {
+                // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
 
 
-       // Log.d("Hello", positionn + "hello");
-        manager.sendBroadcast(intent);
-        player.reset();
+                player.setDataSource(this, songsList.get(position).getSonguri());
+                player.prepare();
+                player.start();
 
-        try {
-           // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
-
-
-
-            player.setDataSource(this, songsList.get(position).getSonguri());
-            player.prepare();
-            player.start();
-
-            getCurrentPosiotnnn();
-        } catch (Exception e) {
-        }
-        showNotification(positionn,play_pause_notification);
-
-      /*  if(play_pauseConn) {
-            showNotification(positionn,play_pause_notification);
-        }
-        else{
-            play_pause_notification=R.drawable.ic_baseline_pause_24;
-            showNotification(positionn,play_pause_notification);
-        }*/
-        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                changeMusic(++position);
-
+                getCurrentPosiotnnn();
+            } catch (Exception e) {
             }
-        });
+            showNotification(positionn, play_pause_notification);
+
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    Log.d("CCOOMPL","COMPJGKFG");
+                    changeMusic(++position);
+
+                }
+            });
+        } else if (positionn > songsList.size() - 1) {
+            position = 0;
+        }
+
+        // startForeground(100,notification);
+
+        // }
+
     }
-    else if(positionn>songsList.size()-1)
-    {
-        position=0;
-    }
-
-       // startForeground(100,notification);
-
-   // }
-
-}
-
-
 
 
     public int getCurrentPosiotnnn() {
@@ -635,9 +612,9 @@ public void changeMusic(int positionn)
                 while (player != null) {
                     try {
                         if (player.isPlaying()) {
-                             intent.putExtra("CURRENTDURATION", player.getCurrentPosition());
-                             manager.sendBroadcast(intent);
-                          //  Log.d("HEJO", player.getCurrentPosition() + "__position");
+                            intent.putExtra("CURRENTDURATION", player.getCurrentPosition());
+                            manager.sendBroadcast(intent);
+                            //  Log.d("HEJO", player.getCurrentPosition() + "__position");
                             Thread.sleep(1000);
 
                         }
@@ -647,103 +624,110 @@ public void changeMusic(int positionn)
                 }
             }
         }).start();
-        return  player.getCurrentPosition();
+        return player.getCurrentPosition();
 
     }
 
 
-public void showNotification(int possition,int play_pauseICON) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      //  Log.d("HJO", "HDFDIHFN");
-        // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        // mediaSessionCompat = new MediaSession(getBaseContext(), "MusicService");
-        // mediaSessionCompat.setActive(true);
+    public void showNotification(int possition, int play_pauseICON) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //  Log.d("HJO", "HDFDIHFN");
+            // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+            // mediaSessionCompat = new MediaSession(getBaseContext(), "MusicService");
+            // mediaSessionCompat.setActive(true);
 
 
-        mediaSessionCompat.setMetadata(
-                new MediaMetadataCompat.Builder()
-                        .putString(MediaMetadata.METADATA_KEY_TITLE, songsList.get(possition).getSongName())
-                        .putString(MediaMetadata.METADATA_KEY_ARTIST, songsList.get(possition).getArtist())
-                        .putBitmap(MediaMetadata.METADATA_KEY_ART, songsList.get(possition).getBitmap())
-                        .build());
+            mediaSessionCompat.setMetadata(
+                    new MediaMetadataCompat.Builder()
+                            .putString(MediaMetadata.METADATA_KEY_TITLE, songsList.get(possition).getSongName())
+                            .putString(MediaMetadata.METADATA_KEY_ARTIST, songsList.get(possition).getArtist())
+                            .putBitmap(MediaMetadata.METADATA_KEY_ART, songsList.get(possition).getBitmap())
+                            .build());
 
 
-        NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setSound(null,null);
-        //  channel.setDescription("GHello");
-        NotificationManager manager = getSystemService(NotificationManager.class);
-        manager.createNotificationChannel(channel);
+            NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setSound(null, null);
+            //  channel.setDescription("GHello");
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+            // }
+            //  Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "2");
+        }
+        PendingIntent pendingIntentPrevious;
+        int drw_previous;
+        // if (position == 0){
+        //  pendingIntentPrevious = null;
+        //  drw_previous = 0;
+        //  } else {
+        Intent intentPrevious = new Intent(this, MusicService.class)
+                .setAction("ACTION_PREVIUOS");
+        pendingIntentPrevious = PendingIntent.getService(this, 0,
+                intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent intentPlay = new Intent(this, MusicService.class)
+                .setAction("ACTION_PLAY");
+        PendingIntent pendingIntentPlay = PendingIntent.getService(this, 0,
+                intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent intentNext = new Intent(this, MusicService.class)
+                .setAction("ACTION_NEXT");
+        PendingIntent pendingIntentNext = PendingIntent.getService(this, 0,
+                intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
         // }
-      //  Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "2");
+        // Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "3");
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channelid");
+        builder.setContentTitle("MUSIC")
+                .setSmallIcon(R.drawable.musictwo_ton)
+                // .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setLargeIcon(songsList.get(possition).getBitmap())
+                .setColor(getResources().getColor(R.color.Green))
+                .setContentTitle(songsList.get(possition).getSongName())
+                .setContentText(songsList.get(possition).getArtist())
+                .setLargeIcon(songsList.get(possition).getBitmap())
+                .setSilent(true)
+                .setOnlyAlertOnce(true)
+                //.setShowWhen(false)
+                .addAction(R.drawable.ic_baseline_navigate_before_24, "Previous", pendingIntentPrevious)
+                .addAction(play_pauseICON, "Play", pendingIntentPlay)
+                .addAction(R.drawable.ic_baseline_navigate_next_24, "Next", pendingIntentNext)
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()).setShowCancelButton(true).setShowActionsInCompactView(0, 1, 2))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+
+        Notification notification = builder.build();
+        startForeground(101, notification);
     }
-    PendingIntent pendingIntentPrevious;
-    int drw_previous;
-    // if (position == 0){
-    //  pendingIntentPrevious = null;
-    //  drw_previous = 0;
-    //  } else {
-    Intent intentPrevious = new Intent(this, MusicService.class)
-            .setAction("ACTION_PREVIUOS");
-    pendingIntentPrevious = PendingIntent.getService(this, 0,
-            intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT);
-
-    Intent intentPlay = new Intent(this, MusicService.class)
-            .setAction("ACTION_PLAY");
-    PendingIntent pendingIntentPlay = PendingIntent.getService(this, 0,
-            intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
-
-    Intent intentNext = new Intent(this, MusicService.class)
-            .setAction("ACTION_NEXT");
-    PendingIntent pendingIntentNext = PendingIntent.getService(this, 0,
-            intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
-    // }
-   // Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "3");
-
-
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channelid");
-    builder.setContentTitle("MUSIC")
-            .setSmallIcon(R.drawable.musictwo_ton)
-            // .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setLargeIcon(songsList.get(possition).getBitmap())
-            .setColor(getResources().getColor(R.color.Green))
-            .setContentTitle(songsList.get(possition).getSongName())
-            .setContentText(songsList.get(possition).getArtist())
-            .setLargeIcon(songsList.get(possition).getBitmap())
-            .setSilent(true)
-            .setOnlyAlertOnce(true)
-            //.setShowWhen(false)
-            .addAction(R.drawable.ic_baseline_navigate_before_24, "Previous", pendingIntentPrevious)
-            .addAction(play_pauseICON, "Play", pendingIntentPlay)
-            .addAction(R.drawable.ic_baseline_navigate_next_24, "Next", pendingIntentNext)
-            .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()).setShowCancelButton(true).setShowActionsInCompactView(0, 1, 2))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-
-    Notification notification = builder.build();
-    startForeground(101, notification);
-}
-
-//}
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-      //  Log.d("DDEESSTROY","DESTROY");
+        //  Log.d("DDEESSTROY","DESTROY");
        /* Intent inntent=new Intent(this,MusicService.class);
         inntent.setAction("ACTION_STOP");
         startService(inntent);*/
-        if(player!=null)
-        {
+        if (player != null) {
             player.reset();
             player.release();
         }
-       // changeMusic(-1);
+        // changeMusic(-1);
         stopForeground(true);
         stopSelf();
 
     }
 
-
-
+    public Bitmap convertToBitmap(String bitmapstr)
+    {
+        Bitmap bitmap1=null;
+        try {
+            // Log.d("bitMAPSTR",bitmapstr);
+            byte[] byteArray = Base64.decode(bitmapstr, Base64.DEFAULT);
+            bitmap1= BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            //Log.d("BITMMAP",bitmap1.toString());
+        }catch (Exception e){}
+//    Log.d("HHELO",bitmap1.toString());
+        return bitmap1;
+    }
 
 }

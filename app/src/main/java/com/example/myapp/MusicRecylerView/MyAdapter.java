@@ -115,6 +115,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
    {
        itemClickListener=customItemClickListener;
    }
+   //creating interface here
    public interface CustomItemClickListener
    {
      void onItemClick(int position,View imageview);

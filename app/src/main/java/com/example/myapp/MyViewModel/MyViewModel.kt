@@ -23,7 +23,10 @@ class MyViewModel : ViewModel {
 
     private var livesongsFirebase: MutableLiveData<ArrayList<Songs_FireBase>>? = null
     private var liveListResult:MutableLiveData<ListResult>?=null
+    private var liveSongList:MutableLiveData<ArrayList<Songs>>?=null
+
     private var songsFirebase: ArrayList<Songs_FireBase>? = null
+    private var songsList:ArrayList<Songs>?=null
 
     //we use CON_NUM argument here
     constructor(playlist: String, folder: String/*,reference: StorageReference*/) {
@@ -45,15 +48,8 @@ class MyViewModel : ViewModel {
                         Log.d("JKDHFD", it.name)
                         songsFirebase?.add(Songs_FireBase(it.metadata, it.downloadUrl))
 
-                        //  Log.d("SIFIRE", songsFireList?.size.toString())
-                        // intent.putExtra("songFirebaseList", songsFireList)
-                        // manager.sendBroadcast(intent)
                     }
-/*
-                Log.d("HFHDJ",songsFirebase.get(0).toString())
-*/
                     livesongsFirebase?.value = songsFirebase
-
                 }
             })
         //getting listAll() list
@@ -80,5 +76,6 @@ class MyViewModel : ViewModel {
     {
         return liveListResult
     }
+
 
 }

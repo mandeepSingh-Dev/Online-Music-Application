@@ -34,6 +34,8 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
     LocalBroadcastManager manager;
     Intent intent;
 
+    public CustomItemClickListener2 customItemClickListener2;
+
 
     public MyAdapter2(Context context, ArrayList<Songs_FireBase> arrayList)
     {
@@ -115,7 +117,27 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
             Animation animation= AnimationUtils.loadAnimation(context,R.anim.opening_anim);
             itemView.setAnimation(animation);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customItemClickListener2.customOnItemClick(getAdapterPosition());
+                }
+            });
+
         }
+    }
+
+    public void setOnClickListener(CustomItemClickListener2 customItemClickListener2)
+    {
+        this.customItemClickListener2=customItemClickListener2;
+    }
+    //creating interface here
+    public interface CustomItemClickListener2
+    {
+        //creating this function to implement in SongsFrfagment class so when
+        //we click a song then position will pass to this function
+        public void customOnItemClick(int position);
+
     }
 
 
