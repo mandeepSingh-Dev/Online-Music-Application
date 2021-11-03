@@ -35,7 +35,7 @@ class MyViewModel : ViewModel {
         //getting StorageReference instance from StorageRefernceSinglton Class
         var mrefernceSingleton = StorageReferenceSingleton().getStroageReference()
 
-        //Log.d("djfgd", ".vjjdf")
+        Log.d("djfgd", ".vjjdf")
 
         songsFirebase = ArrayList()
         livesongsFirebase = MutableLiveData<ArrayList<Songs_FireBase>>()
@@ -51,7 +51,9 @@ class MyViewModel : ViewModel {
                     }
                     livesongsFirebase?.value = songsFirebase
                 }
-            })
+            })?.addOnFailureListener {
+                Log.d("FIREBASEexception",it.message+"\n"+it.localizedMessage+"\n"+it.cause+"\n"+it.printStackTrace())
+            }
         //getting listAll() list
         liveListResult=MutableLiveData()
         mrefernceSingleton?.child(playlist)?.child(folder)?.listAll()?.addOnSuccessListener(object : OnSuccessListener<ListResult>{

@@ -167,6 +167,11 @@ class SongsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("SongsFragment","songsFRagment");
+
+        /*val intenttt = Intent(activity, MusicService::class.java)
+        intenttt.action = "ACTION_START_FROM_SONGSFRAGMENT"
+        activity?.startService(intenttt)*/
 
        var animation = AnimationUtils.loadAnimation(context, R.anim.opening_anim)
         var rootLayout=view.findViewById<CoordinatorLayout>(R.id.songFragmentRootLay)
@@ -191,6 +196,7 @@ class SongsFragment : Fragment() {
 
             CoroutineScope(Dispatchers.Main).launch {
                // gettingSongsListfromFireBase(playlist, folder)
+                Log.d("fklgjkflgflgkflgkf",folder!!)
            gettingSongsListfromFireBase(playlist!!,folder!!)
             }
 
@@ -198,11 +204,11 @@ class SongsFragment : Fragment() {
         else{
             toolbar?.setTitle("Music")
         }
-
     } //onViewCreated Finished
 
     suspend fun gettingSongsListfromFireBase(playlist: String ="Trending_Playlist", folder: String="English")= withContext(Dispatchers.Main)
     {
+        Log.d("hhhhhhh","flfghgfhfghfgj");
         localBroadcastManager= LocalBroadcastManager.getInstance(requireContext())
         var i=Intent("Send_SongsList")
         //initStorageReference(storage!!) //initialization of mReference
@@ -226,8 +232,10 @@ class SongsFragment : Fragment() {
 
             addpter?.setOnClickListener(object:MyAdapter2.CustomItemClickListener2{
                 override fun customOnItemClick(position: Int) {
+                    Log.d("onlinesongClicked","onlinesongClicked"+"__"+position)
                     var i2=Intent("FIREPOSITION")
                     i2.putExtra("positionfire",position)
+                    i2.putExtra("ONLINE_CONDITION","ONLINE")
                     localBroadcastManager?.sendBroadcast(i2)
                 }
             })

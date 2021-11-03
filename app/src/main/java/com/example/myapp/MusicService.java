@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -31,6 +32,7 @@ import android.util.Size;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.myapp.MusicRecylerView.Songs;
@@ -45,73 +47,92 @@ import java.util.ArrayList;
 public class MusicService extends Service {
     private final MyBinder mBinder = new MyBinder();
     public static ArrayList<Songs> songsList;
+
     public static ArrayList<Songs_FireBase> songListFirebase;
     public ArrayList<Songs> songsFireList;
 
     MediaSessionCompat mediaSessionCompat;
 
 
-    LocalBroadcastManager manager;
-    int position = 1;
+    private LocalBroadcastManager broadcastmanager;
+    int position = 0;
     MediaPlayer player;
     Intent intent = new Intent("ACTION_SEND");
 
     boolean play_pauseConn = true;
+    String offline_Online;
     int play_pause_notification=R.drawable.ic_baseline_pause_24;
+
+
+ public BroadcastReceiver receiver2=new BroadcastReceiver() {
+     @Override
+     public void onReceive(Context context, Intent intent)
+     {
+         if (intent.getAction().equals("Send_SongsList")) {
+            // position = intent.getIntExtra("positionfire", 0);
+
+
+             Log.d("HelloARRPARC", intent.getParcelableArrayListExtra("songslIst").size() + "jjdh");
+             songListFirebase = intent.getParcelableArrayListExtra("songslIst");
+             //foreach loop for getting metadata and downloaded uri from Songs_FireBase songListFirebase list
+             // to set in ArrayList<Songs>  songsFireList
+
+             for (Songs_FireBase list : songListFirebase) {
+                 list.getStorageMetadataa().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+                     @Override
+                     public void onSuccess(StorageMetadata storageMetadata) {
+                         String songName = storageMetadata.getCustomMetadata("SongName");
+                         String bitmapstr = storageMetadata.getCustomMetadata("Bitmap");
+                         String dateModifiedd = String.valueOf(storageMetadata.getCreationTimeMillis());
+                         String artist = storageMetadata.getCustomMetadata("Artist");
+                         long durationn = Long.parseLong(storageMetadata.getCustomMetadata("Duration"));
+                         long songSize = Long.parseLong(storageMetadata.getCustomMetadata("Size"));
+                         //converting bitmapstr to set in arraylist as a bitmap
+                         Bitmap bitmap = convertToBitmap(bitmapstr);
+
+                         list.getDownloadedUri().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                             @Override
+                             public void onSuccess(Uri uri) {
+                                 songsFireList.add(new Songs(uri, songName, artist, durationn, bitmap, dateModifiedd, songSize));
+
+                             }
+                         });
+                         //checking elements in songFireList is added or not
+                         Log.d("HELEJ", songsFireList.size() + "fjk");
+                         //changeMusic(position,songsFireList);
+                     }
+                 });
+             }
+         }
+     }};
 
 
     public BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            //here in this condition we get position of item song
+            // of Offline Local songsList and pass position to changeMusic method
             if (intent.getAction().equals("ACTION_POSITION")) {
-                int pos = intent.getIntExtra("Position", 1);
-                //   Log.d("POSiTION",pos+"__");
-                position = pos;
+                int pos = intent.getIntExtra("Position",0);
+                offline_Online=intent.getStringExtra("OFFLINE_CONDITION");
+                Log.d("offlineePOSITION",offline_Online+pos+"");
 
-                changeMusic(pos);
+               // position = pos;
+                changeMusic(pos,songsList);
             }
-            else if(intent.getAction().equals("Send_SongsList"))
-            {
-                songsFireList=new ArrayList();
 
-                Log.d("HelloARRPARC",intent.getParcelableArrayListExtra("songslIst").size()+"jjdh");
-                songListFirebase=intent.getParcelableArrayListExtra("songslIst");
-                //foreach loop for getting metadata and downloaded uri from Songs_FireBase songListFirebase list
-                // to set in ArrayList<Songs>  songsFireList
-
-              for(Songs_FireBase list:songListFirebase)
-              {
-                  list.getStorageMetadataa().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-                      @Override
-                      public void onSuccess(StorageMetadata storageMetadata) {
-                          String songName=storageMetadata.getCustomMetadata("SongName");
-                          String bitmapstr=storageMetadata.getCustomMetadata("Bitmap");
-                          String dateModifiedd=String.valueOf(storageMetadata.getCreationTimeMillis());
-                          String artist=storageMetadata.getCustomMetadata("Artist");
-                          long durationn=Long.parseLong(storageMetadata.getCustomMetadata("Duration"));
-                          long songSize=Long.parseLong(storageMetadata.getCustomMetadata("Size"));
-                          //converting bitmapstr to set in arraylist as a bitmap
-                          Bitmap bitmap=convertToBitmap(bitmapstr);
-
-                             list.getDownloadedUri().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                 @Override
-                                 public void onSuccess(Uri uri) {
-                                     songsFireList.add(new Songs(uri, songName, artist, durationn, bitmap, dateModifiedd, songSize));
-
-                                 }
-                             });
-                          //checking elements in songFireList is added or not
-                          Log.d("HELEJ",songsFireList.size()+"fjk");
-                      }
-                  });
-              }
-
-            }
+            //here we get position of Online songslist item position
+            // to pass in changeMusic() method
             else if(intent.getAction().equals("FIREPOSITION"))
             {
                 Log.d("POSTIONFIRE",intent.getIntExtra("positionfire",0)+"k");
-                position = intent.getIntExtra("positionfire",0);
-                changeMusic(position);
+                int pos = intent.getIntExtra("positionfire",0);
+                offline_Online=intent.getStringExtra("ONLINE_CONDITION");
+                Log.d("onlineePOSITION",offline_Online+pos+"");
+
+                //changeMusic(position,songsList);
+                changeMusic(pos,songsFireList);
+
             }
         }
     };
@@ -120,18 +141,21 @@ public class MusicService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d("SertviceStart","MUSICSERVICESTART");
         if (player == null) {
             player = new MediaPlayer();
         }
         songsList = getSongArrayList();
+        songsFireList = new ArrayList();
+        songListFirebase=new ArrayList();
 
         //Initialize LocalBroadcastManager object here
-        manager = LocalBroadcastManager.getInstance(getApplicationContext());
+        broadcastmanager = LocalBroadcastManager.getInstance(getApplicationContext());
 
         //register broadcastReceiver by checking intentFilter "ACTION_POSITION"
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_POSITION"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_DESTROY"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("Send_SongsList"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver2,new IntentFilter("Send_SongsList"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("FIREPOSITION"));
 
         mediaSessionCompat = new MediaSessionCompat(getBaseContext(), "Music Service");
@@ -142,95 +166,11 @@ public class MusicService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // songs1=getSongArrayList();
 
-        //  Log.d("KPKPKP", "onStartCommand 34");
-        // songs = MainActivity.arrayList;
-        // if (!songs1.isEmpty()) {
-        // Log.d("djpkhfdj", songsList.size()+"");
-
-        //if(intent.getAction().equals("ACTION_START_FROM_MUSICFRAGMENT")) {
-           /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Log.d("HJO", "HDFDIHFN");
-                // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-               // mediaSessionCompat = new MediaSession(getBaseContext(), "MusicService");
-               // mediaSessionCompat.setActive(true);
-
-
-                Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "1");
-
-               NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);
-              //  channel.setDescription("GHello");
-                NotificationManager manager = getSystemService(NotificationManager.class);
-                manager.createNotificationChannel(channel);
-                // }
-                Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"2");
-
-                PendingIntent pendingIntentPrevious;
-                int drw_previous;
-               // if (position == 0){
-                  //  pendingIntentPrevious = null;
-                  //  drw_previous = 0;
-              //  } else {
-                    Intent intentPrevious = new Intent(this, MusicService.class)
-                            .setAction("ACTION_PREVIUOS");
-                    pendingIntentPrevious = PendingIntent.getService(this, 0,
-                            intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT);
-                    drw_previous = R.drawable.music_two_tonne;
-
-                Intent intentPlay = new Intent(this, MusicService.class)
-                        .setAction("ACTION_PLAY");
-                PendingIntent pendingIntentPlay = PendingIntent.getService(this, 0,
-                        intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                Intent intentNext = new Intent(this, MusicService.class)
-                        .setAction("ACTION_NEXT");
-              PendingIntent  pendingIntentNext = PendingIntent.getService(this, 0,
-                        intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
-               // }
-                Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"3");
-
-                Bitmap bitmap=BitmapFactory.decodeFile("android.graphics.Bitmap@ffeece5");
-
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channelid");
-                builder.setContentTitle("MUSIC")
-                       .setSmallIcon(R.drawable.ic_launcher_background)
-                      // .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                       // .setLargeIcon(bitmap)
-                       .setColor(Color.BLUE)
-                        .setContentTitle(songsList.get(position).getSongName())
-                        .setContentText("Kulbir ")
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.music_two_tonne))
-                        .setOnlyAlertOnce(true)
-                        .setShowWhen(false)
-                        .setProgress(10000,4000,true)
-
-                        .addAction(R.drawable.music_two_tonne,"Previous",pendingIntentPrevious)
-                        .addAction(R.drawable.ic_launcher_background,"Previous",pendingIntentPlay)
-                        .addAction(R.drawable.ic_launcher_background,"Previous",pendingIntentNext)
-                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()))
-                        .setPriority(NotificationCompat.PRIORITY_MAX);
-                Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"4");
-
-                Notification notification = builder.build();
-
-               // notificationManagerCompat.notify(1, notification);
-                Log.d("MEDIAAA",mediaSessionCompat.getSessionToken().toString()+mediaSessionCompat.isActive()+"5");
-         //   NotificationManagerCompat.from(MusicService.this).notify(1, builder.build());
-
-                startForeground(101,notification);
-       }
-*/
-//}
-//this block for first time starting of service from SplashScreen
-// Because at First tym starting service our songsList will be 0
-// But at second tym songlist will be not empty so
-// in above if block we get startservice from MusicFragment.
-        /*else*/
-        if (intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN")) {//Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");
+        if (intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
+        {
+            //Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");
         }
-        // changeMusic(position);
-        //this else if block for pending intent.
         else if (intent.getAction().equals("ACTION_PLAY")) {
             if (player.isPlaying()) {
                 player.pause();
@@ -239,126 +179,30 @@ public class MusicService extends Service {
                 player.start();
                 play_pause_notification=R.drawable.ic_baseline_pause_24;
             }
-        } else if (intent.getAction().equals("ACTION_PREVIUOS")) {
-            changeMusic(--position);
-            // Log.d("pendingintentposition",position+"_previous");
-        } else if (intent.getAction().equals("ACTION_NEXT")) {
-            changeMusic(++position);
-            //  Log.d("pendingintentposition",position+"_next");
-        }
-
-
-/*
-if(intent.getAction().equals("ACTION_PLAY")) {
-
-
-    Log.d("IUUUI", songs.get(position).getSonguri().toString());
-
-    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) {
-        NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);
-        channel.setDescription("GHello");
-        NotificationManager manager = getSystemService(NotificationManager.class);
-        manager.createNotificationChannel(channel);
-    }
-    NotificationCompat.Builder builder=new NotificationCompat.Builder(this,"channelid");
-    builder.setContentTitle("MUSIC")
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle("MUSIC PLAY");
-
-    Notification notification= builder.build();
-
-    startForeground(100,notification);
-
-
-    player = MediaPlayer.create(getApplicationContext(), songs.get(position).getSonguri());
-    player.start();
-    player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-        @Override
-        public void onCompletion(MediaPlayer mp) {
-            position+=1;
-            player = MediaPlayer.create(getApplicationContext(), songs.get(position).getSonguri());
-            Log.d("eee",position+"..");
-            player.start();
-            notification.notify();
-        }
-    });
-
-    }*/
-
-
-     /* String songs=intent.getStringExtra("SONG_URI");
-       position=intent.getIntExtra("POSITION",1);
-        Log.d("POPOPO",position+"ff");
-
-        Log.d("JJJJ","kk"+ songs);
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), Uri.parse(songs));
-
-     if(mediaPlayer!=null) {
-         Log.d("KPKPKP","IF MEDIAPLAYER NOT NULL 41");
-         mediaPlayer.start();
-          i=new Intent("ACTION_HULLI");
-         i.putExtra("DURATION",mediaPlayer.getDuration());
-      manager=LocalBroadcastManager.getInstance(getApplicationContext());
-     manager.sendBroadcast(i);
-     }
-     else{
-         Toast.makeText(getApplicationContext(),"Media is null", Toast.LENGTH_SHORT).show();
-     }
-
-         new Thread(new Runnable() {
-             @Override
-             public void run() {
-                while (mediaPlayer != null) {
-                     try {
-                         if (mediaPlayer.isPlaying()) {
-                             i.putExtra("CURRENTDURATION", mediaPlayer.getCurrentPosition());
-                             manager.sendBroadcast(i);
-                             Thread.sleep(1000);
-
-                         }
-                     } catch (InterruptedException e) {
-                         e.printStackTrace();
-                     }
-                 }
-             }
-         }).start();
-
-     if(mediaPlayer!=null)
-     {
-         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-             @Override
-             public void onCompletion(MediaPlayer mp) {
-                 Log.d("KPKPKP","onCompletion IN onStartCommand 75");
-                 Boolean con=true;
-                 i.putExtra("BooleanCOMPLETION",con);
-                 i.putExtra("POSITIONN",++position);
-                 Log.d("POPOPO",++position+"ff");
-                 manager.sendBroadcast(i);
-
-
-
-
-             }
-         });
-     }*/
-      /*  mreference.child("majhail.mp3").getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-            @Override
-            public void onSuccess(StorageMetadata storageMetadata) {
-                Log.d("METADATAAFIREBASE", storageMetadata.getName()+"\n"+storageMetadata.getContentType()+"\n"+storageMetadata.getSizeBytes()+"\n"+storageMetadata.getBucket()+storageMetadata.getContentLanguage());
+        } else if (intent.getAction().equals("ACTION_PREVIUOS"))
+        {
+            if(offline_Online.equals("ONLINE")) {
+                Log.d("HELLOPOSS",position+"");
+                changeMusic(--position, songsFireList);
+            }
+            else  if(offline_Online.equals("OFFLINE")){
+                Log.d("HELLOPOSS",position+"");
+                changeMusic(--position, songsList);
 
             }
-        });*//*.getBytes(1000000*10).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                try {
-                    String s = new String(bytes, "UTF-8");
-                    Uri uri = Uri.parse(s);
-                    MediaPlayer.create(getApplicationContext(),uri).start();
-                }catch (Exception e){}
-                }
-        });*/
+        } else if (intent.getAction().equals("ACTION_NEXT"))
+        {
+            if (offline_Online.equals("ONLINE")) {
+                Log.d("HELLOPOSS", position + "");
+                changeMusic(++position, songsFireList);
+            } else if (offline_Online.equals("OFFLINE")) {
+                Log.d("HELLOPOSS", position + "");
+                changeMusic(++position, songsList);
+            }
+                //  Log.d("pendingintentposition",position+"_next");
+            }
 
-        return START_NOT_STICKY;
+    return START_NOT_STICKY;
     }
 
     @Nullable
@@ -553,50 +397,75 @@ if(intent.getAction().equals("ACTION_PLAY")) {
 
     }
 
-    public void changeMusic(int positionn) {
+    public void changeMusic(int positionn, ArrayList<Songs> songsListttt) {
         // position=positionn;
         // Log.d("LOLO",position+"_+");
    /* if(!songsList.isEmpty())
     {*/
-        if (positionn <= -1) {
-            //  Log.d("reset_position",positionn+"_");
-            player.reset();
-            position = 0;
-            // player=null;
-        } else if (positionn <= songsList.size() - 1) {
-            intent.putExtra("receivedPosition", positionn);
-            intent.putExtra("TOTAL_DURATION", player.getDuration());
-            intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
+        Log.d("changeMusicPOSITION",positionn+"\n"+songsListttt.size()+songsListttt.get(positionn).getSongName());
 
 
-            // Log.d("Hello", positionn + "hello");
-            manager.sendBroadcast(intent);
-            player.reset();
+                if (positionn <= -1) {
+                    //  Log.d("reset_position",positionn+"_");
+                    player.reset();
+                    position = 0;
+                    // player=null;
+                } else if (positionn <= songsListttt.size() - 1) {
+                    intent.putExtra("receivedPosition", positionn);
+                    intent.putExtra("TOTAL_DURATION", player.getDuration());
+                    intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
 
-            try {
-                // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
+
+                    // Log.d("Hello", positionn + "hello");
+                    broadcastmanager.sendBroadcast(intent);
+                    player.reset();
+
+                    try {
+                        // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
+                        if (offline_Online.equals("ONLINE")) {
+                            Log.d("ONNLINECHNAGEMUSIC","ONNlineChangemUSIC()");
+                            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                            player.setDataSource(this,songsListttt.get(positionn).getSonguri());
+                           // player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+                            player.prepareAsync();
+                            // player.start();
+                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                @Override
+                                public void onPrepared(MediaPlayer mp) {
+                                    player.start();
+                                }
+                            });
+                            Log.d("helssdslo","play");
 
 
-                player.setDataSource(this, songsList.get(position).getSonguri());
-                player.prepare();
-                player.start();
+                        }
+                        else if (offline_Online.equals("OFFLINE"))
+                       {
+                           Log.d("OFFLINECHNAGEMUSIC","OFFlineChangemUSIC()");
+                            player.setDataSource(getApplicationContext(), songsListttt.get(positionn).getSonguri());
+                         player.prepare();
+                         player.start();
+                         Log.d("hello","play");
+                       }
+                        showNotification(positionn, play_pause_notification,songsListttt);
 
-                getCurrentPosiotnnn();
-            } catch (Exception e) {
-            }
-            showNotification(positionn, play_pause_notification);
 
-            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    Log.d("CCOOMPL","COMPJGKFG");
-                    changeMusic(++position);
+                        getCurrentPosiotnnn();
+                    } catch (Exception e) {
+                    }
 
+
+                    player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            Log.d("CCOOMPL", "COMPJGKFG");
+                            changeMusic(++position, songsListttt);
+
+                        }
+                    });
+                } else if (positionn > songsListttt.size() - 1) {
+                    position = 0;
                 }
-            });
-        } else if (positionn > songsList.size() - 1) {
-            position = 0;
-        }
 
         // startForeground(100,notification);
 
@@ -613,7 +482,7 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                     try {
                         if (player.isPlaying()) {
                             intent.putExtra("CURRENTDURATION", player.getCurrentPosition());
-                            manager.sendBroadcast(intent);
+                            broadcastmanager.sendBroadcast(intent);
                             //  Log.d("HEJO", player.getCurrentPosition() + "__position");
                             Thread.sleep(1000);
 
@@ -629,36 +498,28 @@ if(intent.getAction().equals("ACTION_PLAY")) {
     }
 
 
-    public void showNotification(int possition, int play_pauseICON) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //  Log.d("HJO", "HDFDIHFN");
-            // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-            // mediaSessionCompat = new MediaSession(getBaseContext(), "MusicService");
-            // mediaSessionCompat.setActive(true);
-
-
-            mediaSessionCompat.setMetadata(
-                    new MediaMetadataCompat.Builder()
+    public void showNotification(int possition, int play_pauseICON, ArrayList<Songs> songsList)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            mediaSessionCompat.setMetadata(new MediaMetadataCompat.Builder()
                             .putString(MediaMetadata.METADATA_KEY_TITLE, songsList.get(possition).getSongName())
                             .putString(MediaMetadata.METADATA_KEY_ARTIST, songsList.get(possition).getArtist())
                             .putBitmap(MediaMetadata.METADATA_KEY_ART, songsList.get(possition).getBitmap())
                             .build());
 
 
-            NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);//after debugging set IMPORATNCE_DEFAULT HERE
             channel.setSound(null, null);
             //  channel.setDescription("GHello");
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
+
             // }
             //  Log.d("MEDIAAA", mediaSessionCompat.getSessionToken().toString() + mediaSessionCompat.isActive() + "2");
         }
         PendingIntent pendingIntentPrevious;
         int drw_previous;
-        // if (position == 0){
-        //  pendingIntentPrevious = null;
-        //  drw_previous = 0;
-        //  } else {
         Intent intentPrevious = new Intent(this, MusicService.class)
                 .setAction("ACTION_PREVIUOS");
         pendingIntentPrevious = PendingIntent.getService(this, 0,
@@ -693,10 +554,15 @@ if(intent.getAction().equals("ACTION_PLAY")) {
                 .addAction(play_pauseICON, "Play", pendingIntentPlay)
                 .addAction(R.drawable.ic_baseline_navigate_next_24, "Next", pendingIntentNext)
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()).setShowCancelButton(true).setShowActionsInCompactView(0, 1, 2))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_MAX); //after debugging set PRIORITY_DEFAULT HERE
 
 
         Notification notification = builder.build();
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(100, builder.build());
+
+
         startForeground(101, notification);
     }
 

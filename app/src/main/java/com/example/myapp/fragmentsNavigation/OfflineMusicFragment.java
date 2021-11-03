@@ -165,6 +165,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Log.d("offFragment","OFFLINEFRAGMENT");
         Intent intenttt = new Intent(getActivity(), MusicService.class);
         intenttt.setAction("ACTION_START_FROM_MUSICFRAGMENT");
         getActivity().startService(intenttt);
@@ -435,15 +436,12 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
                                     }
                                 });
-
-
                             }
                         });
+
                     } catch (Exception e) {
                         Log.d("djkh", e.getMessage());
                     }
-
-
                     //user defined setOnItemClickListener Method and Interface in MyAdapter.
                     myAdapter.setOnItemClickListener(new MyAdapter.CustomItemClickListener() {
                         @Override
@@ -451,13 +449,13 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                             Log.d("KPKPKP", "onItemClick 275");
 
                             mposition = position;
+                            Log.d("clickOffFragmnetSong","clickedOfflineSong");
                             //SENDING POSITION TO MUSIC SERVICE THROUGH BROADCAST MANAGER.
-                            // Intent i=new Intent("ACTION_POSITION");
+                            // Intent i2=new Intent("ACTION_POSITION");
                             i.putExtra("Position", position);
+                            i.putExtra("OFFLINE_CONDITION","OFFLINE");
                             broadcastManager.sendBroadcast(i);
                             playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
-
-
                             //  changeMusic(position);
 
                         }
@@ -465,11 +463,8 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                 }
             });
         }  //if statemnet closed of android version above or equal to Q
-
         //if statement for android version below Q
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-
-
             //File file = Environment.getExternalStorageDirectory();
 
             // File file = Environment.getRootDirectory();
@@ -484,41 +479,6 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                             progressBar.setVisibility(View.VISIBLE);
                         }
                     });
-
-                   /* ArrayList<File> fileAL = getDirectories(file);  //getting files in Thread handler...
-
-                    for (int i = 0; i < fileAL.size(); i++) {
-
-                        try {
-                            String name = fileAL.get(i).getName(); //get all files name...
-                            // Log.d("nameofSONG",name);
-                            Uri uri = Uri.fromFile(fileAL.get(i));
-                            Log.d("nameofSONG", uri.toString());//get file and parse into Uri.
-
-                            MediaMetadataRetriever retriever = new MediaMetadataRetriever();   //For getting Bitmap image from song.
-                            retriever.setDataSource(fileAL.get(i).toString());
-
-                            byte[] bytes = retriever.getEmbeddedPicture();
-                            Bitmap bitmap = null;
-                            if (bytes != null) {
-                                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);   //geting Bitmap
-                            } else {
-                                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.musictwo_tone);
-                            }
-                            //To get metadata(Artist and Duration)
-                            String artist = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-                            Long duration = Long.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-
-                            // now adding data to Arraylist..
-                            if (!(bitmap == null)) {
-                                songsArrayList.add(new Songs(uri, name, artist, duration, bitmap));
-                            } else {
-                                songsArrayList.add(new Songs(uri, name, artist, duration));
-                            }
-                        } catch (Exception e) {
-                        }
-                    }  //for loop closed
-*/
                     songsArrayList2.sort(new Comparator<Songs>() {
                         @Override
                         public int compare(Songs lhs, Songs rhs) {
@@ -550,9 +510,9 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                             // Intent i=new Intent("ACTION_POSITION");  //setting this globally..
 
                             i.putExtra("Position", position);
+                            i.putExtra("OFFLINE_CONDITION","OFFLINE");
                             broadcastManager.sendBroadcast(i);
                             playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
-
 
                             // changeMusic(position);
                         }
