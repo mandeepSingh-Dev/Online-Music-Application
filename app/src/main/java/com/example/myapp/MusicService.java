@@ -455,14 +455,14 @@ public class MusicService extends Service {
                     }
 
 
-                    player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                  /*  player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
                             Log.d("CCOOMPL", "COMPJGKFG");
                             changeMusic(++position, songsListttt);
 
                         }
-                    });
+                    });*/
                 } else if (positionn > songsListttt.size() - 1) {
                     position = 0;
                 }
