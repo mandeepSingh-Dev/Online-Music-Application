@@ -77,7 +77,7 @@ public class MusicService extends Service implements Parcelable {
             // position = intent.getIntExtra("positionfire", 0);
 
 
-             Log.d("HelloARRPARC", intent.getParcelableArrayListExtra("songslIst").size() + "jjdh");
+             Log.d("HelloARRPAR", intent.getParcelableArrayListExtra("songslIst").size() + "jjdh");
              songListFirebase = intent.getParcelableArrayListExtra("songslIst");
              //foreach loop for getting metadata and downloaded uri from Songs_FireBase songListFirebase list
              // to set in ArrayList<Songs>  songsFireList
