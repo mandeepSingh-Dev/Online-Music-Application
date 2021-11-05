@@ -60,10 +60,14 @@
             android:name=".Foregroung_service_music.Music_Foreground">
         </service>
 
-        <service android:name=".MusicService"
+        <service android:name=".MusicServices.MusicService"
             android:stopWithTask="true"
             android:exported="false"
 
+            />
+        <service android:name=".MusicServices.MusicServiceOnline"
+            android:stopWithTask="true"
+            android:exported="false"
             />
 
         <meta-data

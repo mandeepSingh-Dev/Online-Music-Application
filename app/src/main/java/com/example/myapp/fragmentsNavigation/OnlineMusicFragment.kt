@@ -13,18 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.myapp.MusicRecylerView.MyAdapter3
 import com.example.myapp.MusicRecylerView.Songs
 import com.example.myapp.MusicRecylerView.Songs_FireBase
-import com.example.myapp.MusicService
+import com.example.myapp.MusicServices.MusicService
 import com.example.myapp.MyViewModel.*
 import com.example.myapp.R
 import com.example.myapp.StorageReferenceSingleton
@@ -32,13 +30,10 @@ import com.example.myapp.databinding.FolderFeaturedArtistLayoutBinding
 import com.example.myapp.databinding.FolderLayoutNormalBinding
 import com.example.myapp.databinding.FragmentOnlineMusicBinding
 import com.example.myapp.databinding.ListTrendingLayoutBinding
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.*
-import java.io.ByteArrayOutputStream
-import java.util.jar.JarOutputStream
 
 
 // TODO: Rename parameter arguments, choose names that match

@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.myapp.MainActivity;
-import com.example.myapp.MusicService;
+import com.example.myapp.MusicServices.MusicService;
 import com.example.myapp.NavigationMainActivity;
 import com.example.myapp.R;
 import com.example.myapp.databinding.ActivitySplashScreenBinding;

@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -25,7 +24,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.myapp.MusicRecylerView.Songs
-import com.example.myapp.MusicService
+import com.example.myapp.MusicServices.MusicService
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentContentUploadBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -33,14 +32,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
-import java.io.File
-import android.app.Activity
-import android.media.MediaPlayer
-import androidx.activity.OnBackPressedCallback
 import com.example.myapp.StorageReferenceSingleton
 import kotlinx.coroutines.*
-import java.io.FileNotFoundException
-import java.time.Duration
 
 
 class ContentUpload_Fragment : Fragment()
@@ -169,7 +162,7 @@ class ContentUpload_Fragment : Fragment()
 
         }
 
-        var arraylist=MusicService.songsList
+        var arraylist= MusicService.songsList
 
 //if(Build.VERSION.SDK_INT<Build.VERSION_CODES.P) {
     binding?.uploadImage?.setOnClickListener {

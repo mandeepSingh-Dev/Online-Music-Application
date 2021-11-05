@@ -1,15 +1,10 @@
 package com.example.myapp.fragmentsNavigation
 
 import android.content.*
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
-import android.media.MediaCodec.MetricsConstants.MODE
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.os.IBinder
 import android.util.Base64
 import android.util.Log
@@ -18,20 +13,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.AbsListView
-import android.widget.AdapterView
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.navigation.NavArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.bumptech.glide.Glide
 import com.example.myapp.MusicRecylerView.MyAdapter
 import com.example.myapp.MusicRecylerView.MyAdapter2
 import com.example.myapp.MusicRecylerView.Songs
@@ -39,19 +29,12 @@ import com.example.myapp.MusicRecylerView.Songs_FireBase
 import com.example.myapp.MyViewModel.MyViewModel
 import com.example.myapp.MyViewModel.MyViewModelFactory
 import com.example.myapp.R
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ListResult
-import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.*
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.StorageReferenceSingleton
-import android.os.Parcelable
-import com.example.myapp.MusicService
-import com.example.myapp.MusicService.MyBinder
+import com.example.myapp.MusicServices.MusicService
+import com.example.myapp.MusicServices.MusicServiceOnline
 import com.example.myapp.databinding.FragmentSongsBinding
 
 
@@ -101,14 +84,27 @@ class SongsFragment : Fragment() {
         var staticSonglistFirebase:ArrayList<Songs_FireBase>?=null
     }
 
-    lateinit var musicService:MusicService
+    lateinit var musicServiceOnline: MusicServiceOnline
+   // lateinit var musicService:MusicService
 
-    //getting MusicService instance by connecting this class to MusicService class
-    var serviceConnection=object : ServiceConnection {
+  /*  //getting MusicService instance connecting this class to MusicService class using ServiceConnection clas
+    var serviceConnection1=object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             Log.d("KPKPKP", "onServiceConnected 101")
-            val myBinder = service as MyBinder
+            val myBinder = service as MusicService.MyBinder
             musicService = myBinder.service
+        }
+        override fun onServiceDisconnected(name: ComponentName?) {
+            Log.d("KPKPKP", "onServiceDisconnected 110")
+        }
+    }*/
+
+    //getting MusicServiceOnline instance by connecting this class to MusicServiceOnline class using ServiceConnection class
+    var serviceConnectionOnline=object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            Log.d("KPKPKP", "onServiceConnected 101")
+            val myBinder2 = service as MusicServiceOnline.MyBinder2
+            musicServiceOnline = myBinder2.service
         }
         override fun onServiceDisconnected(name: ComponentName?) {
             Log.d("KPKPKP", "onServiceDisconnected 110")
@@ -141,6 +137,24 @@ class SongsFragment : Fragment() {
             var sognfirelist:ArrayList<Songs_FireBase> = intent?.getSerializableExtra("songFirebaseList") as ArrayList<Songs_FireBase>
                 Log.d("sizeRECIERFIRELIST",songsFireList?.size.toString()+"f;blhf")*/
         }
+        //testing if block onlt
+
+        else if(intent?.action.equals("musicservice_instance"))
+        {
+            Log.d("MUSICSERVICEGGETTEED","FFFF")
+            var musicService: MusicService? =intent?.getParcelableExtra("musicService")
+            Log.d("HELLOMUSICINSTANCE",musicService.toString()+"")
+           /* if(musicService!=null)
+            {
+                Log.d("NOTNUILL","MUSICSERVIDENOT NULL")
+
+                if(musicService.isPlaying)
+                {
+                    Log.d("playing","PLAYEEDD")
+                    musicService.stop()
+                }
+            }*/
+        }
 
     }
 
@@ -149,6 +163,9 @@ class SongsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         staticSonglistFirebase=ArrayList()
+        localBroadcastManager= LocalBroadcastManager.getInstance(requireContext())
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -158,20 +175,38 @@ class SongsFragment : Fragment() {
         songsFireList= ArrayList()
         storage = FirebaseStorage.getInstance()
 
+
         binding = FragmentSongsBinding.inflate(inflater, container, false)
 
          LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter("SENDING_BITMAPSTR"))
-        return inflater.inflate(R.layout.fragment_songs, container, false)
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter("musicservice_instance"))
+
+       // return inflater.inflate(R.layout.fragment_songs, container, false)
+        return binding?.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("SongsFragment","songsFRagment");
+        Log.d("SongsFragmentggggg","songsFRagment");
 
-        /*val intenttt = Intent(activity, MusicService::class.java)
-        intenttt.action = "ACTION_START_FROM_SONGSFRAGMENT"
+        var intent=Intent(activity,MusicServiceOnline::class.java)
+        activity?.startService(intent)
+
+       /* val intenttt = Intent(activity, MusicService::class.java)
+        intenttt.action = "STOP KAR"
         activity?.startService(intenttt)*/
+
+        binding?.lottieSongsFragment?.setOnClickListener {
+            Log.d("HELLOIGHFR","HFSDSDJSSTARTSSSlottie")
+
+            var intentttt=Intent("STOP KAR")
+            localBroadcastManager?.sendBroadcast(intentttt)
+        }
+
+
+
+
 
        var animation = AnimationUtils.loadAnimation(context, R.anim.opening_anim)
         var rootLayout=view.findViewById<CoordinatorLayout>(R.id.songFragmentRootLay)
@@ -209,14 +244,13 @@ class SongsFragment : Fragment() {
     suspend fun gettingSongsListfromFireBase(playlist: String ="Trending_Playlist", folder: String="English")= withContext(Dispatchers.Main)
     {
         Log.d("hhhhhhh","flfghgfhfghfgj");
-        localBroadcastManager= LocalBroadcastManager.getInstance(requireContext())
         var i=Intent("Send_SongsList")
         //initStorageReference(storage!!) //initialization of mReference
         var factory:MyViewModelFactory= MyViewModelFactory(playlist!!,folder!!/*,mReference!!*/)
         var myviewmodel=ViewModelProvider(this@SongsFragment,factory).get(MyViewModel::class.java)
 
 
-        myviewmodel.getLiveList()?.observe(viewLifecycleOwner,Observer {
+        myviewmodel.getLiveList()?.observe(viewLifecycleOwner, Observer {
 
             lottie?.visibility=View.GONE
             lottie2?.visibility=View.GONE
@@ -237,6 +271,9 @@ class SongsFragment : Fragment() {
                     i2.putExtra("positionfire",position)
                     i2.putExtra("ONLINE_CONDITION","ONLINE")
                     localBroadcastManager?.sendBroadcast(i2)
+
+                    var intentttt=Intent("STOP KAR")
+                    localBroadcastManager?.sendBroadcast(intentttt)
                 }
             })
 
@@ -259,7 +296,14 @@ class SongsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        var intent=Intent(context,MusicService::class.java)
-        activity?.bindService(intent,serviceConnection,Context.BIND_AUTO_CREATE)
+        //binding MusicService to this class
+       /* var intent1=Intent(context,MusicService::class.java)
+        activity?.bindService(intent1,serviceConnection1,Context.BIND_AUTO_CREATE)
+*/
+        //binding MusicServiceOnline to this class
+        var intent=Intent(context, MusicServiceOnline::class.java)
+        activity?.bindService(intent,serviceConnectionOnline,Context.BIND_AUTO_CREATE)
+
+
     }
 }

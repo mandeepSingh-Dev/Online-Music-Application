@@ -1,4 +1,4 @@
-package com.example.myapp;
+package com.example.myapp.MusicServices;
 
 
 import android.app.Notification;
@@ -23,6 +23,8 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -35,8 +37,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.myapp.ExecutorSingleton;
 import com.example.myapp.MusicRecylerView.Songs;
 import com.example.myapp.MusicRecylerView.Songs_FireBase;
+import com.example.myapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageMetadata;
 
@@ -44,7 +48,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class MusicService extends Service {
+public class MusicService extends Service implements Parcelable {
     private final MyBinder mBinder = new MyBinder();
     public static ArrayList<Songs> songsList;
 
@@ -61,8 +65,9 @@ public class MusicService extends Service {
 
     boolean play_pauseConn = true;
     String offline_Online;
-    int play_pause_notification=R.drawable.ic_baseline_pause_24;
+    int play_pause_notification= R.drawable.ic_baseline_pause_24;
 
+  public MusicService(){}
 
  public BroadcastReceiver receiver2=new BroadcastReceiver() {
      @Override
@@ -134,14 +139,51 @@ public class MusicService extends Service {
                 changeMusic(pos,songsFireList);
 
             }
+            else if(intent.getAction().equals("STOP KAR"))
+            {
+                Log.d("HELLDHFHDSTOP","STOP");
+                if(player!=null)
+                {
+                    if(player.isPlaying())
+                    {
+                        player.pause();
+                       // player.release();
+
+                    }
+                }
+            }
+
         }
     };
 
+
+    protected MusicService(Parcel in) {
+        songsFireList = in.createTypedArrayList(Songs.CREATOR);
+        position = in.readInt();
+        intent = in.readParcelable(Intent.class.getClassLoader());
+        play_pauseConn = in.readByte() != 0;
+        offline_Online = in.readString();
+        play_pause_notification = in.readInt();
+    }
+
+    public static final Creator<MusicService> CREATOR = new Creator<MusicService>() {
+        @Override
+        public MusicService createFromParcel(Parcel in) {
+            return new MusicService(in);
+        }
+
+        @Override
+        public MusicService[] newArray(int size) {
+            return new MusicService[size];
+        }
+    };
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d("SertviceStart","MUSICSERVICESTART");
+        Log.d("MUSICSERVICEDDDDD","MUSICSERVICESTARTED");
+
         if (player == null) {
             player = new MediaPlayer();
         }
@@ -157,15 +199,17 @@ public class MusicService extends Service {
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_DESTROY"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver2,new IntentFilter("Send_SongsList"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("FIREPOSITION"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("STOP KAR"));
+
 
         mediaSessionCompat = new MediaSessionCompat(getBaseContext(), "Music Service");
         // Log.d("KPKPKP", "onCrearte");
-
 
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+          Log.d("MUSICSERVICEDDDDD","MUSICSERVICESTARTED");
 
         if (intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
         {
@@ -202,6 +246,7 @@ public class MusicService extends Service {
                 //  Log.d("pendingintentposition",position+"_next");
             }
 
+
     return START_NOT_STICKY;
     }
 
@@ -212,6 +257,7 @@ public class MusicService extends Service {
     }
 
     public void stop() {
+        player.stop();
         //  Log.d("OOO","ONSTOP MUSICSERVICE");
 
     }
@@ -242,6 +288,21 @@ public class MusicService extends Service {
 
     public void seekTo(int progress) {
         player.seekTo(progress);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(songsFireList);
+        dest.writeInt(position);
+        dest.writeParcelable(intent, flags);
+        dest.writeByte((byte) (play_pauseConn ? 1 : 0));
+        dest.writeString(offline_Online);
+        dest.writeInt(play_pause_notification);
     }
 
     //MyBinder inner class for getting MusicService refernce Through

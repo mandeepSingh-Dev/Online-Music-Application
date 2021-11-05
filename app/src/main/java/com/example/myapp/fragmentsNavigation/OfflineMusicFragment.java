@@ -42,7 +42,7 @@ import com.example.myapp.ExecutorSingleton;
 import com.example.myapp.Handler_Looper_Thread.MyThread;
 import com.example.myapp.MusicRecylerView.MyAdapter;
 import com.example.myapp.MusicRecylerView.Songs;
-import com.example.myapp.MusicService;
+import com.example.myapp.MusicServices.MusicService;
 import com.example.myapp.R;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -131,6 +131,11 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
             Log.d("KPKPKP", "onServiceConnected 101");
             MusicService.MyBinder myBinder = (MusicService.MyBinder) binder;
             musicService = myBinder.getService();
+
+            Intent serviceIntent=new Intent("musicservice_instance");
+            serviceIntent.putExtra("musicService", new MusicService());
+            broadcastManager.sendBroadcast(serviceIntent);
+
 
 
             //setting total duration to motion total duration textview
@@ -828,6 +833,8 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         super.onResume();
         Intent intent1 = new Intent(getContext(), MusicService.class);
         getActivity().bindService(intent1, sConnection, Context.BIND_AUTO_CREATE);
+
+
     }
 
     public void setPaletteColor(Palette p) {
