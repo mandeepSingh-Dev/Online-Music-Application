@@ -14,7 +14,6 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -41,8 +40,6 @@ import com.example.myapp.ExecutorSingleton;
 import com.example.myapp.MusicRecylerView.Songs;
 import com.example.myapp.MusicRecylerView.Songs_FireBase;
 import com.example.myapp.R;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageMetadata;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,7 +66,7 @@ public class MusicService extends Service implements Parcelable {
 
   public MusicService(){}
 
- public BroadcastReceiver receiver2=new BroadcastReceiver() {
+ /*public BroadcastReceiver receiver2=new BroadcastReceiver() {
      @Override
      public void onReceive(Context context, Intent intent)
      {
@@ -109,7 +106,7 @@ public class MusicService extends Service implements Parcelable {
                  });
              }
          }
-     }};
+     }};*/
 
 
     public BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -128,7 +125,7 @@ public class MusicService extends Service implements Parcelable {
 
             //here we get position of Online songslist item position
             // to pass in changeMusic() method
-            else if(intent.getAction().equals("FIREPOSITION"))
+           /* else if(intent.getAction().equals("FIREPOSITION"))
             {
                 Log.d("POSTIONFIRE",intent.getIntExtra("positionfire",0)+"k");
                 int pos = intent.getIntExtra("positionfire",0);
@@ -138,7 +135,7 @@ public class MusicService extends Service implements Parcelable {
                 //changeMusic(position,songsList);
                 changeMusic(pos,songsFireList);
 
-            }
+            }*/
             else if(intent.getAction().equals("STOP KAR"))
             {
                 Log.d("HELLDHFHDSTOP","STOP");
@@ -197,7 +194,7 @@ public class MusicService extends Service implements Parcelable {
         //register broadcastReceiver by checking intentFilter "ACTION_POSITION"
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_POSITION"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_DESTROY"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver2,new IntentFilter("Send_SongsList"));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(receiver2,new IntentFilter("Send_SongsList"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("FIREPOSITION"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("STOP KAR"));
 
@@ -225,24 +222,24 @@ public class MusicService extends Service implements Parcelable {
             }
         } else if (intent.getAction().equals("ACTION_PREVIUOS"))
         {
-            if(offline_Online.equals("ONLINE")) {
+           /* if(offline_Online.equals("ONLINE")) {
                 Log.d("HELLOPOSS",position+"");
                 changeMusic(--position, songsFireList);
-            }
-            else  if(offline_Online.equals("OFFLINE")){
-                Log.d("HELLOPOSS",position+"");
+            }*/
+           // else  if(offline_Online.equals("OFFLINE")){
+              //  Log.d("HELLOPOSS",position+"");
                 changeMusic(--position, songsList);
 
-            }
-        } else if (intent.getAction().equals("ACTION_NEXT"))
+          //  }
+        }else if (intent.getAction().equals("ACTION_NEXT"))
         {
-            if (offline_Online.equals("ONLINE")) {
+           /* if (offline_Online.equals("ONLINE")) {
                 Log.d("HELLOPOSS", position + "");
                 changeMusic(++position, songsFireList);
             } else if (offline_Online.equals("OFFLINE")) {
-                Log.d("HELLOPOSS", position + "");
+            */    Log.d("HELLOPOSS", position + "");
                 changeMusic(++position, songsList);
-            }
+           // }
                 //  Log.d("pendingintentposition",position+"_next");
             }
 
@@ -483,7 +480,7 @@ public class MusicService extends Service implements Parcelable {
 
                     try {
                         // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
-                        if (offline_Online.equals("ONLINE")) {
+                       /* if (offline_Online.equals("ONLINE")) {
                             Log.d("ONNLINECHNAGEMUSIC","ONNlineChangemUSIC()");
                             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
                             player.setDataSource(this,songsListttt.get(positionn).getSonguri());
@@ -497,17 +494,15 @@ public class MusicService extends Service implements Parcelable {
                                 }
                             });
                             Log.d("helssdslo","play");
-
-
                         }
                         else if (offline_Online.equals("OFFLINE"))
-                       {
+                       {*/
                            Log.d("OFFLINECHNAGEMUSIC","OFFlineChangemUSIC()");
                             player.setDataSource(getApplicationContext(), songsListttt.get(positionn).getSonguri());
                          player.prepare();
                          player.start();
                          Log.d("hello","play");
-                       }
+                      // }
                         showNotification(positionn, play_pause_notification,songsListttt);
 
 
