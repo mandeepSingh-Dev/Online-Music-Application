@@ -51,6 +51,7 @@ public class MusicServiceOnline extends Service {
     int position = 0;
     MediaPlayer player;
     Intent intent = new Intent("ACTION_SEND");
+    int p;
 
     String offline_Online;
     int play_pause_notification= R.drawable.ic_baseline_pause_24;
