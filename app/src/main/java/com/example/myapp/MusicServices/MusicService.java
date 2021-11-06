@@ -66,49 +66,6 @@ public class MusicService extends Service implements Parcelable {
 
   public MusicService(){}
 
- /*public BroadcastReceiver receiver2=new BroadcastReceiver() {
-     @Override
-     public void onReceive(Context context, Intent intent)
-     {
-         if (intent.getAction().equals("Send_SongsList")) {
-            // position = intent.getIntExtra("positionfire", 0);
-
-
-             Log.d("HelloARRP", intent.getParcelableArrayListExtra("songslIst").size() + "jjdh");
-             songListFirebase = intent.getParcelableArrayListExtra("songslIst");
-             //foreach loop for getting metadata and downloaded uri from Songs_FireBase songListFirebase list
-             // to set in ArrayList<Songs>  songsFireList
-
-             for (Songs_FireBase list : songListFirebase) {
-                 list.getStorageMetadataa().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-                     @Override
-                     public void onSuccess(StorageMetadata storageMetadata) {
-                         String songName = storageMetadata.getCustomMetadata("SongName");
-                         String bitmapstr = storageMetadata.getCustomMetadata("Bitmap");
-                         String dateModifiedd = String.valueOf(storageMetadata.getCreationTimeMillis());
-                         String artist = storageMetadata.getCustomMetadata("Artist");
-                         long durationn = Long.parseLong(storageMetadata.getCustomMetadata("Duration"));
-                         long songSize = Long.parseLong(storageMetadata.getCustomMetadata("Size"));
-                         //converting bitmapstr to set in arraylist as a bitmap
-                         Bitmap bitmap = convertToBitmap(bitmapstr);
-
-                         list.getDownloadedUri().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                             @Override
-                             public void onSuccess(Uri uri) {
-                                 songsFireList.add(new Songs(uri, songName, artist, durationn, bitmap, dateModifiedd, songSize));
-
-                             }
-                         });
-                         //checking elements in songFireList is added or not
-                         Log.d("HELEJ", songsFireList.size() + "fjk");
-                         //changeMusic(position,songsFireList);
-                     }
-                 });
-             }
-         }
-     }};*/
-
-
     public BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -122,22 +79,8 @@ public class MusicService extends Service implements Parcelable {
                // position = pos;
                 changeMusic(pos,songsList);
             }
-
-            //here we get position of Online songslist item position
-            // to pass in changeMusic() method
-           /* else if(intent.getAction().equals("FIREPOSITION"))
-            {
-                Log.d("POSTIONFIRE",intent.getIntExtra("positionfire",0)+"k");
-                int pos = intent.getIntExtra("positionfire",0);
-                offline_Online=intent.getStringExtra("ONLINE_CONDITION");
-                Log.d("onlineePOSITION",offline_Online+pos+"");
-
-                //changeMusic(position,songsList);
-                changeMusic(pos,songsFireList);
-
-            }*/
-            //here we get "STOP KAR" string by clicking on song in SongsFragment
-            //to stop music when online song will start
+            //here we get ""STOP KAR" intent action to stop music
+            // whenever we click online song for play onilne song
             else if(intent.getAction().equals("STOP KAR"))
             {
                 Log.d("HELLDHFHDSTOP","STOP");
@@ -472,6 +415,7 @@ public class MusicService extends Service implements Parcelable {
                     // player=null;
                 } else if (positionn <= songsListttt.size() - 1) {
                     intent.putExtra("receivedPosition", positionn);
+                    //below both lines are useless in OfflineSongFragment
                     intent.putExtra("TOTAL_DURATION", player.getDuration());
                     intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
 

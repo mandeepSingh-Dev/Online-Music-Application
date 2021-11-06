@@ -106,7 +106,7 @@ public class MusicServiceOnline extends Service {
             {
                 Log.d("POSTIONFIRE",intent.getIntExtra("positionfire",0)+"k");
                 int pos = intent.getIntExtra("positionfire",0);
-                offline_Online=intent.getStringExtra("ONLINE_CONDITION");
+              // offline_Online=intent.getStringExtra("ONLINE_CONDITION");
                 Log.d("onlineePOSITION",offline_Online+pos+"");
 
                 //changeMusic(position,songsList);
@@ -160,27 +160,9 @@ public class MusicServiceOnline extends Service {
         {
             changeMusic(--position/*, songsFireList*/);
 
-           /* if(offline_Online.equals("ONLINE")) {
-                Log.d("HELLOPOSS",position+"");
-                changeMusic(--position, songsFireList);
-            }
-            else  if(offline_Online.equals("OFFLINE")){
-                Log.d("HELLOPOSS",position+"");
-                changeMusic(--position, songsList);
-
-            }*/
         } else if (intent.getAction().equals("ACTION_NEXT"))
         {
             changeMusic(++position/*, songsFireList*/);
-
-          /*  if (offline_Online.equals("ONLINE")) {
-                Log.d("HELLOPOSS", position + "");
-                changeMusic(++position, songsFireList);
-            } else if (offline_Online.equals("OFFLINE")) {
-                Log.d("HELLOPOSS", position + "");
-                changeMusic(++position, songsList);
-            }*/
-            //  Log.d("pendingintentposition",position+"_next");
         }
 
         return START_NOT_STICKY;
@@ -193,7 +175,7 @@ public class MusicServiceOnline extends Service {
     }
 
     public void stop() {
-        //  Log.d("OOO","ONSTOP MUSICSERVICE");
+       player.stop();
 
     }
 
@@ -279,8 +261,6 @@ public class MusicServiceOnline extends Service {
                 getCurrentPosiotnnn();
             } catch (Exception e) {
             }
-
-
                     player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
@@ -346,17 +326,17 @@ public class MusicServiceOnline extends Service {
         }
         PendingIntent pendingIntentPrevious;
         int drw_previous;
-        Intent intentPrevious = new Intent(this, MusicService.class)
+        Intent intentPrevious = new Intent(this, MusicServiceOnline.class)
                 .setAction("ACTION_PREVIUOS");
         pendingIntentPrevious = PendingIntent.getService(this, 0,
                 intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent intentPlay = new Intent(this, MusicService.class)
+        Intent intentPlay = new Intent(this, MusicServiceOnline.class)
                 .setAction("ACTION_PLAY");
         PendingIntent pendingIntentPlay = PendingIntent.getService(this, 0,
                 intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent intentNext = new Intent(this, MusicService.class)
+        Intent intentNext = new Intent(this, MusicServiceOnline.class)
                 .setAction("ACTION_NEXT");
         PendingIntent pendingIntentNext = PendingIntent.getService(this, 0,
                 intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
