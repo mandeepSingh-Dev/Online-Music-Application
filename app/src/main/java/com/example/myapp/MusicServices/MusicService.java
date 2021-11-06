@@ -136,6 +136,8 @@ public class MusicService extends Service implements Parcelable {
                 changeMusic(pos,songsFireList);
 
             }*/
+            //here we get "STOP KAR" string by clicking on song in SongsFragment
+            //to stop music when online song will start
             else if(intent.getAction().equals("STOP KAR"))
             {
                 Log.d("HELLDHFHDSTOP","STOP");

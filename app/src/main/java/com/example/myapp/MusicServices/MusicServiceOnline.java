@@ -41,8 +41,6 @@ import java.util.ArrayList;
 public class MusicServiceOnline extends Service {
     private final MyBinder2 mBinder = new MyBinder2();
 
-    public static ArrayList<Songs> songsList;
-
     public static ArrayList<Songs_FireBase> songListFirebase;
     public ArrayList<Songs> songsFireList;
 
@@ -54,19 +52,16 @@ public class MusicServiceOnline extends Service {
     MediaPlayer player;
     Intent intent = new Intent("ACTION_SEND");
 
-    boolean play_pauseConn = true;
     String offline_Online;
     int play_pause_notification= R.drawable.ic_baseline_pause_24;
 
-
+//this receiver is to get firebase songlist from SongsFragment
     public BroadcastReceiver receiver2=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent)
         {
             if (intent.getAction().equals("Send_SongsList")) {
                 // position = intent.getIntExtra("positionfire", 0);
-
-
                 Log.d("HelloARRPARC", intent.getParcelableArrayListExtra("songslIst").size() + "jjdh");
                 songListFirebase = intent.getParcelableArrayListExtra("songslIst");
                 //foreach loop for getting metadata and downloaded uri from Songs_FireBase songListFirebase list
@@ -89,7 +84,6 @@ public class MusicServiceOnline extends Service {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     songsFireList.add(new Songs(uri, songName, artist, durationn, bitmap, dateModifiedd, songSize));
-
                                 }
                             });
                             //checking elements in songFireList is added or not
@@ -101,24 +95,13 @@ public class MusicServiceOnline extends Service {
             }
         }};
 
-
+// In this receiver we r getting position of song by clicking on song in SongsFragment
     public BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //here in this condition we get position of item song
-            // of Offline Local songsList and pass position to changeMusic method
-            if (intent.getAction().equals("ACTION_POSITION")) {
-                int pos = intent.getIntExtra("Position",0);
-                offline_Online=intent.getStringExtra("OFFLINE_CONDITION");
-                Log.d("offlineePOSITION",offline_Online+pos+"");
-
-                // position = pos;
-                //changeMusic(pos,songsList);
-            }
-
             //here we get position of Online songslist item position
             // to pass in changeMusic() method
-            else if(intent.getAction().equals("FIREPOSITION"))
+             if(intent.getAction().equals("FIREPOSITION"))
             {
                 Log.d("POSTIONFIRE",intent.getIntExtra("positionfire",0)+"k");
                 int pos = intent.getIntExtra("positionfire",0);
@@ -126,7 +109,7 @@ public class MusicServiceOnline extends Service {
                 Log.d("onlineePOSITION",offline_Online+pos+"");
 
                 //changeMusic(position,songsList);
-                changeMusic(pos,songsFireList);
+                changeMusic(pos/*,songsFireList*/);
 
             }
         }
@@ -147,9 +130,7 @@ public class MusicServiceOnline extends Service {
         //Initialize LocalBroadcastManager object here
         broadcastmanager = LocalBroadcastManager.getInstance(getApplicationContext());
 
-        //register broadcastReceiver by checking intentFilter "ACTION_POSITION"
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_POSITION"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_DESTROY"));
+        //register broadcastReceiver by checking intentFilter "Send_SongsList" & "FIREPOSITION"
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver2,new IntentFilter("Send_SongsList"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("FIREPOSITION"));
 
@@ -159,10 +140,10 @@ public class MusicServiceOnline extends Service {
 
     }
 
-   /* @Override
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
+        if (intent.getAction().equals("START_FROM_SONGSFRAGMENT"))
         {
             //Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");
         }
@@ -176,7 +157,9 @@ public class MusicServiceOnline extends Service {
             }
         } else if (intent.getAction().equals("ACTION_PREVIUOS"))
         {
-            if(offline_Online.equals("ONLINE")) {
+            changeMusic(--position/*, songsFireList*/);
+
+           /* if(offline_Online.equals("ONLINE")) {
                 Log.d("HELLOPOSS",position+"");
                 changeMusic(--position, songsFireList);
             }
@@ -184,21 +167,23 @@ public class MusicServiceOnline extends Service {
                 Log.d("HELLOPOSS",position+"");
                 changeMusic(--position, songsList);
 
-            }
+            }*/
         } else if (intent.getAction().equals("ACTION_NEXT"))
         {
-            if (offline_Online.equals("ONLINE")) {
+            changeMusic(++position/*, songsFireList*/);
+
+          /*  if (offline_Online.equals("ONLINE")) {
                 Log.d("HELLOPOSS", position + "");
                 changeMusic(++position, songsFireList);
             } else if (offline_Online.equals("OFFLINE")) {
                 Log.d("HELLOPOSS", position + "");
                 changeMusic(++position, songsList);
-            }
+            }*/
             //  Log.d("pendingintentposition",position+"_next");
         }
 
         return START_NOT_STICKY;
-    }*/
+    }
 
     @Nullable
     @Override
@@ -249,7 +234,7 @@ public class MusicServiceOnline extends Service {
     }
 
 
-    public void changeMusic(int positionn, ArrayList<Songs> songsListttt) {
+    public void changeMusic(int positionn/*, ArrayList<Songs> songsListttt*/) {
         // position=positionn;
         // Log.d("LOLO",position+"_+");
    /* if(!songsList.isEmpty())
@@ -262,7 +247,7 @@ public class MusicServiceOnline extends Service {
             player.reset();
             position = 0;
             // player=null;
-        } else if (positionn <= songsListttt.size() - 1) {
+        } else if (positionn <= songsFireList.size() - 1) {
             intent.putExtra("receivedPosition", positionn);
             intent.putExtra("TOTAL_DURATION", player.getDuration());
             intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
@@ -271,16 +256,14 @@ public class MusicServiceOnline extends Service {
             // Log.d("Hello", positionn + "hello");
             broadcastmanager.sendBroadcast(intent);
             player.reset();
+            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
 
             try {
                 // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
-                if (offline_Online.equals("ONLINE")) {
                     Log.d("ONNLINECHNAGEMUSIC","ONNlineChangemUSIC()");
-                    player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    player.setDataSource(this,songsListttt.get(positionn).getSonguri());
-                    // player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+                    player.setDataSource(this,songsFireList.get(positionn).getSonguri());
                     player.prepareAsync();
-                    // player.start();
                     player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mp) {
@@ -289,17 +272,7 @@ public class MusicServiceOnline extends Service {
                     });
                     Log.d("helssdslo","play");
 
-
-                }
-                else if (offline_Online.equals("OFFLINE"))
-                {
-                    Log.d("OFFLINECHNAGEMUSIC","OFFlineChangemUSIC()");
-                    player.setDataSource(getApplicationContext(), songsListttt.get(positionn).getSonguri());
-                    player.prepare();
-                    player.start();
-                    Log.d("hello","play");
-                }
-                showNotification(positionn, play_pause_notification,songsListttt);
+                showNotification(positionn, play_pause_notification,songsFireList);
 
 
                 getCurrentPosiotnnn();
@@ -307,15 +280,15 @@ public class MusicServiceOnline extends Service {
             }
 
 
-                  /*  player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
                             Log.d("CCOOMPL", "COMPJGKFG");
-                            changeMusic(++position, songsListttt);
+                            changeMusic(++position);
 
                         }
-                    });*/
-        } else if (positionn > songsListttt.size() - 1) {
+                    });
+        } else if (positionn > songsFireList.size() - 1) {
             position = 0;
         }
 

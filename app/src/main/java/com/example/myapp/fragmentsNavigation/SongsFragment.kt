@@ -191,6 +191,7 @@ class SongsFragment : Fragment() {
         Log.d("SongsFragmentggggg","songsFRagment");
 
         var intent=Intent(activity,MusicServiceOnline::class.java)
+        intent.setAction("START_FROM_SONGSFRAGMENT")
         activity?.startService(intent)
 
        /* val intenttt = Intent(activity, MusicService::class.java)
@@ -269,9 +270,11 @@ class SongsFragment : Fragment() {
                     Log.d("onlinesongClicked","onlinesongClicked"+"__"+position)
                     var i2=Intent("FIREPOSITION")
                     i2.putExtra("positionfire",position)
-                    i2.putExtra("ONLINE_CONDITION","ONLINE")
+                    //i2.putExtra("ONLINE_CONDITION","ONLINE")
                     localBroadcastManager?.sendBroadcast(i2)
 
+                    //sending "STOP KAR" String to MusicService
+                    //to stop Local/offline song so that online song can play without disturbance
                     var intentttt=Intent("STOP KAR")
                     localBroadcastManager?.sendBroadcast(intentttt)
                 }
