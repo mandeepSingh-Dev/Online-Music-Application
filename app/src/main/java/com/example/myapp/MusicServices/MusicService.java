@@ -62,9 +62,10 @@ public class MusicService extends Service implements Parcelable {
 
     boolean play_pauseConn = true;
     String offline_Online;
-    int play_pause_notification= R.drawable.ic_baseline_pause_24;
+    int play_pause_notification = R.drawable.ic_baseline_pause_24;
 
-  public MusicService(){}
+    public MusicService() {
+    }
 
     public BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -72,24 +73,19 @@ public class MusicService extends Service implements Parcelable {
             //here in this condition we get position of item song
             // of Offline Local songsList and pass position to changeMusic method
             if (intent.getAction().equals("ACTION_POSITION")) {
-                int pos = intent.getIntExtra("Position",0);
-                offline_Online=intent.getStringExtra("OFFLINE_CONDITION");
-                Log.d("offlineePOSITION",offline_Online+pos+"");
+                int pos = intent.getIntExtra("Position", 0);
 
-               // position = pos;
-                changeMusic(pos,songsList);
+                // position = pos;
+                changeMusic(pos, songsList);
             }
             //here we get ""STOP KAR" intent action to stop music
             // whenever we click online song for play onilne song
-            else if(intent.getAction().equals("STOP KAR"))
-            {
-                Log.d("HELLDHFHDSTOP","STOP");
-                if(player!=null)
-                {
-                    if(player.isPlaying())
-                    {
+            else if (intent.getAction().equals("STOP KAR_OFFLINE")) {
+                Log.d("HELLDHFHDSTOP", "STOP");
+                if (player != null) {
+                    if (player.isPlaying()) {
                         player.pause();
-                       // player.release();
+                        // player.release();
 
                     }
                 }
@@ -123,15 +119,15 @@ public class MusicService extends Service implements Parcelable {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("SertviceStart","MUSICSERVICESTART");
-        Log.d("MUSICSERVICEDDDDD","MUSICSERVICESTARTED");
+        Log.d("SertviceStart", "MUSICSERVICESTART");
+        Log.d("MUSICSERVICEDDDDD", "MUSICSERVICESTARTED");
 
         if (player == null) {
             player = new MediaPlayer();
         }
         songsList = getSongArrayList();
         songsFireList = new ArrayList();
-        songListFirebase=new ArrayList();
+        songListFirebase = new ArrayList();
 
         //Initialize LocalBroadcastManager object here
         broadcastmanager = LocalBroadcastManager.getInstance(getApplicationContext());
@@ -140,8 +136,8 @@ public class MusicService extends Service implements Parcelable {
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_POSITION"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("ACTION_DESTROY"));
         //LocalBroadcastManager.getInstance(this).registerReceiver(receiver2,new IntentFilter("Send_SongsList"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("FIREPOSITION"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("STOP KAR"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("FIREPOSITION"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("STOP KAR_OFFLINE"));
 
 
         mediaSessionCompat = new MediaSessionCompat(getBaseContext(), "Music Service");
@@ -151,45 +147,42 @@ public class MusicService extends Service implements Parcelable {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-          Log.d("MUSICSERVICEDDDDD","MUSICSERVICESTARTED");
+        Log.d("MUSICSERVICEDDDDD", "MUSICSERVICESTARTED");
 
-        if (intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN"))
-        {
+        if (intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN")) {
             //Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");
-        }
-        else if (intent.getAction().equals("ACTION_PLAY")) {
+        } else if (intent.getAction().equals("ACTION_PLAY")) {
             if (player.isPlaying()) {
                 player.pause();
-                play_pause_notification=R.drawable.play_notification;
+                play_pause_notification = R.drawable.play_notification;
             } else if (!player.isPlaying()) {
                 player.start();
-                play_pause_notification=R.drawable.ic_baseline_pause_24;
+                play_pause_notification = R.drawable.ic_baseline_pause_24;
             }
-        } else if (intent.getAction().equals("ACTION_PREVIUOS"))
-        {
+        } else if (intent.getAction().equals("ACTION_PREVIUOS")) {
            /* if(offline_Online.equals("ONLINE")) {
                 Log.d("HELLOPOSS",position+"");
                 changeMusic(--position, songsFireList);
             }*/
-           // else  if(offline_Online.equals("OFFLINE")){
-              //  Log.d("HELLOPOSS",position+"");
-                changeMusic(--position, songsList);
+            // else  if(offline_Online.equals("OFFLINE")){
+            //  Log.d("HELLOPOSS",position+"");
+            changeMusic(--position, songsList);
 
-          //  }
-        }else if (intent.getAction().equals("ACTION_NEXT"))
-        {
+            //  }
+        } else if (intent.getAction().equals("ACTION_NEXT")) {
            /* if (offline_Online.equals("ONLINE")) {
                 Log.d("HELLOPOSS", position + "");
                 changeMusic(++position, songsFireList);
             } else if (offline_Online.equals("OFFLINE")) {
-            */    Log.d("HELLOPOSS", position + "");
-                changeMusic(++position, songsList);
-           // }
-                //  Log.d("pendingintentposition",position+"_next");
-            }
+            */
+            Log.d("HELLOPOSS", position + "");
+            changeMusic(++position, songsList);
+            // }
+            //  Log.d("pendingintentposition",position+"_next");
+        }
 
 
-    return START_NOT_STICKY;
+        return START_NOT_STICKY;
     }
 
     @Nullable
@@ -405,27 +398,27 @@ public class MusicService extends Service implements Parcelable {
         // Log.d("LOLO",position+"_+");
    /* if(!songsList.isEmpty())
     {*/
-        Log.d("changeMusicPOSITION",positionn+"\n"+songsListttt.size()+songsListttt.get(positionn).getSongName());
+        Log.d("changeMusicPOSITION", positionn + "\n" + songsListttt.size() + songsListttt.get(positionn).getSongName());
 
 
-                if (positionn <= -1) {
-                    //  Log.d("reset_position",positionn+"_");
-                    player.reset();
-                    position = 0;
-                    // player=null;
-                } else if (positionn <= songsListttt.size() - 1) {
-                    intent.putExtra("receivedPosition", positionn);
-                    //below both lines are useless in OfflineSongFragment
-                    intent.putExtra("TOTAL_DURATION", player.getDuration());
-                    intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
+        if (positionn <= -1) {
+            //  Log.d("reset_position",positionn+"_");
+            player.reset();
+            position = 0;
+            // player=null;
+        } else if (positionn <= songsListttt.size() - 1) {
+            intent.putExtra("receivedPosition", positionn);
+            //below both lines are useless in OfflineSongFragment
+            intent.putExtra("TOTAL_DURATION", player.getDuration());
+            intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
 
 
-                    // Log.d("Hello", positionn + "hello");
-                    broadcastmanager.sendBroadcast(intent);
-                    player.reset();
+            // Log.d("Hello", positionn + "hello");
+            broadcastmanager.sendBroadcast(intent);
+            player.reset();
 
-                    try {
-                        // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
+            try {
+                // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
                        /* if (offline_Online.equals("ONLINE")) {
                             Log.d("ONNLINECHNAGEMUSIC","ONNlineChangemUSIC()");
                             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -443,18 +436,18 @@ public class MusicService extends Service implements Parcelable {
                         }
                         else if (offline_Online.equals("OFFLINE"))
                        {*/
-                           Log.d("OFFLINECHNAGEMUSIC","OFFlineChangemUSIC()");
-                            player.setDataSource(getApplicationContext(), songsListttt.get(positionn).getSonguri());
-                         player.prepare();
-                         player.start();
-                         Log.d("hello","play");
-                      // }
-                        showNotification(positionn, play_pause_notification,songsListttt);
+                Log.d("OFFLINECHNAGEMUSIC", "OFFlineChangemUSIC()");
+                player.setDataSource(getApplicationContext(), songsListttt.get(positionn).getSonguri());
+                player.prepare();
+                player.start();
+                Log.d("hello", "play");
+                // }
+                showNotification(positionn, play_pause_notification, songsListttt);
 
 
-                        getCurrentPosiotnnn();
-                    } catch (Exception e) {
-                    }
+                getCurrentPosiotnnn();
+            } catch (Exception e) {
+            }
 
 
                   /*  player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -465,9 +458,9 @@ public class MusicService extends Service implements Parcelable {
 
                         }
                     });*/
-                } else if (positionn > songsListttt.size() - 1) {
-                    position = 0;
-                }
+        } else if (positionn > songsListttt.size() - 1) {
+            position = 0;
+        }
 
         // startForeground(100,notification);
 
@@ -500,15 +493,13 @@ public class MusicService extends Service implements Parcelable {
     }
 
 
-    public void showNotification(int possition, int play_pauseICON, ArrayList<Songs> songsList)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
+    public void showNotification(int possition, int play_pauseICON, ArrayList<Songs> songsList) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mediaSessionCompat.setMetadata(new MediaMetadataCompat.Builder()
-                            .putString(MediaMetadata.METADATA_KEY_TITLE, songsList.get(possition).getSongName())
-                            .putString(MediaMetadata.METADATA_KEY_ARTIST, songsList.get(possition).getArtist())
-                            .putBitmap(MediaMetadata.METADATA_KEY_ART, songsList.get(possition).getBitmap())
-                            .build());
+                    .putString(MediaMetadata.METADATA_KEY_TITLE, songsList.get(possition).getSongName())
+                    .putString(MediaMetadata.METADATA_KEY_ARTIST, songsList.get(possition).getArtist())
+                    .putBitmap(MediaMetadata.METADATA_KEY_ART, songsList.get(possition).getBitmap())
+                    .build());
 
 
             NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);//after debugging set IMPORATNCE_DEFAULT HERE
@@ -585,15 +576,15 @@ public class MusicService extends Service implements Parcelable {
 
     }
 
-    public Bitmap convertToBitmap(String bitmapstr)
-    {
-        Bitmap bitmap1=null;
+    public Bitmap convertToBitmap(String bitmapstr) {
+        Bitmap bitmap1 = null;
         try {
             // Log.d("bitMAPSTR",bitmapstr);
             byte[] byteArray = Base64.decode(bitmapstr, Base64.DEFAULT);
-            bitmap1= BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            bitmap1 = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             //Log.d("BITMMAP",bitmap1.toString());
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 //    Log.d("HHELO",bitmap1.toString());
         return bitmap1;
     }

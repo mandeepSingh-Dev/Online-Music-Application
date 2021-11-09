@@ -50,7 +50,7 @@ public class MusicServiceOnline extends Service {
     private LocalBroadcastManager broadcastmanager;
     int position = 0;
     MediaPlayer player;
-    Intent intent = new Intent("ACTION_SEND");
+    Intent intent = new Intent("ACTION_SEND_ONLINE");
     int y;
 
     String offline_Online;
@@ -89,6 +89,7 @@ public class MusicServiceOnline extends Service {
                             });
                             //checking elements in songFireList is added or not
                             Log.d("HELEJ", songsFireList.size() + "fjk");
+
                             //changeMusic(position,songsFireList);
                         }
                     });
@@ -113,6 +114,19 @@ public class MusicServiceOnline extends Service {
                 changeMusic(pos/*,songsFireList*/);
 
             }
+             else if(intent.getAction().equals("STOP KAR_ONLINE"))
+             {
+                 Log.d("HELLDDSTOP","STOP");
+                 if(player!=null)
+                 {
+                     if(player.isPlaying())
+                     {
+                         player.pause();
+                         // player.release();
+
+                     }
+                 }
+             }
         }
     };
 
@@ -134,6 +148,7 @@ public class MusicServiceOnline extends Service {
         //register broadcastReceiver by checking intentFilter "Send_SongsList" & "FIREPOSITION"
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver2,new IntentFilter("Send_SongsList"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("FIREPOSITION"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,new IntentFilter("STOP KAR_ONLINE"));
 
         mediaSessionCompat = new MediaSessionCompat(getBaseContext(), "Music Service");
         // Log.d("KPKPKP", "onCrearte");
@@ -148,7 +163,7 @@ public class MusicServiceOnline extends Service {
         {
             //Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");
         }
-        else if (intent.getAction().equals("ACTION_PLAY")) {
+        else if (intent.getAction().equals("ACTION_PLAYY")) {
             if (player.isPlaying()) {
                 player.pause();
                 play_pause_notification=R.drawable.play_notification;
@@ -231,9 +246,11 @@ public class MusicServiceOnline extends Service {
             position = 0;
             // player=null;
         } else if (positionn <= songsFireList.size() - 1) {
-            intent.putExtra("receivedPosition", positionn);
-            intent.putExtra("TOTAL_DURATION", player.getDuration());
-            intent.putExtra("CURRENT_DURATION", player.getCurrentPosition());
+
+          //now basically below three lines again useless hahahaha
+            intent.putExtra("receivedPosition_ONLINE", positionn);
+            intent.putExtra("TOTAL_DURATION_ONLINE", player.getDuration());
+            intent.putExtra("CURRENT_DURATION_ONLINE", player.getCurrentPosition());
 
 
             // Log.d("Hello", positionn + "hello");
@@ -287,7 +304,7 @@ public class MusicServiceOnline extends Service {
                 while (player != null) {
                     try {
                         if (player.isPlaying()) {
-                            intent.putExtra("CURRENTDURATION", player.getCurrentPosition());
+                            intent.putExtra("CURRENTDURATION_ONLINE", player.getCurrentPosition());
                             broadcastmanager.sendBroadcast(intent);
                             //  Log.d("HEJO", player.getCurrentPosition() + "__position");
                             Thread.sleep(1000);
@@ -332,7 +349,7 @@ public class MusicServiceOnline extends Service {
                 intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent intentPlay = new Intent(this, MusicServiceOnline.class)
-                .setAction("ACTION_PLAY");
+                .setAction("ACTION_PLAYY");
         PendingIntent pendingIntentPlay = PendingIntent.getService(this, 0,
                 intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
 

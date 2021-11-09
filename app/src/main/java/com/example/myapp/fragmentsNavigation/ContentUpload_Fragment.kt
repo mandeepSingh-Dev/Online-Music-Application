@@ -36,116 +36,130 @@ import com.example.myapp.StorageReferenceSingleton
 import kotlinx.coroutines.*
 
 
-class ContentUpload_Fragment : Fragment()
-{
-    var binding:FragmentContentUploadBinding?=null
+class ContentUpload_Fragment : Fragment() {
+    var binding: FragmentContentUploadBinding? = null
 
-    var songName:String="Null Name"
-    var artistName="Null Artist"
-    var songUri:Uri?=null
-    var duration:Long=44564545
-    var songSize:Long=89787887
-    var bitmap:Bitmap?=null
+    var songName: String = "Null Name"
+    var artistName = "Null Artist"
+    var songUri: Uri? = null
+    var duration: Long = 44564545
+    var songSize: Long = 89787887
+    var bitmap: Bitmap? = null
 
-    lateinit var bottomDialog:BottomSheetDialog
+    lateinit var bottomDialog: BottomSheetDialog
 
     var defaultUri = "content://media/external_primary/images/media/457"
 
-    var storage:FirebaseStorage?=null
-    var mRefernce:StorageReference?=null
+    var storage: FirebaseStorage? = null
+    var mRefernce: StorageReference? = null
 
     //using RegisterForActivityResult
-    var contract: ActivityResultContract<Intent,Uri> = object: ActivityResultContract<Intent,Uri>() {
-        override fun createIntent(context: Context, input: Intent?): Intent {
-            return input!!
-        }
+    var contract: ActivityResultContract<Intent, Uri> =
+        object : ActivityResultContract<Intent, Uri>() {
+            override fun createIntent(context: Context, input: Intent?): Intent {
+                return input!!
+            }
 
-        override fun parseResult(resultCode: Int, intent: Intent?): Uri
-        {
-            var uri1:Uri?
-            if(intent?.data!=null)
-            {
-                uri1=intent.data
+            override fun parseResult(resultCode: Int, intent: Intent?): Uri {
+                var uri1: Uri?
+                if (intent?.data != null) {
+                    uri1 = intent.data
+                } else {
+                    uri1 = Uri.parse(defaultUri)
+                }
+                return uri1!!
             }
-            else{
-                uri1=Uri.parse(defaultUri)
-            }
-            return uri1!!
-        }
-    } //ActivityForResultContract finish here
+        } //ActivityForResultContract finish here
+
     @RequiresApi(Build.VERSION_CODES.Q)
-    var luancher:ActivityResultLauncher<Intent> = registerForActivityResult(contract,
+    var luancher: ActivityResultLauncher<Intent> = registerForActivityResult(contract,
         ActivityResultCallback
         {
-            Log.d("HOLOLOPOLO",it.toString())
+            Log.d("HOLOLOPOLO", it.toString())
             //FOR  ABOVE OR EQUAL ANDROID Q
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 var resolver = activity?.contentResolver
                 var cursor = resolver?.query(it, null, null, null, null, null)
                 if (cursor!!.moveToFirst()) {
-                    songName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
-                    artistName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
-                    songUri= it  //uri
-                    duration =cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
-                    songSize =cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
+                    songName =
+                        cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
+                    artistName =
+                        cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+                    songUri = it  //uri
+                    duration =
+                        cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
+                    songSize = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
 
                     try {
                         var bitmap1 = resolver?.loadThumbnail(it, Size(180, 180), null)
-                         bitmap=bitmap1
-                        Log.d("kdfhj", bitmap.toString()+"ui")
+                        bitmap = bitmap1
+                        Log.d("kdfhj", bitmap.toString() + "ui")
 
                         binding?.songImageUpload?.setImageBitmap(bitmap)
 
-                   } catch (e: Exception)
-                   {
-                       if(e.javaClass.name.equals("java.io.FileNotFoundException"))
-                           Log.d("occur",e.javaClass.name)
-                       bitmap=BitmapFactory.decodeResource(resources,R.drawable.circle_top)
-                       Log.d("ojdo", bitmap.toString()+"\nj")
-                       binding?.songImageUpload?.setImageBitmap(bitmap)
+                    } catch (e: Exception) {
+                        if (e.javaClass.name.equals("java.io.FileNotFoundException"))
+                            Log.d("occur", e.javaClass.name)
+                        bitmap = BitmapFactory.decodeResource(resources, R.drawable.circle_top)
+                        Log.d("ojdo", bitmap.toString() + "\nj")
+                        binding?.songImageUpload?.setImageBitmap(bitmap)
 
 
-                   }
+                    }
                 }
             }
             //FOR  BELOW ANDROID Q
-            else{
-                var retriever:MediaMetadataRetriever= MediaMetadataRetriever()
-                retriever.setDataSource(requireContext(),it)
-                songName=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)!!
-                artistName=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)!!
-                songUri=it
+            else {
+                var retriever: MediaMetadataRetriever = MediaMetadataRetriever()
+                retriever.setDataSource(requireContext(), it)
+                songName = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)!!
+                artistName = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)!!
+                songUri = it
                 //TODO duration and songSize isnot getting correct Long datatype form.Correct it..
-                duration= retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
-                songSize= retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong()
+                duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
+                    .toLong()
+                songSize =
+                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!
+                        .toLong()
 
-                Log.d("hello",retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong().toString())
-                Log.d("hello",retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong().toString())
+                Log.d(
+                    "hello",
+                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
+                        .toLong().toString()
+                )
+                Log.d(
+                    "hello",
+                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!
+                        .toLong().toString()
+                )
 
                 // duration=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
-               // songSize=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong()
+                // songSize=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong()
             }
-            binding?.uploadImage?.visibility=View.GONE
-            binding?.clickPlus?.visibility=View.GONE
+            binding?.uploadImage?.visibility = View.GONE
+            binding?.clickPlus?.visibility = View.GONE
 
 
-            binding?.cardViewForHidenView?.visibility=View.VISIBLE
-            binding?.smallUploadImage?.visibility=View.VISIBLE
-
+            binding?.cardViewForHidenView?.visibility = View.VISIBLE
+            binding?.smallUploadImage?.visibility = View.VISIBLE
 
 
         })
 
     //.............................
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-           binding=FragmentContentUploadBinding.inflate(inflater,container,false)
-        storage= FirebaseStorage.getInstance()
-        mRefernce= StorageReferenceSingleton().getStroageReference()
+        binding = FragmentContentUploadBinding.inflate(inflater, container, false)
+        storage = FirebaseStorage.getInstance()
+        mRefernce = StorageReferenceSingleton().getStroageReference()
 
-       // return inflater.inflate(R.layout.fragment_content_upload_, container, false)
-    return binding?.root
+        // return inflater.inflate(R.layout.fragment_content_upload_, container, false)
+        return binding?.root
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -155,85 +169,81 @@ class ContentUpload_Fragment : Fragment()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             activity?.window?.statusBarColor = resources.getColor(R.color.Orangee, null)
-            activity?.window?.navigationBarColor=resources.getColor(R.color.Orangee, null)
+            activity?.window?.navigationBarColor = resources.getColor(R.color.Orangee, null)
         } else {
             activity?.window?.statusBarColor = resources.getColor(R.color.Orangee)
-            activity?.window?.navigationBarColor=resources.getColor(R.color.Orangee)
+            activity?.window?.navigationBarColor = resources.getColor(R.color.Orangee)
 
         }
 
-        var arraylist= MusicService.songsList
+        var arraylist = MusicService.songsList
 
 //if(Build.VERSION.SDK_INT<Build.VERSION_CODES.P) {
-    binding?.uploadImage?.setOnClickListener {
+        binding?.uploadImage?.setOnClickListener {
 
-        var i = Intent()
-        i.setType("audio/*")
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
-            i.setAction(Intent.ACTION_PICK)
-        }
-        else {
-            i.setAction(Intent.ACTION_GET_CONTENT)
-        }
-        luancher.launch(i)
-        //startActivityForResult(i, 100)
+            var i = Intent()
+            i.setType("audio/*")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                i.setAction(Intent.ACTION_PICK)
+            } else {
+                i.setAction(Intent.ACTION_GET_CONTENT)
+            }
+            luancher.launch(i)
+            //startActivityForResult(i, 100)
 
-    }
+        }
 //}
 
-            binding?.smallUploadImage?.setOnClickListener {
-                var i = Intent()
-                i.setType("audio/*")
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
-                    i.setAction(Intent.ACTION_PICK)
-                }
-                else {
-                    i.setAction(Intent.ACTION_GET_CONTENT)
-                }
-                luancher.launch(i)
+        binding?.smallUploadImage?.setOnClickListener {
+            var i = Intent()
+            i.setType("audio/*")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                i.setAction(Intent.ACTION_PICK)
+            } else {
+                i.setAction(Intent.ACTION_GET_CONTENT)
+            }
+            luancher.launch(i)
         }
 
         binding?.uploadButton?.setOnClickListener {
             showBottomSheetDialog()
         }
 
-        gettingSongsfromFireBase("Trending_Playlist","English")
-
-
+        gettingSongsfromFireBase("Trending_Playlist", "English")
 
 
     }  //onViewCreated finshes
 
 
     //for Uploading songs in bunch to firebase Storage
-  /* suspend fun uploadSongs(playlist:String,folder:String,songsList:ArrayList<Songs>)= withContext(Dispatchers.Default)
-    {
-        for(i in 0..songsList.size)
-        {
-            if(i>=15)
-            {}
-            else {
-                try {
-                    var songs=songsList.get(i)
-                    var songName=songs.songName
-                    var artist=songs.artist
-                    var duration=songs.duration
-                    var songuri=songs.songuri
-                    var songSize=songs.songSize
-                    var bitmap=songs.bitmap
+    /* suspend fun uploadSongs(playlist:String,folder:String,songsList:ArrayList<Songs>)= withContext(Dispatchers.Default)
+      {
+          for(i in 0..songsList.size)
+          {
+              if(i>=15)
+              {}
+              else {
+                  try {
+                      var songs=songsList.get(i)
+                      var songName=songs.songName
+                      var artist=songs.artist
+                      var duration=songs.duration
+                      var songuri=songs.songuri
+                      var songSize=songs.songSize
+                      var bitmap=songs.bitmap
 
 
-                    var metaDataBuilder = StorageMetadata.Builder()
-                    var songUri: Uri = songsList.get(i).songuri
-                    metaDataBuilder.setCustomMetadata("SongName", songName)
-                    metaDataBuilder.setCustomMetadata("Artist",artist)
-                    metaDataBuilder.setCustomMetadata("Duration",duration.toString()
-                    )
-                    metaDataBuilder.setCustomMetadata("Uri",songuri.toString())
+                      var metaDataBuilder = StorageMetadata.Builder()
+                      var songUri: Uri = songsList.get(i).songuri
+                      metaDataBuilder.setCustomMetadata("SongName", songName)
+                      metaDataBuilder.setCustomMetadata("Artist",artist)
+                      metaDataBuilder.setCustomMetadata("Duration",duration.toString()
+                      )
+                      metaDataBuilder.setCustomMetadata("Uri",songuri.toString())
 
-                    //
+                      //
 
-                   *//**//* if (bitmap)
+                     *//**//* if (bitmap)
                     {
                         metaDataBuilder.setCustomMetadata("Bitmap", songsList.get(i).bitmap.toString()
                         )
@@ -272,81 +282,89 @@ class ContentUpload_Fragment : Fragment()
             }
         }
 */
-    suspend fun uploadSongs(playlist:String,folder:String,songsList:ArrayList<Songs>,view:View)= withContext(Dispatchers.Default)
+    suspend fun uploadSongs(
+        playlist: String,
+        folder: String,
+        songsList: ArrayList<Songs>,
+        view: View
+    ) = withContext(Dispatchers.Default)
     {
-       var songs:Songs=songsList.get(0)
-        var bitmap=songs.bitmap
-        var songName=songs.songName
-        var songUriii=songs.songuri
+        var songs: Songs = songsList.get(0)
+        var bitmap = songs.bitmap
+        var songName = songs.songName
+        var songUriii = songs.songuri
 
-       /* var byteArrayOutputStream=ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream)
+        /* var byteArrayOutputStream=ByteArrayOutputStream()
+         bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream)
 
-        var bitmapString=Base64.encodeToString(byteArrayOutputStream.toByteArray(),Base64.DEFAULT)*/
+         var bitmapString=Base64.encodeToString(byteArrayOutputStream.toByteArray(),Base64.DEFAULT)*/
 
-        var bitmapString=encodeBitmapToString(bitmap) //encode bitmap to string usign Base64
+        var bitmapString = encodeBitmapToString(bitmap) //encode bitmap to string usign Base64
 
-        var builder=StorageMetadata.Builder()
-        builder.setCustomMetadata("Bitmap",bitmapString)
-        var metaData=builder.build()
+        var builder = StorageMetadata.Builder()
+        builder.setCustomMetadata("Bitmap", bitmapString)
+        var metaData = builder.build()
 
 
-        mRefernce?.child(playlist)?.child(folder)?.putFile(songUriii,metaData)?.addOnSuccessListener {
-            Log.d("OPKFIEUF","UPLOADED")
-        }
+        mRefernce?.child(playlist)?.child(folder)?.putFile(songUriii, metaData)
+            ?.addOnSuccessListener {
+                Log.d("OPKFIEUF", "UPLOADED")
+            }
     }
 
-   suspend fun  uploadASong(playlist:String,folder:String)= withContext(Dispatchers.Default)
-       {
-           var metaDataBuilder = StorageMetadata.Builder()
-           metaDataBuilder.setCustomMetadata("SongName", songName)
-           metaDataBuilder.setCustomMetadata("Artist", artistName)
-           metaDataBuilder.setCustomMetadata("Bitmap", encodeBitmapToString(bitmap!!))
-           metaDataBuilder.setCustomMetadata("Duration",duration.toString())
-           metaDataBuilder.setCustomMetadata("Size",songSize.toString())
-                   metaDataBuilder.setCustomMetadata("Uri",songUri.toString())
-           val metaData=metaDataBuilder.build()
+    suspend fun uploadASong(playlist: String, folder: String) = withContext(Dispatchers.Default)
+    {
+        var metaDataBuilder = StorageMetadata.Builder()
+        metaDataBuilder.setCustomMetadata("SongName", songName)
+        metaDataBuilder.setCustomMetadata("Artist", artistName)
+        metaDataBuilder.setCustomMetadata("Bitmap", encodeBitmapToString(bitmap!!))
+        metaDataBuilder.setCustomMetadata("Duration", duration.toString())
+        metaDataBuilder.setCustomMetadata("Size", songSize.toString())
+        metaDataBuilder.setCustomMetadata("Uri", songUri.toString())
+        val metaData = metaDataBuilder.build()
 
 
-           mRefernce?.child(playlist)?.child(folder)?.child(songName)?.putFile(songUri!!, metaData)
-               ?.addOnSuccessListener {
-                   Log.d("YoPo", it.toString() + "HOGYA")
-               }?.addOnProgressListener {
-               binding?.cardViewForHidenView?.visibility = View.VISIBLE
+        mRefernce?.child(playlist)?.child(folder)?.child(songName)?.putFile(songUri!!, metaData)
+            ?.addOnSuccessListener {
+                Log.d("YoPo", it.toString() + "HOGYA")
+            }?.addOnProgressListener {
+                binding?.cardViewForHidenView?.visibility = View.VISIBLE
 
-               var doublee = (100 * it.bytesTransferred) / it.totalByteCount
-               binding?.progressTextViewUpload?.setText("${doublee.toInt()}%")
-               binding?.progressBarUpload?.setProgress(doublee.toInt())
+                var doublee = (100 * it.bytesTransferred) / it.totalByteCount
+                binding?.progressTextViewUpload?.setText("${doublee.toInt()}%")
+                binding?.progressBarUpload?.setProgress(doublee.toInt())
 
-               binding?.uploadButton?.visibility = View.GONE
-               binding?.progressBarUpload?.visibility = View.VISIBLE
-               binding?.progressTextViewUpload?.visibility = View.VISIBLE
+                binding?.uploadButton?.visibility = View.GONE
+                binding?.progressBarUpload?.visibility = View.VISIBLE
+                binding?.progressTextViewUpload?.visibility = View.VISIBLE
 
-           }?.addOnSuccessListener {
-               binding?.uploadButton?.visibility = View.VISIBLE
-               binding?.cardViewForHidenView?.visibility = View.VISIBLE
+            }?.addOnSuccessListener {
+                binding?.uploadButton?.visibility = View.VISIBLE
+                binding?.cardViewForHidenView?.visibility = View.VISIBLE
 
-               binding?.progressBarUpload?.visibility = View.VISIBLE
-               binding?.progressTextViewUpload?.visibility = View.VISIBLE
-
-
-           }
+                binding?.progressBarUpload?.visibility = View.VISIBLE
+                binding?.progressTextViewUpload?.visibility = View.VISIBLE
 
 
-       } //function finished
+            }
 
-    suspend fun encodeBitmapToString(bitmap:Bitmap):String= withContext(Dispatchers.Default)
+
+    } //function finished
+
+    suspend fun encodeBitmapToString(bitmap: Bitmap): String = withContext(Dispatchers.Default)
     {
 
-        var bitmapString:String?=null
-        Log.d("BBIITMAP",bitmap.toString())
+        var bitmapString: String? = null
+        Log.d("BBIITMAP", bitmap.toString())
         try {
             var byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
 
-            bitmapString = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
-        }catch (e:java.lang.Exception){}
-        Log.d("BBIITMAP",bitmapString!!)
+            bitmapString =
+                Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
+        } catch (e: java.lang.Exception) {
+        }
+        Log.d("BBIITMAP", bitmapString!!)
 
         return@withContext bitmapString!!
     }
@@ -362,228 +380,234 @@ class ContentUpload_Fragment : Fragment()
 
         bottomDialog.show()
 
-              uploadOnItemSelected(bottomDialog,"Trending_Playlist")
-             uploadOnItemSelected(bottomDialog,"Top_Charts")
-             uploadOnItemSelected(bottomDialog,"Discover")
-             uploadOnItemSelected(bottomDialog,"Moods&Collection")
-             uploadOnItemSelected(bottomDialog,"Featured_Artists")
+        uploadOnItemSelected(bottomDialog, "Trending_Playlist")
+        uploadOnItemSelected(bottomDialog, "Top_Charts")
+        uploadOnItemSelected(bottomDialog, "Discover")
+        uploadOnItemSelected(bottomDialog, "Moods&Collection")
+        uploadOnItemSelected(bottomDialog, "Featured_Artists")
 
     }
 
-        fun uploadOnItemSelected(bottomSheetDialog: BottomSheetDialog, playlist: String)
-       {
-            when (playlist) {
-                "Trending_Playlist" -> {
+    fun uploadOnItemSelected(bottomSheetDialog: BottomSheetDialog, playlist: String) {
+        when (playlist) {
+            "Trending_Playlist" -> {
 
-                    val trendingspinner =
-                        bottomSheetDialog.findViewById<Spinner>(R.id.TrendingSpinner)
-                    trendingspinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
-                            ) {
-                                Log.d("hello", parent?.selectedItem.toString())
-                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
-                                // sheet then default selected item will be 1st mean Trending
-                                {
+                val trendingspinner =
+                    bottomSheetDialog.findViewById<Spinner>(R.id.TrendingSpinner)
+                trendingspinner?.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                        ) {
+                            Log.d("hello", parent?.selectedItem.toString())
+                            if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                            // sheet then default selected item will be 1st mean Trending
+                            {
+                            } else {
+                                if (parent?.selectedItem?.equals(playlist) == true) {
                                 } else {
-                                    if (parent?.selectedItem?.equals(playlist) == true) {
-                                    } else {
-                                        CoroutineScope(Dispatchers.Main).launch {
-                                            uploadASong(playlist, parent?.selectedItem.toString())
-                                        }
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        uploadASong(playlist, parent?.selectedItem.toString())
                                     }
-                                    val itemName: String = parent?.selectedItem.toString()
-                                    bottomSheetDialog.hide()
                                 }
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                TODO("Not yet implemented")
+                                val itemName: String = parent?.selectedItem.toString()
+                                bottomSheetDialog.hide()
                             }
                         }
-                }
-                "Top_Charts" -> {
-                    val topchartsSpinner =
-                        bottomSheetDialog.findViewById<Spinner>(R.id.topChartsSpinner)
-                    topchartsSpinner?.onItemSelectedListener =
-                        object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(
-                                parent: AdapterView<*>?,
-                                view: View?,
-                                position: Int,
-                                id: Long
-                            ) {
-                                Log.d("hello", parent?.selectedItem.toString())
-                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
-                                // sheet then default selected item will be 1st mean Trending
-                                {
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            TODO("Not yet implemented")
+                        }
+                    }
+            }
+            "Top_Charts" -> {
+                val topchartsSpinner =
+                    bottomSheetDialog.findViewById<Spinner>(R.id.topChartsSpinner)
+                topchartsSpinner?.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            Log.d("hello", parent?.selectedItem.toString())
+                            if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                            // sheet then default selected item will be 1st mean Trending
+                            {
+                            } else {
+                                if (parent?.selectedItem?.equals(playlist) == true) {
                                 } else {
-                                    if (parent?.selectedItem?.equals(playlist) == true) {
-                                    } else {
-                                        CoroutineScope(Dispatchers.Main).launch {
-                                            uploadASong(playlist, parent?.selectedItem.toString())
-                                        }
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        uploadASong(playlist, parent?.selectedItem.toString())
                                     }
-                                    val itemName: String = parent?.selectedItem.toString()
-                                    bottomSheetDialog.hide()
                                 }
-                                if (parent?.selectedItem?.equals("English") == true) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        parent?.selectedItem?.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    bottomSheetDialog.hide()
-                                }
+                                val itemName: String = parent?.selectedItem.toString()
+                                bottomSheetDialog.hide()
                             }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                TODO("Not yet implemented")
+                            if (parent?.selectedItem?.equals("English") == true) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    parent?.selectedItem?.toString(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                bottomSheetDialog.hide()
                             }
                         }
-                }
-                "Discover" -> {
-                    val DiscoverSpinner =
-                        bottomSheetDialog.findViewById<Spinner>(R.id.discoverSpinner)
-                    DiscoverSpinner?.onItemSelectedListener =
-                        object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(
-                                parent: AdapterView<*>?,
-                                view: View?,
-                                position: Int,
-                                id: Long
-                            ) {
-                                Log.d("hello", parent?.selectedItem.toString())
-                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
-                                // sheet then default selected item will be 1st mean Trending
-                                {
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            TODO("Not yet implemented")
+                        }
+                    }
+            }
+            "Discover" -> {
+                val DiscoverSpinner =
+                    bottomSheetDialog.findViewById<Spinner>(R.id.discoverSpinner)
+                DiscoverSpinner?.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            Log.d("hello", parent?.selectedItem.toString())
+                            if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                            // sheet then default selected item will be 1st mean Trending
+                            {
+                            } else {
+                                if (parent?.selectedItem?.equals(playlist) == true) {
                                 } else {
-                                    if (parent?.selectedItem?.equals(playlist) == true) {
-                                    } else {
-                                        CoroutineScope(Dispatchers.Main).launch {
-                                            uploadASong(playlist, parent?.selectedItem.toString())
-                                        }
-                                        }
-                                    val itemName: String = parent?.selectedItem.toString()
-                                    bottomSheetDialog.hide()
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        uploadASong(playlist, parent?.selectedItem.toString())
+                                    }
                                 }
-                                if (parent?.selectedItem?.equals("English") == true) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        parent?.selectedItem?.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    bottomSheetDialog.hide()
-                                }
+                                val itemName: String = parent?.selectedItem.toString()
+                                bottomSheetDialog.hide()
                             }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                TODO("Not yet implemented")
+                            if (parent?.selectedItem?.equals("English") == true) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    parent?.selectedItem?.toString(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                bottomSheetDialog.hide()
                             }
                         }
-                }
-                "Moods&Collection" -> {
-                    val MoodsSpinner = bottomSheetDialog.findViewById<Spinner>(R.id.MoodsSpinner)
-                    MoodsSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                                Log.d("hello", parent?.selectedItem.toString())
-                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
-                                // sheet then default selected item will be 1st mean Trending
-                                {   Log.d("SPINNER",parent?.selectedItem.toString()+"1")
-                                } else {
-                                    if (parent?.selectedItem?.equals(playlist) == true) {
-                                        Log.d("SPINNER",parent?.selectedItem.toString()+"2")
 
-                                    } else {
-                                        Log.d("SPINNER",parent?.selectedItem.toString()+"3")
-                                        CoroutineScope(Dispatchers.Main).launch {
-                                            uploadASong("Moods&Collection", parent?.selectedItem.toString())
-                                        }
-                                        }
-                                    val itemName: String = parent?.selectedItem.toString()
-                                    bottomSheetDialog.hide()
-                                }
-                                if (parent?.selectedItem?.equals("English") == true) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        parent?.selectedItem?.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    bottomSheetDialog.hide()
-                                }
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                TODO("Not yet implemented")
-                            }
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            TODO("Not yet implemented")
                         }
-                }
-                "Featured_Artists" -> {
-                    val featuredArtistSpinner =
-                        bottomSheetDialog.findViewById<Spinner>(R.id.featuredArtistSpinner)
-                    featuredArtistSpinner?.onItemSelectedListener =
-                        object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(
-                                parent: AdapterView<*>?,
-                                view: View?,
-                                position: Int,
-                                id: Long
-                            ) {
-                                Log.d("hello", parent?.selectedItem.toString())
-                                if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
-                                // sheet then default selected item will be 1st mean Trending
-                                {
-                                } else {
-                                    if (parent?.selectedItem?.equals(playlist) == true) {
-                                    } else {
-                                        CoroutineScope(Dispatchers.Main).launch {
-                                            uploadASong(playlist, parent?.selectedItem.toString())
-                                        }
-                                        }
-                                    val itemName: String = parent?.selectedItem.toString()
-                                    bottomSheetDialog.hide()
+                    }
+            }
+            "Moods&Collection" -> {
+                val MoodsSpinner = bottomSheetDialog.findViewById<Spinner>(R.id.MoodsSpinner)
+                MoodsSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        Log.d("hello", parent?.selectedItem.toString())
+                        if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                        // sheet then default selected item will be 1st mean Trending
+                        {
+                            Log.d("SPINNER", parent?.selectedItem.toString() + "1")
+                        } else {
+                            if (parent?.selectedItem?.equals(playlist) == true) {
+                                Log.d("SPINNER", parent?.selectedItem.toString() + "2")
+
+                            } else {
+                                Log.d("SPINNER", parent?.selectedItem.toString() + "3")
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    uploadASong("Moods&Collection", parent?.selectedItem.toString())
                                 }
                             }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                TODO("Not yet implemented")
-                            }
+                            val itemName: String = parent?.selectedItem.toString()
+                            bottomSheetDialog.hide()
                         }
+                        if (parent?.selectedItem?.equals("English") == true) {
+                            Toast.makeText(
+                                requireContext(),
+                                parent?.selectedItem?.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            bottomSheetDialog.hide()
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        TODO("Not yet implemented")
+                    }
                 }
             }
+            "Featured_Artists" -> {
+                val featuredArtistSpinner =
+                    bottomSheetDialog.findViewById<Spinner>(R.id.featuredArtistSpinner)
+                featuredArtistSpinner?.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            Log.d("hello", parent?.selectedItem.toString())
+                            if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
+                            // sheet then default selected item will be 1st mean Trending
+                            {
+                            } else {
+                                if (parent?.selectedItem?.equals(playlist) == true) {
+                                } else {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        uploadASong(playlist, parent?.selectedItem.toString())
+                                    }
+                                }
+                                val itemName: String = parent?.selectedItem.toString()
+                                bottomSheetDialog.hide()
+                            }
+                        }
 
-
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            TODO("Not yet implemented")
+                        }
+                    }
+            }
         }
+
+
+    }
 
     /*override fun onStop() {
         super.onStop()
         bottomDialog.hide()
     }*/
-    fun gettingSongsfromFireBase(playlist: String,folder: String)
-    {
+    fun gettingSongsfromFireBase(playlist: String, folder: String) {
         mRefernce?.child(playlist)?.child(folder)?.listAll()?.addOnSuccessListener {
 
-            for(item in it.items)
-            {
-              item.metadata.addOnSuccessListener {
-                  songName=it.getCustomMetadata("SongName").toString()
-                  artistName=it.getCustomMetadata("Artist").toString()
-                  bitmapStr=it.getCustomMetadata("Bitmap").toString()
-                  songSizeStr=it.getCustomMetadata("Size").toString()
-                  durationStr=it.getCustomMetadata("Duration").toString()
-                  songUriStr=it.getCustomMetadata("Uri").toString()
+            for (item in it.items) {
+                item.metadata.addOnSuccessListener {
+                    songName = it.getCustomMetadata("SongName").toString()
+                    artistName = it.getCustomMetadata("Artist").toString()
+                    bitmapStr = it.getCustomMetadata("Bitmap").toString()
+                    songSizeStr = it.getCustomMetadata("Size").toString()
+                    durationStr = it.getCustomMetadata("Duration").toString()
+                    songUriStr = it.getCustomMetadata("Uri").toString()
 
-                  Log.d("HEJKKGO",it.getCustomMetadata("SongName").toString())
+                    Log.d("HEJKKGO", it.getCustomMetadata("SongName").toString())
 
-               }
+                }
 
-           }
             }
         }
-    lateinit var bitmapStr:String
-    lateinit var songSizeStr:String
-    lateinit var durationStr:String
-    lateinit var songUriStr:String
     }
+
+    lateinit var bitmapStr: String
+    lateinit var songSizeStr: String
+    lateinit var durationStr: String
+    lateinit var songUriStr: String
+}
 
 
 

@@ -408,6 +408,9 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                             i.putExtra("OFFLINE_CONDITION","OFFLINE");
                             broadcastManager.sendBroadcast(i);
                             playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
+
+                            Intent intentttt=new Intent("STOP KAR_ONLINE");
+                            broadcastManager.sendBroadcast(intentttt);
                             //  changeMusic(position);
 
                         }
@@ -457,14 +460,20 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                     myAdapter.setOnItemClickListener(new MyAdapter.CustomItemClickListener() {
                         @Override
                         public void onItemClick(int position, View imageview) {
+                            Log.d("clickedPosition",position+"position clicked");
                             motionLayoutt.setVisibility(View.VISIBLE);
                             mposition = position;
                             // Intent i=new Intent("ACTION_POSITION");  //setting this globally..
 
                             i.putExtra("Position", position);
                             i.putExtra("OFFLINE_CONDITION","OFFLINE");
+
+                            Intent intentttt=new Intent("STOP KAR_ONLINE");
+                            broadcastManager.sendBroadcast(intentttt);
+
                             broadcastManager.sendBroadcast(i);
                             playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
+
 
                             // changeMusic(position);
                         }

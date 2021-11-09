@@ -31,6 +31,7 @@ import com.example.myapp.MusicRecylerView.MyAdapter
 import com.example.myapp.MusicRecylerView.MyAdapter2
 import com.example.myapp.MusicRecylerView.Songs
 import com.example.myapp.MusicRecylerView.Songs_FireBase
+import com.example.myapp.MusicServices.MusicService.songsList
 import com.example.myapp.MyViewModel.MyViewModel
 import com.example.myapp.MyViewModel.MyViewModelFactory
 import com.example.myapp.R
@@ -40,8 +41,10 @@ import kotlinx.coroutines.*
 import com.example.myapp.StorageReferenceSingleton
 import com.example.myapp.MusicServices.MusicServiceOnline
 import com.example.myapp.databinding.FragmentSongsBinding
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.storage.StorageMetadata
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 import java.text.DecimalFormat
@@ -52,43 +55,43 @@ class SongsFragment : Fragment() {
     var con: Boolean? = null
     private var songsList: ArrayList<Songs>? = null
     var recylrView: RecyclerView? = null
-    var adpter:MyAdapter?=null
+    var adpter: MyAdapter? = null
 
-    var addpter:MyAdapter2?=null
+    var addpter: MyAdapter2? = null
     var window: Window? = null
 
-    var songsFireList:ArrayList<Songs_FireBase>?=null
+    var songsFireList: ArrayList<Songs_FireBase>? = null
 
-    var toolbarimageview:ImageView?=null
-    var toolbarimageview2:ImageView?=null
-    var toolbarimageview3:ImageView?=null
-    var toolbarimageview4:ImageView?=null
-    var toolbar:Toolbar?=null
-    var lottie:LottieAnimationView?=null
-    var lottie2:LottieAnimationView?=null
+    var toolbarimageview: ImageView? = null
+    var toolbarimageview2: ImageView? = null
+    var toolbarimageview3: ImageView? = null
+    var toolbarimageview4: ImageView? = null
+    var toolbar: Toolbar? = null
+    var lottie: LottieAnimationView? = null
+    var lottie2: LottieAnimationView? = null
 
     var storage: FirebaseStorage? = null
     var mReference: StorageReference? = null
-    var songName:String?=null
-    var artistName:String?=null
-    var  bitmapStr:String?=null
-    var songSizeStr:String?=null
-    var durationStr:String?=null
-    var songUriStr:String?=null
-    var creationDate:Long?=null
-    var duration:Long?=null
-    var size:Long?=null
-    var uri: Uri?=null
-    var bitmap:Bitmap?=null
-    var binding:FragmentSongsBinding?=null
+    var songName: String? = null
+    var artistName: String? = null
+    var bitmapStr: String? = null
+    var songSizeStr: String? = null
+    var durationStr: String? = null
+    var songUriStr: String? = null
+    var creationDate: Long? = null
+    var duration: Long? = null
+    var size: Long? = null
+    var uri: Uri? = null
+    var bitmap: Bitmap? = null
+    var binding: FragmentSongsBinding? = null
 
-    var playlist:String?=null
-    var folder:String?=null
+    var playlist: String? = null
+    var folder: String? = null
 
-    var sharedPreferences:SharedPreferences?=null
-    var editor:SharedPreferences.Editor?=null
-    var localBroadcastManager:LocalBroadcastManager?=null
-    var songsfirelist:ArrayList<Songs>?=null
+    var sharedPreferences: SharedPreferences? = null
+    var editor: SharedPreferences.Editor? = null
+    var localBroadcastManager: LocalBroadcastManager? = null
+    var songsfirelist: ArrayList<Songs>? = null
 
     //Motion Layout Variables
     var motionSongName: TextView? = null
@@ -117,77 +120,84 @@ class SongsFragment : Fragment() {
     var bottomSHEET: View? = null
 
     var recievedBitmap: Bitmap? = null
+    var positionnn: Int? = null
 
-    companion object{
-        var staticSonglistFirebase:ArrayList<Songs_FireBase>?=null
+    companion object {
+        var staticSonglistFirebase: ArrayList<Songs_FireBase>? = null
     }
 
     lateinit var musicServiceOnline: MusicServiceOnline
 
     //getting MusicServiceOnline instance by connecting this class to
     // MusicServiceOnline class using ServiceConnection class
-    var serviceConnectionOnline=object : ServiceConnection {
+    var serviceConnectionOnline = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             Log.d("KPKPKP", "onServiceConnected 101")
             val myBinder2 = service as MusicServiceOnline.MyBinder2
             musicServiceOnline = myBinder2.service
         }
+
         override fun onServiceDisconnected(name: ComponentName?) {
             Log.d("KPKPKP", "onServiceDisconnected 110")
         }
     }
 
     //here we getting bitmap from OnlineSongsFragment..
-    var receiver=object: BroadcastReceiver(){
-    override fun onReceive(context: Context?, intent: Intent?) {
+    var receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
 
-        if(intent?.action.equals("SENDING_BITMAPSTR"))
-        {
-                var bitmapstrr=intent?.getStringExtra("BITMAPSTR")
+            if (intent?.action.equals("SENDING_BITMAPSTR")) {
+                var bitmapstrr = intent?.getStringExtra("BITMAPSTR")
 
-            CoroutineScope(Dispatchers.Main).launch {
-                var bitmap = convertToBitmap(bitmapstrr)
-                binding?.songImageOnToolbar1?.setImageBitmap(bitmap)
-                binding?.songImageOnToolbar2?.setImageBitmap(bitmap)
-                binding?.songImageOnToolbar3?.setImageBitmap(bitmap)
-                binding?.songImageOnToolbar4?.setImageBitmap(bitmap)
+                CoroutineScope(Dispatchers.Main).launch {
+                    var bitmap = convertToBitmap(bitmapstrr)
+                    binding?.songImageOnToolbar1?.setImageBitmap(bitmap)
+                    binding?.songImageOnToolbar2?.setImageBitmap(bitmap)
+                    binding?.songImageOnToolbar3?.setImageBitmap(bitmap)
+                    binding?.songImageOnToolbar4?.setImageBitmap(bitmap)
+                }
+            } else if (intent?.action.equals("SENDING_FIRENAME")) {
+                /* Log.d("kfgjkfjkjfk","OOOPS"+intent?.getStringExtra("metasongName"))
+                 var str=intent?.getStringExtra("metasongName")
+                 songsList?.add(Songs(str))
+
+                 //Log.d("LIISTDFDFD",songsList?.get(0)?.songName!!)
+
+                 var sognfirelist:ArrayList<Songs_FireBase> = intent?.getSerializableExtra("songFirebaseList") as ArrayList<Songs_FireBase>
+                     Log.d("sizeRECIERFIRELIST",songsFireList?.size.toString()+"f;blhf")*/
             }
         }
-        else if(intent?.action.equals("SENDING_FIRENAME"))
-        {
-           /* Log.d("kfgjkfjkjfk","OOOPS"+intent?.getStringExtra("metasongName"))
-            var str=intent?.getStringExtra("metasongName")
-            songsList?.add(Songs(str))
-
-            //Log.d("LIISTDFDFD",songsList?.get(0)?.songName!!)
-
-            var sognfirelist:ArrayList<Songs_FireBase> = intent?.getSerializableExtra("songFirebaseList") as ArrayList<Songs_FireBase>
-                Log.d("sizeRECIERFIRELIST",songsFireList?.size.toString()+"f;blhf")*/
-        }
     }
-}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        staticSonglistFirebase=ArrayList()
-        localBroadcastManager= LocalBroadcastManager.getInstance(requireContext())
+        staticSonglistFirebase = ArrayList()
+
+        localBroadcastManager = LocalBroadcastManager.getInstance(requireContext())
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-       // songsList = ArrayList<Songs>()
-        songsFireList= ArrayList()
+        // songsList = ArrayList<Songs>()
+        songsFireList = ArrayList()
+        songsList = ArrayList()
         storage = FirebaseStorage.getInstance()
         binding = FragmentSongsBinding.inflate(inflater, container, false)
 
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter("SENDING_BITMAPSTR"))
-       // return inflater.inflate(R.layout.fragment_songs, container, false)
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(receiver, IntentFilter("SENDING_BITMAPSTR"))
+        // return inflater.inflate(R.layout.fragment_songs, container, false)
         return binding?.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("SongsFragmentggggg","songsFRagment");
+        Log.d("SongsFragmentggggg", "songsFRagment");
 
         //this block is for Fullscreen,color the status bar.
 
@@ -200,45 +210,43 @@ class SongsFragment : Fragment() {
         }
 
         //TO START MusicServiceOnline Service.
-        var intent=Intent(activity,MusicServiceOnline::class.java)
+        var intent = Intent(activity, MusicServiceOnline::class.java)
         intent.setAction("START_FROM_SONGSFRAGMENT")
         activity?.startService(intent)
 
 
         //sending  "STOP KAR" string to stop offline song.
         binding?.lottieSongsFragment?.setOnClickListener {
-            Log.d("HELLOIGHFR","HFSDSDJSSTARTSSSlottie")
+            Log.d("HELLOIGHFR", "HFSDSDJSSTARTSSSlottie")
 
-            var intentttt=Intent("STOP KAR")
+            var intentttt = Intent("STOP KAR")
             localBroadcastManager?.sendBroadcast(intentttt)
         }
 
         //getting motion layout from <include/> navigationActivity.
-          motionLayoutViews()
+        motionLayoutViews()
 
         //getting bottomSheetLayout views
-          bottomSheetViews()
+        bottomSheetViews()
 
         //In this Receiver we r getting song position, currentduration position aftr evry 1 second
 
         //In this Receiver we r getting song position, currentduration position aftr evry 1 second
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                if (intent.action == "ACTION_SEND") {
-
-                    //TODO whereever we use songsArrayList2 USE own songlist
-                        // TODO we can get songlist as we get in MusicServiceOnline via BroadcastReceiver
-                            // TODO or just simnply add data in songlist in onResponse method but test this process first
-
+                if (intent.action == "ACTION_SEND_ONLINE") {
+                    // motionSongName?.text=intent.getStringExtra("SONGNAAAAM")
                     try {
-                        Log.d("PPOOK", intent.getIntExtra("receivedPosition", 1).toString())
-                        val receivedPosition = intent.getIntExtra("receivedPosition", 1)
+                        //  Log.d("PPOOK", intent.getIntExtra("receivedPosition_ONLINE", 1).toString())
+                        // val receivedPosition = intent.getIntExtra("receivedPosition_ONLINE", 1)
 
                         //To send Song Uri to anothher app..
-                        shareSongUri(receivedPosition)
-                        val receivedCurrentPosition = intent.getIntExtra("CURRENTDURATION", 1000)
+                        shareSongUri(positionnn!!)
+                        val receivedCurrentPosition =
+                            intent.getIntExtra("CURRENTDURATION_ONLINE", 1000)
+                        //WE CAN USE CLICKED POSITION INSEAD OF receivedPosition in below line
                         positionTextview!!.text =
-                            (receivedPosition + 1).toString() + "/" + OfflineMusicFragment.songsArrayList2.size
+                            (positionnn!! + 1).toString() + "/" + songsList?.size
                         //setting current position to textview and seekbar
                         seekBar?.setProgress(receivedCurrentPosition)
                         val currentTimeLabel: String? = createTimeLabel(receivedCurrentPosition)
@@ -247,116 +255,169 @@ class SongsFragment : Fragment() {
                         //SETTING Total duration to seekbar and TextView
                         seekBar?.setMax(musicServiceOnline.getDuration())
                         motionTotalDuration?.setText(createTimeLabel(musicServiceOnline.getDuration()))
-                        motionSongName!!.text = OfflineMusicFragment.songsArrayList2[receivedPosition].songName
-                        motionartistName!!.text = OfflineMusicFragment.songsArrayList2[receivedPosition].artist
-                        artistSheetText!!.text = OfflineMusicFragment.songsArrayList2[receivedPosition].artist
-                        albumSheetText!!.text = OfflineMusicFragment.songsArrayList2[receivedPosition].songName
+                        motionSongName!!.text = songsList?.get(positionnn!!)?.songName
+                        motionartistName!!.text = songsList?.get(positionnn!!)?.artist
+                        artistSheetText!!.text = songsList?.get(positionnn!!)?.artist
+                        albumSheetText!!.text = songsList?.get(positionnn!!)?.songName
                         durationSheetText?.setText(createTimeLabel(musicServiceOnline.getDuration()))
 
-                        val songSize = OfflineMusicFragment.songsArrayList2[receivedPosition].songSize
+                        val songSize = songsList?.get(positionnn!!)?.songSize
                         Log.d("soongssize", songSize.toString())
-                        songSizeSheet?.setText(byteToMB(songSize) + "mb")
+                        songSizeSheet?.setText(byteToMB(songSize!!) + "mb")
 
                         //here we set imagebitmap to motionImagevIew and use bitmap for Palette colors
-                        recievedBitmap = OfflineMusicFragment.songsArrayList2[receivedPosition].bitmap
+                        recievedBitmap = songsList?.get(positionnn!!)?.bitmap
                         if (recievedBitmap != null) {
                             motionImagevIew!!.setImageBitmap(recievedBitmap)
                             Log.d("revicerdBitmap", recievedBitmap.toString())
                             //setting pallette color to motionlayout
                             try {
-                                Palette.from(recievedBitmap!!).generate(object:PaletteAsyncListener{
-                                    override fun onGenerated(palette: Palette?) {
-                                        try {
-                                            setPaletteColor(palette!!)
-                                            motionCardView!!.setBackgroundColor(palette!!.getMutedColor(activity!!.resources.getColor(R.color.paletteDEFAULT)))
-                                            lastSpace!!.setBackgroundColor(palette!!.getMutedColor(activity!!.resources.getColor(R.color.paletteDEFAULT)))
+                                Palette.from(recievedBitmap!!)
+                                    .generate(object : PaletteAsyncListener {
+                                        override fun onGenerated(palette: Palette?) {
+                                            try {
+                                                setPaletteColor(palette!!)
+                                                motionCardView!!.setBackgroundColor(
+                                                    palette!!.getMutedColor(
+                                                        activity!!.resources.getColor(R.color.paletteDEFAULT)
+                                                    )
+                                                )
+                                                lastSpace!!.setBackgroundColor(
+                                                    palette!!.getMutedColor(
+                                                        activity!!.resources.getColor(R.color.paletteDEFAULT)
+                                                    )
+                                                )
 
-                                        } catch (e: java.lang.Exception) {}
-                                    }
-                                } )
-                            } catch (e: java.lang.Exception) {}
-                        }
-                        else {
+                                            } catch (e: java.lang.Exception) {
+                                            }
+                                        }
+                                    })
+                            } catch (e: java.lang.Exception) {
+                            }
+                        } else {
                             motionImagevIew!!.setImageDrawable(resources.getDrawable(R.drawable.music_two_tonne))
                         }
-                    } catch (e: java.lang.Exception) {}
+                    } catch (e: java.lang.Exception) {
+                    }
                 }
+
             }
         }
         //register LocalBroadcastManager to receive data from MusicService.
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter("ACTION_SEND"))
-
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(receiver, IntentFilter("ACTION_SEND_ONLINE"))
 
         var animation = AnimationUtils.loadAnimation(context, R.anim.opening_anim)
-        binding?.songFragmentRootLay?.animation=animation
+        binding?.songFragmentRootLay?.animation = animation
 
-       lottie=binding?.lottieSongsFragment
+        lottie = binding?.lottieSongsFragment
         //initialise storageRefernce here..
-        mReference= StorageReferenceSingleton().getStroageReference()
+        mReference = StorageReferenceSingleton().getStroageReference()
 
 
         toolbar = view.findViewById<Toolbar>(R.id.toolbarSongsFragment)
 
         if (arguments != null) {
-             playlist = arguments?.get("Playlist").toString()
-             folder = arguments?.getString("Folder").toString()
+            playlist = arguments?.get("Playlist").toString()
+            folder = arguments?.getString("Folder").toString()
             binding?.toolbarSongsFragment?.setTitle(folder)
 
             CoroutineScope(Dispatchers.Main).launch {
-               // gettingSongsListfromFireBase(playlist, folder)
-                Log.d("fklgjkflgflgkflgkf",folder!!)
-           gettingSongsListfromFireBase(playlist!!,folder!!)
+                // gettingSongsListfromFireBase(playlist, folder)
+                Log.d("fklgjkflgflgkflgkf", folder!!)
+                gettingSongsListfromFireBase(playlist!!, folder!!)
             }
 
-        }
-        else{
+        } else {
             binding?.toolbarSongsFragment?.setTitle("Music")
         }
     } //onViewCreated Finished
 
 
-
-
-    suspend fun gettingSongsListfromFireBase(playlist: String ="Trending_Playlist", folder: String="English")= withContext(Dispatchers.Main)
+    suspend fun gettingSongsListfromFireBase(
+        playlist: String = "Trending_Playlist",
+        folder: String = "English"
+    ) = withContext(Dispatchers.Main)
     {
-        Log.d("hhhhhhh","flfghgfhfghfgj");
+        Log.d("hhhhhhh", "flfghgfhfghfgj");
         //here this intent is to send 'it'  (SongsList)
-        var i=Intent("Send_SongsList")
+        var i = Intent("Send_SongsList")
         //initStorageReference(storage!!) //initialization of mReference
-        var factory:MyViewModelFactory= MyViewModelFactory(playlist!!,folder!!/*,mReference!!*/)
-        var myviewmodel=ViewModelProvider(this@SongsFragment,factory).get(MyViewModel::class.java)
+        var factory: MyViewModelFactory = MyViewModelFactory(playlist!!, folder!!/*,mReference!!*/)
+        var myviewmodel =
+            ViewModelProvider(this@SongsFragment, factory).get(MyViewModel::class.java)
 
 
         myviewmodel.getLiveList()?.observe(viewLifecycleOwner, Observer {
 
-            lottie?.visibility=View.GONE
-            lottie2?.visibility=View.GONE
-            staticSonglistFirebase=it
+            lottie?.visibility = View.GONE
+            lottie2?.visibility = View.GONE
+            staticSonglistFirebase = it
 
             //putting arraylist and sending to Music Service
-            i.putParcelableArrayListExtra("songslIst",it)
+            i.putParcelableArrayListExtra("songslIst", it)
             localBroadcastManager?.sendBroadcast(i)
 
 
-            addpter=MyAdapter2(context,it)
-            binding?.songsRecyclerView?.layoutManager = GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
+            addpter = MyAdapter2(context, it)
+            binding?.songsRecyclerView?.layoutManager =
+                GridLayoutManager(context, 1, GridLayoutManager.VERTICAL, false)
             binding?.songsRecyclerView?.adapter = addpter
 
 
-            addpter?.setOnClickListener(object:MyAdapter2.CustomItemClickListener2{
+            addpter?.setOnClickListener(object : MyAdapter2.CustomItemClickListener2 {
                 override fun customOnItemClick(position: Int) {
-                   //i2 intnt to send position to MusicServiceOnline Service
-                    var i2=Intent("FIREPOSITION")
-                    i2.putExtra("positionfire",position)
+                    //i2 intnt to send position to MusicServiceOnline Service
+                    positionnn = position
+                    var i2 = Intent("FIREPOSITION")
+                    i2.putExtra("positionfire", position)
                     localBroadcastManager?.sendBroadcast(i2)
 
                     //intenttttt is to sending "STOP KAR" String to MusicService
                     //to stop Local/offline song so that online song can play without disturbance
-                    var intentttt=Intent("STOP KAR")
+                    var intentttt = Intent("STOP KAR_OFFLINE")
                     localBroadcastManager?.sendBroadcast(intentttt)
                 }
             })
-        })
+
+            it.forEach {
+                it.storageMetadataa.addOnSuccessListener(object :
+                    OnSuccessListener<StorageMetadata> {
+                    override fun onSuccess(list: StorageMetadata?) {
+                        val songName: String? = list?.getCustomMetadata("SongName")
+                        val bitmapstr: String? = list?.getCustomMetadata("Bitmap")
+                        val dateModifiedd: String? = list?.getCreationTimeMillis().toString()
+                        val artist: String? = list?.getCustomMetadata("Artist")
+                        val durationn: Long? = list?.getCustomMetadata("Duration")?.toLong()
+                        val songSize: Long? = list?.getCustomMetadata("Size")?.toLong()
+                        //converting bitmapstr to set in arraylist as a bitmap
+                        //converting bitmapstr to set in arraylist as a bitmap
+                        val bitmap = convertToBitmap(bitmapstr)
+
+                        it.downloadedUri.addOnSuccessListener(OnSuccessListener<Uri?> { uri ->
+                            songsList!!.add(
+                                Songs(
+                                    uri!!,
+                                    songName!!,
+                                    artist!!,
+                                    durationn!!,
+                                    bitmap!!,
+                                    dateModifiedd!!,
+                                    songSize!!
+                                )
+                            )
+                        })
+                        //checking elements in songFireList is added or not
+                        //checking elements in songFireList is added or not
+                        Log.d("HELEffffJ", songsList!!.size.toString() + "fjk")
+
+                    }
+
+                })
+            }
+
+        }
+        )
 
     } //gettingSon.....function closed
 
@@ -369,20 +430,20 @@ class SongsFragment : Fragment() {
         return DecimalFormat("###.#").format(mb.toDouble()).toString()
     }
 
-   suspend fun convertToBitmap(bitmapStr: String?): Bitmap?= withContext(Dispatchers.Default) {
-        var bitmap1:Bitmap?=null
+    /*suspend*/ fun convertToBitmap(bitmapStr: String?): Bitmap?/*= withContext(Dispatchers.Default)*/ {
+        var bitmap1: Bitmap? = null
         try {
-           // Log.d("bitMAPSTR",bitmapStr!!)
+            // Log.d("bitMAPSTR",bitmapStr!!)
             val byteArray = Base64.decode(bitmapStr!!, Base64.DEFAULT)
-             bitmap1= BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-            Log.d("BITMMAP",bitmap1.toString())
-        }catch (e:Exception){}
-        Log.d("HHELO",bitmap1.toString())
-    return@withContext bitmap1
-   }
+            bitmap1 = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+            Log.d("BITMMAP", bitmap1.toString())
+        } catch (e: Exception) {
+        }
+        Log.d("HHELO", bitmap1.toString())
+        return/*@withContext*/ bitmap1
+    }
 
-    fun motionLayoutViews()
-    {
+    fun motionLayoutViews() {
         //getting motion layout from <include/> navigationActivity.
         val motionLayoutt: MotionLayout = requireActivity().findViewById(R.id.inccluddeMotion)
         motionCardView = motionLayoutt.findViewById(R.id.cardview)
@@ -399,14 +460,16 @@ class SongsFragment : Fragment() {
         lastSpace = motionLayoutt.findViewById<View>(R.id.lastspace)
         dotsButton = motionLayoutt.findViewById<ImageButton>(R.id.DotsButton)
         bottomNavigationView = motionLayoutt.findViewById(R.id.bottomNavigation)
-        seekBar=motionLayoutt.findViewById(R.id.seekbar)
+        seekBar = motionLayoutt.findViewById(R.id.seekbar)
 
     }
 
 
-    fun bottomSheetViews()
-    {
-        bottomSHEET = LayoutInflater.from(context).inflate(R.layout.detailssong_bottom_sheetlayout, activity?.findViewById(R.id.sheetConstraintLayout))
+    fun bottomSheetViews() {
+        bottomSHEET = LayoutInflater.from(context).inflate(
+            R.layout.detailssong_bottom_sheetlayout,
+            activity?.findViewById(R.id.sheetConstraintLayout)
+        )
         artistSheetText = bottomSHEET?.findViewById<TextView>(R.id.artist_textview)
         albumSheetText = bottomSHEET?.findViewById<TextView>(R.id.album_textview)
         durationSheetText = bottomSHEET?.findViewById<TextView>(R.id.Duration_textview)
@@ -428,7 +491,7 @@ class SongsFragment : Fragment() {
 
     fun shareSongUri(receivedPosition: Int) {
         shareSong!!.setOnClickListener {
-            val uri = OfflineMusicFragment.songsArrayList2[receivedPosition].songuri
+            val uri = songsList?.get(receivedPosition)?.songuri
             val file = File(uri.toString())
             val intentShare = Intent(Intent.ACTION_SEND)
             intentShare.type = "audio/*"
@@ -456,11 +519,29 @@ class SongsFragment : Fragment() {
 
     fun setPaletteColor(p: Palette) {
         try {
-            motionCardView!!.setBackgroundColor(p.getDarkMutedColor(requireActivity().resources.getColor(R.color.Green)))
-            lastSpace!!.setBackgroundColor(p.getDarkMutedColor(requireActivity().resources.getColor(R.color.Green)))
+            motionCardView!!.setBackgroundColor(
+                p.getDarkMutedColor(
+                    requireActivity().resources.getColor(
+                        R.color.Green
+                    )
+                )
+            )
+            lastSpace!!.setBackgroundColor(
+                p.getDarkMutedColor(
+                    requireActivity().resources.getColor(
+                        R.color.Green
+                    )
+                )
+            )
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 window?.setStatusBarColor(p.getDarkMutedColor(requireActivity().resources.getColor(R.color.Green)))
-                window?.setNavigationBarColor(p.getDarkMutedColor(requireActivity().resources.getColor(R.color.Green)))
+                window?.setNavigationBarColor(
+                    p.getDarkMutedColor(
+                        requireActivity().resources.getColor(
+                            R.color.Green
+                        )
+                    )
+                )
             }
         } catch (e: java.lang.Exception) {
         }
@@ -469,7 +550,7 @@ class SongsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         //binding MusicServiceOnline to this class
-        var intent=Intent(context, MusicServiceOnline::class.java)
-        activity?.bindService(intent,serviceConnectionOnline,Context.BIND_AUTO_CREATE)
+        var intent = Intent(context, MusicServiceOnline::class.java)
+        activity?.bindService(intent, serviceConnectionOnline, Context.BIND_AUTO_CREATE)
     }
 }

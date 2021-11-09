@@ -7,8 +7,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class Songs implements Serializable, Parcelable
-{
+public class Songs implements Serializable, Parcelable {
     Uri songuri;
     String songName;
     String artist;
@@ -17,50 +16,48 @@ public class Songs implements Serializable, Parcelable
     String dateModified;
     long songSize;
 
-    public Songs(){}
-    public Songs(String songName)
-    {
-        this.songName=songName;
+    public Songs() {
+    }
+
+    public Songs(String songName) {
+        this.songName = songName;
     }
 
 
-    public Songs(String dateModified,String songName){
-        this.dateModified=dateModified;
-        this.songName=songName;
-    }
-    public Songs(String songName, String artist,Uri songuri)
-    {
-        this.songName=songName;
-        this.artist=artist;
-        this.songuri=songuri;
+    public Songs(String dateModified, String songName) {
+        this.dateModified = dateModified;
+        this.songName = songName;
     }
 
-    public Songs(Uri songuri, String songName, String artist, Long duration, Bitmap bitmap,String dateModified,long songSize)
-    {
-        this.songuri=songuri;
-        this.songName=songName;
-        this.artist=artist;
-        this.duration=duration;
-        this.bitmap=bitmap;
-        this.dateModified=dateModified;
-        this.songSize=songSize;
+    public Songs(String songName, String artist, Uri songuri) {
+        this.songName = songName;
+        this.artist = artist;
+        this.songuri = songuri;
     }
 
-    public Songs(Uri songuri, String songName, String artist, Long duration,String dateModified,long songSize)
-    {
-        this.songuri=songuri;
-        this.songName=songName;
-        this.artist=artist;
-        this.duration=duration;
-        this.dateModified=dateModified;
-        this.songSize=songSize;
+    public Songs(Uri songuri, String songName, String artist, Long duration, Bitmap bitmap, String dateModified, long songSize) {
+        this.songuri = songuri;
+        this.songName = songName;
+        this.artist = artist;
+        this.duration = duration;
+        this.bitmap = bitmap;
+        this.dateModified = dateModified;
+        this.songSize = songSize;
+    }
+
+    public Songs(Uri songuri, String songName, String artist, Long duration, String dateModified, long songSize) {
+        this.songuri = songuri;
+        this.songName = songName;
+        this.artist = artist;
+        this.duration = duration;
+        this.dateModified = dateModified;
+        this.songSize = songSize;
     }
 
     //for pracise only
-    public Songs(String songName,Bitmap bitmap)
-    {
-        this.songName=songName;
-        this.bitmap=bitmap;
+    public Songs(String songName, Bitmap bitmap) {
+        this.songName = songName;
+        this.bitmap = bitmap;
     }
 
 

@@ -4,14 +4,14 @@
     package="com.example.myapp">
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL"
+    <uses-permission
+        android:name="android.permission.MEDIA_CONTENT_CONTROL"
         tools:ignore="ProtectedPermissions" />
-
 
 
     <application
@@ -23,16 +23,16 @@
         android:theme="@style/Theme.MyApp">
         <activity
             android:name=".NavigationMainActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
-            >
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
 
         </activity>
         <activity
             android:name=".signUpActivity.SignUpActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".SplashScreen.SplashScreen"
+        <activity
+            android:name=".SplashScreen.SplashScreen"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
             <intent-filter>
                 <action
@@ -47,7 +47,8 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,19 +57,18 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".Foregroung_service_music.Music_Foreground"></service>
+
         <service
-            android:name=".Foregroung_service_music.Music_Foreground">
-        </service>
-
-        <service android:name=".MusicServices.MusicService"
-            android:stopWithTask="true"
+            android:name=".MusicServices.MusicService"
             android:exported="false"
+            android:stopWithTask="true"
 
             />
-        <service android:name=".MusicServices.MusicServiceOnline"
-            android:stopWithTask="true"
+        <service
+            android:name=".MusicServices.MusicServiceOnline"
             android:exported="false"
-            />
+            android:stopWithTask="true" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -77,8 +77,8 @@
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.myapp.fileprovider"
-            android:exported="false"
             android:enabled="true"
+            android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
