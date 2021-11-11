@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My App</string>
+    <string name="app_name">Online Player</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="navigation_open">navigation open</string>
     <string name="navigation_close">navigation close</string>

@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "187961192773",
-    "project_id": "my-app-8a58f",
-    "storage_bucket": "my-app-8a58f.appspot.com"
+    "project_number": "342776328570",
+    "project_id": "online-music-player-ad82c",
+    "storage_bucket": "online-music-player-ad82c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:187961192773:android:fe38feca3bebaef94c8e2c",
+        "mobilesdk_app_id": "1:342776328570:android:05fd45110362a9ffe9a6c3",
         "android_client_info": {
-          "package_name": "com.example.myapp"
+          "package_name": "com.example.onlinemusicapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "187961192773-f78ore9ts6s0nfvtije2ur26aqphgd8l.apps.googleusercontent.com",
+          "client_id": "342776328570-j1a71319vj88h0ps03jbadh141c5ieqs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.onlinemusicapp",
+            "certificate_hash": "a1af67c1838f7e96f8285a3c5359085123112582"
+          }
+        },
+        {
+          "client_id": "342776328570-pd6aorb85tn70ormt7lbhpprvsl386vv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA5SQf1I8DKNotHPLPNDyKFczvsittpUAk"
+          "current_key": "AIzaSyA0E1z6SWtIgpvQ6F51KuXrR-12quzfYVM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "187961192773-f78ore9ts6s0nfvtije2ur26aqphgd8l.apps.googleusercontent.com",
+              "client_id": "342776328570-pd6aorb85tn70ormt7lbhpprvsl386vv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

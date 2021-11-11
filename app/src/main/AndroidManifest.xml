@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.myapp">
+    package="com.example.onlinemusicapp">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -22,17 +22,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
         <activity
-            android:name=".NavigationMainActivity"
+            android:name="com.example.onlinemusicapp.NavigationMainActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             >
 
         </activity>
         <activity
-            android:name=".signUpActivity.SignUpActivity"
+            android:name="com.example.onlinemusicapp.signUpActivity.SignUpActivity"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
 
-        <activity android:name=".SplashScreen.SplashScreen"
+        <activity android:name="com.example.onlinemusicapp.SplashScreen.SplashScreen"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
             <intent-filter>
                 <action
@@ -47,7 +47,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".MainActivity"
+        <activity android:name="com.example.onlinemusicapp.MainActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,15 +57,15 @@
         </activity>
 
         <service
-            android:name=".Foregroung_service_music.Music_Foreground">
+            android:name="com.example.onlinemusicapp.Foregroung_service_music.Music_Foreground">
         </service>
 
-        <service android:name=".MusicServices.MusicService"
+        <service android:name="com.example.onlinemusicapp.MusicServices.MusicService"
             android:stopWithTask="true"
             android:exported="false"
 
             />
-        <service android:name=".MusicServices.MusicServiceOnline"
+        <service android:name="com.example.onlinemusicapp.MusicServices.MusicServiceOnline"
             android:stopWithTask="true"
             android:exported="false"
             />
@@ -76,7 +76,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.myapp.fileprovider"
+            android:authorities="com.example.onlinemusicapp.fileprovider"
             android:exported="false"
             android:enabled="true"
             android:grantUriPermissions="true">

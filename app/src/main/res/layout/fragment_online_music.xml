@@ -45,11 +45,14 @@
                     android:id="@+id/setting_Icon"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/btn_4"
+
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/upperTitle"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="15dp"/>
+                <!--
+                    android:src="@drawable/btn_4"
+-->
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/lottie2"
                     android:layout_width="80dp"

@@ -5,7 +5,7 @@
     app:startDestination="@id/onlineMusicFragment">
     <fragment
         android:id="@+id/onlineMusicFragment"
-        android:name="com.example.myapp.fragmentsNavigation.OnlineMusicFragment"
+        android:name="com.example.onlinemusicapp.fragmentsNavigation.OnlineMusicFragment"
         android:label="fragment_online_music"
         tools:layout="@layout/fragment_online_music" >
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/search_Fragment"
-        android:name="com.example.myapp.fragmentsNavigation.Search_Fragment"
+        android:name="com.example.onlinemusicapp.fragmentsNavigation.Search_Fragment"
         android:label="fragment_search_"
         tools:layout="@layout/fragment_search_" >
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/library_Fragment"
-        android:name="com.example.myapp.fragmentsNavigation.Library_Fragment"
+        android:name="com.example.onlinemusicapp.fragmentsNavigation.Library_Fragment"
         android:label="fragment_library_"
         tools:layout="@layout/fragment_library_" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/contentUpload_Fragment"
-        android:name="com.example.myapp.fragmentsNavigation.ContentUpload_Fragment"
+        android:name="com.example.onlinemusicapp.fragmentsNavigation.ContentUpload_Fragment"
         android:label="fragment_content_upload_"
         tools:layout="@layout/fragment_content_upload_" >
         <action
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/songsFragment"
-        android:name="com.example.myapp.fragmentsNavigation.SongsFragment"
+        android:name="com.example.onlinemusicapp.fragmentsNavigation.SongsFragment"
         android:label="SongsFragment" >
 
         <argument
@@ -59,7 +59,7 @@
     </fragment>
 
     <fragment
-         android:name="com.example.myapp.fragmentsNavigation.OfflineMusicFragment"
+         android:name="com.example.onlinemusicapp.fragmentsNavigation.OfflineMusicFragment"
         android:id="@+id/OfflineMusicFragment"
         android:label="fragment_wallp">
         <action
@@ -68,17 +68,17 @@
     </fragment>
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.example.myapp.MainActivity"
+        android:name="com.example.onlinemusicapp.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
     <activity
         android:id="@+id/signUpActivity"
-        android:name="com.example.myapp.signUpActivity.SignUpActivity"
+        android:name="com.example.onlinemusicapp.signUpActivity.SignUpActivity"
         android:label="activity_sign_up"
         tools:layout="@layout/activity_sign_up" />
     <activity
         android:id="@+id/splashScreen"
-        android:name="com.example.myapp.SplashScreen.SplashScreen"
+        android:name="com.example.onlinemusicapp.SplashScreen.SplashScreen"
         android:label="activity_splash_screen"
         tools:layout="@layout/activity_splash_screen" />
 

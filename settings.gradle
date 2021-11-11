@@ -1,2 +1,3 @@
-rootProject.name = "My App"
+rootProject.name = "online Music Player"
 include ':app'
+//My App
