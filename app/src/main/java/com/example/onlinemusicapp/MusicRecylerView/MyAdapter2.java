@@ -65,33 +65,17 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
 
     @Override
     public void onBindViewHolder(@NonNull MyAdapter2.MyViewHolder2 holder,int position) {
-        Songs songs=arrayList.get(position);
+        Songs songs = arrayList.get(position);
         holder.songName.setText(songs.getSongName());
-       /* Songs_FireBase songs_fireBase=arrayList.get(position);
-        Log.d("SIIZE",arrayList.size()+"SIZE");
-        int positiondup=position;
+        if (songs.getBitmap()==null)
+        {
+            holder.songImagee.setImageResource(R.drawable.music_two_tonne);
+        }
+        else{
+            holder.songImagee.setImageBitmap(songs.getBitmap());
+        }
+        holder.songArtist.setText(songs.getArtist());
 
-        manager=LocalBroadcastManager.getInstance(context);
-        intent=new Intent("SENDING_BITMAPSTR");
-
-        songs_fireBase.getStorageMetadataa().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-            @Override
-            public void onSuccess(StorageMetadata storageMetadata) {
-                String name=storageMetadata.getCustomMetadata("SongName");
-                String bitmapstr=storageMetadata.getCustomMetadata("Bitmap");
-                Bitmap bitmap=convertToBitmap(bitmapstr);
-                holder.songName.setText(name);
-                holder.songImagee.setImageBitmap(bitmap);
-                if(positiondup==0)
-                {
-                    intent.putExtra("BITMAPSTR",bitmapstr);
-                    manager.sendBroadcast(intent);
-
-                }
-            }
-        });*/
-        /*Log.d("MYADAPTER_NNAME",name+"f,lhb");
-        holder.songName.setText(name);*/
 
     }
     public Bitmap convertToBitmap(String bitmapstr)
@@ -107,7 +91,6 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
         return bitmap1;
     }
 
-
     @Override
     public int getItemCount() {
         Log.d("SIIZE",arrayList.size()+"SIZE");
@@ -119,12 +102,15 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
     {
         TextView songName;
         ImageView songImagee;
+        TextView songArtist;
 
         public MyViewHolder2(@NonNull @NotNull View itemView) {
             super(itemView);
             Log.d("SIIZE",arrayList.size()+"SIZE");
             songName=itemView.findViewById(R.id.songNamee);
             songImagee=itemView.findViewById(R.id.songImagee);
+            songArtist=itemView.findViewById(R.id.artistNamee);
+
 
             Animation animation= AnimationUtils.loadAnimation(context,R.anim.opening_anim);
             itemView.setAnimation(animation);

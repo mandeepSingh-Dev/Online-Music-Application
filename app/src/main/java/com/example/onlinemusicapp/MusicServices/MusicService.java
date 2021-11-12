@@ -30,8 +30,10 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Size;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -53,6 +55,7 @@ public class MusicService extends Service implements Parcelable {
     public ArrayList<Songs> songsFireList;
 
     MediaSessionCompat mediaSessionCompat;
+    NotificationManager manager;
 
 
     private LocalBroadcastManager broadcastmanager;
@@ -75,8 +78,8 @@ public class MusicService extends Service implements Parcelable {
             if (intent.getAction().equals("ACTION_POSITION")) {
                 int pos = intent.getIntExtra("Position", 0);
 
-                // position = pos;
-                changeMusic(pos, songsList);
+                 position = pos;
+                changeMusic(position, songsList);
             }
             //here we get ""STOP KAR" intent action to stop music
             // whenever we click online song for play onilne song
@@ -116,6 +119,7 @@ public class MusicService extends Service implements Parcelable {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -141,6 +145,7 @@ public class MusicService extends Service implements Parcelable {
 
 
         mediaSessionCompat = new MediaSessionCompat(getBaseContext(), "Music Service");
+         manager = getSystemService(NotificationManager.class);
         // Log.d("KPKPKP", "onCrearte");
 
     }
@@ -160,25 +165,14 @@ public class MusicService extends Service implements Parcelable {
                 play_pause_notification = R.drawable.ic_baseline_pause_24;
             }
         } else if (intent.getAction().equals("ACTION_PREVIUOS")) {
-           /* if(offline_Online.equals("ONLINE")) {
-                Log.d("HELLOPOSS",position+"");
-                changeMusic(--position, songsFireList);
-            }*/
-            // else  if(offline_Online.equals("OFFLINE")){
-            //  Log.d("HELLOPOSS",position+"");
+
             changeMusic(--position, songsList);
 
-            //  }
         } else if (intent.getAction().equals("ACTION_NEXT")) {
-           /* if (offline_Online.equals("ONLINE")) {
-                Log.d("HELLOPOSS", position + "");
-                changeMusic(++position, songsFireList);
-            } else if (offline_Online.equals("OFFLINE")) {
-            */
+
             Log.d("HELLOPOSS", position + "");
             changeMusic(++position, songsList);
-            // }
-            //  Log.d("pendingintentposition",position+"_next");
+
         }
 
 
@@ -394,19 +388,20 @@ public class MusicService extends Service implements Parcelable {
     }
 
     public void changeMusic(int positionn, ArrayList<Songs> songsListttt) {
-        // position=positionn;
-        // Log.d("LOLO",position+"_+");
+         position=positionn;
+         Log.d("LOLO",position+"_+");
    /* if(!songsList.isEmpty())
     {*/
-        Log.d("changeMusicPOSITION", positionn + "\n" + songsListttt.size() + songsListttt.get(positionn).getSongName());
-
-
         if (positionn <= -1) {
+            Log.d("positionchoti",position+"");
+
             //  Log.d("reset_position",positionn+"_");
             player.reset();
             position = 0;
             // player=null;
         } else if (positionn <= songsListttt.size() - 1) {
+            Log.d("positionSAHIHAI",position+"");
+
             intent.putExtra("receivedPosition", positionn);
             //below both lines are useless in OfflineSongFragment
             intent.putExtra("TOTAL_DURATION", player.getDuration());
@@ -418,24 +413,7 @@ public class MusicService extends Service implements Parcelable {
             player.reset();
 
             try {
-                // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
-                       /* if (offline_Online.equals("ONLINE")) {
-                            Log.d("ONNLINECHNAGEMUSIC","ONNlineChangemUSIC()");
-                            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            player.setDataSource(this,songsListttt.get(positionn).getSonguri());
-                           // player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-                            player.prepareAsync();
-                            // player.start();
-                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                                @Override
-                                public void onPrepared(MediaPlayer mp) {
-                                    player.start();
-                                }
-                            });
-                            Log.d("helssdslo","play");
-                        }
-                        else if (offline_Online.equals("OFFLINE"))
-                       {*/
+
                 Log.d("OFFLINECHNAGEMUSIC", "OFFlineChangemUSIC()");
                 player.setDataSource(getApplicationContext(), songsListttt.get(positionn).getSonguri());
                 player.prepare();
@@ -450,16 +428,19 @@ public class MusicService extends Service implements Parcelable {
             }
 
 
-                  /*  player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
                             Log.d("CCOOMPL", "COMPJGKFG");
                             changeMusic(++position, songsListttt);
 
                         }
-                    });*/
+                    });
         } else if (positionn > songsListttt.size() - 1) {
+            Toast.makeText(this,positionn+"",Toast.LENGTH_SHORT).show();
+            Log.d("positionBADI",position+"");
             position = 0;
+            changeMusic(position,songsList);
         }
 
         // startForeground(100,notification);
@@ -499,13 +480,14 @@ public class MusicService extends Service implements Parcelable {
                     .putString(MediaMetadata.METADATA_KEY_TITLE, songsList.get(possition).getSongName())
                     .putString(MediaMetadata.METADATA_KEY_ARTIST, songsList.get(possition).getArtist())
                     .putBitmap(MediaMetadata.METADATA_KEY_ART, songsList.get(possition).getBitmap())
+                    .putLong(MediaMetadata.METADATA_KEY_DURATION,player.getCurrentPosition())
                     .build());
 
 
             NotificationChannel channel = new NotificationChannel("channelid", "foregroundservice", NotificationManager.IMPORTANCE_HIGH);//after debugging set IMPORATNCE_DEFAULT HERE
             channel.setSound(null, null);
             //  channel.setDescription("GHello");
-            NotificationManager manager = getSystemService(NotificationManager.class);
+          //  NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
 
             // }
@@ -544,7 +526,7 @@ public class MusicService extends Service implements Parcelable {
                 .setOnlyAlertOnce(true)
                 //.setShowWhen(false)
                 .addAction(R.drawable.ic_baseline_navigate_before_24, "Previous", pendingIntentPrevious)
-                .addAction(play_pauseICON, "Play", pendingIntentPlay)
+                .addAction(play_pause_notification, "Play", pendingIntentPlay)
                 .addAction(R.drawable.ic_baseline_navigate_next_24, "Next", pendingIntentNext)
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()).setShowCancelButton(true).setShowActionsInCompactView(0, 1, 2))
                 .setPriority(NotificationCompat.PRIORITY_MAX); //after debugging set PRIORITY_DEFAULT HERE

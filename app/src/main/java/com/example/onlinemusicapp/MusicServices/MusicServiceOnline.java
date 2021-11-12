@@ -118,7 +118,7 @@ public class MusicServiceOnline extends Service {
                 int pos = intent.getIntExtra("positionfire",0);
                 // offline_Online=intent.getStringExtra("ONLINE_CONDITION");
 
-                //changeMusic(position,songsList);
+                position = pos;
                 changeMusic(pos/*,songsFireList*/);
 
             }
@@ -259,13 +259,11 @@ public class MusicServiceOnline extends Service {
 
 
     public void changeMusic(int positionn/*, ArrayList<Songs> songsListttt*/) {
-        // position=positionn;
-        // Log.d("LOLO",position+"_+");
+         position=positionn;
+         Log.d("LOLO",position+"_+");
    /* if(!songsList.isEmpty())
     {*/
 //        Log.d("changeMusicPOSITION",positionn+"\n"+songsListttt.size()+songsListttt.get(positionn).getSongName());
-
-        Log.d("POSTIONFIREee",positionn+"k");
 
         if (positionn <= -1) {
             //  Log.d("reset_position",positionn+"_");
@@ -290,7 +288,7 @@ public class MusicServiceOnline extends Service {
             try {
                 // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
                 Log.d("ONNLINECHNAGEMUSIC","ONNlineChangemUSIC()");
-                Log.d("nameee",/*songsFireList*/songslistextra.get(positionn).getSongName()+"__POSTION="+positionn);
+                Log.d("nameee",/*songsFireList*/songslistextra.get(position).getSongName()+"__POSTION="+positionn);
                 player.setDataSource(getApplicationContext(), /*songsFireList*/songslistextra.get(positionn).getSonguri());
                 player.prepare();
                 player.start();
@@ -304,7 +302,7 @@ public class MusicServiceOnline extends Service {
                 });*/
                 Log.d("helssdslo","play");
 
-                showNotification(positionn, play_pause_notification,songsFireList);
+                showNotification(position, play_pause_notification,songslistextra);
 
 
                 getCurrentPosiotnnn();
@@ -318,8 +316,9 @@ public class MusicServiceOnline extends Service {
 
                 }
             });
-        } else if (positionn > songsFireList.size() - 1) {
+        } else if (positionn > /*songsFireList*/songslistextra.size() - 1) {
             position = 0;
+            changeMusic(position);
         }
 
         // startForeground(100,notification);
@@ -361,6 +360,7 @@ public class MusicServiceOnline extends Service {
                     .putString(MediaMetadata.METADATA_KEY_TITLE, songsList.get(possition).getSongName())
                     .putString(MediaMetadata.METADATA_KEY_ARTIST, songsList.get(possition).getArtist())
                     .putBitmap(MediaMetadata.METADATA_KEY_ART, songsList.get(possition).getBitmap())
+                    .putLong(MediaMetadata.METADATA_KEY_DURATION,songsList.get(possition).getDuration())
                     .build());
 
 
