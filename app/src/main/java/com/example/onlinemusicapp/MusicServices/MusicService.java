@@ -17,9 +17,11 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadata;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.Parcel;
@@ -27,6 +29,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Size;
@@ -44,7 +47,9 @@ import com.example.onlinemusicapp.MusicRecylerView.Songs_FireBase;
 import com.example.onlinemusicapp.R;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 
 public class MusicService extends Service implements Parcelable {
@@ -56,6 +61,11 @@ public class MusicService extends Service implements Parcelable {
 
     MediaSessionCompat mediaSessionCompat;
     NotificationManager manager;
+
+
+    //boolean for check phone state is recording call or not
+    Boolean recordedStart=false;
+
 
 
     private LocalBroadcastManager broadcastmanager;
@@ -78,7 +88,7 @@ public class MusicService extends Service implements Parcelable {
             if (intent.getAction().equals("ACTION_POSITION")) {
                 int pos = intent.getIntExtra("Position", 0);
 
-                 position = pos;
+                position = pos;
                 changeMusic(position, songsList);
             }
             //here we get ""STOP KAR" intent action to stop music
@@ -89,11 +99,61 @@ public class MusicService extends Service implements Parcelable {
                     if (player.isPlaying()) {
                         player.pause();
                         // player.release();
-
                     }
                 }
             }
+            //IN this else if block the action PHONE_STATE come from android system BroadcastReciever when phone is ringing,Idle,OffHook
+            /*else if (intent.getAction().equals("android.intent.action.PHONE_STATE")) {
+                Bundle bUndle = intent.getExtras();
+                String state = bUndle.getString(TelephonyManager.EXTRA_STATE);
+                MediaRecorder recorder = new MediaRecorder();
 
+                if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                    Toast.makeText(getApplicationContext(), "ringing", Toast.LENGTH_SHORT).show();
+                    Log.d("dfndjkfndkf", "ringing");
+                }
+
+                else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
+                    Toast.makeText(getApplicationContext(), "EXTRA_STATE_OFFHOOK", Toast.LENGTH_SHORT).show();
+                    Log.d("dfndjkfndkf", "EXTRA_STATE_OFFHOOK");
+
+                    File sampleDir = new File(Environment.getExternalStorageDirectory(), "/TestRecordingDasa1");
+                    if (!sampleDir.exists()) {
+                        sampleDir.mkdirs();
+                    }
+                    String file_name = "Record";
+                    File audiofile;
+                    try {
+                        audiofile = File.createTempFile(file_name, ".amr", sampleDir);
+                        String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+
+                        //recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+                        recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+                        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+                        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                        recorder.setOutputFile(audiofile.getAbsolutePath());
+                        // try {
+                        recorder.prepare();
+                        recorder.start();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    recordedStart=true;
+                    showNotification(1,play_pause_notification,songsList);
+
+                }
+                else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                    Toast.makeText(getApplicationContext(), "EXTRA_STATE_IDLE", Toast.LENGTH_SHORT).show();
+                    Log.d("dfndjkfndkf", "EXTRA_STATE_IDLE");
+                    Log.d("fdfdfdfd",recordedStart+"");
+                    if (recordedStart) {
+                        recorder.stop();
+                        recordedStart = false;
+                    }
+                }
+            }*/
         }
     };
 
@@ -130,6 +190,7 @@ public class MusicService extends Service implements Parcelable {
             player = new MediaPlayer();
         }
         songsList = getSongArrayList();
+
         songsFireList = new ArrayList();
         songListFirebase = new ArrayList();
 
@@ -153,6 +214,11 @@ public class MusicService extends Service implements Parcelable {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("MUSICSERVICEDDDDD", "MUSICSERVICESTARTED");
+
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction("android.intent.action.PHONE_STATE");
+        this.registerReceiver(receiver, filter);
+
 
         if (intent.getAction().equals("ACTION_START_FROM_SPLASHSCREEN")) {
             //Log.d("SplashStartSERVICE","SERVICE_START_FROM_SPLASH");
@@ -291,6 +357,7 @@ public class MusicService extends Service implements Parcelable {
                         }
 
                     }
+                    sortingArrayList(arrayList);
 
                 }
             }).start();
@@ -348,6 +415,7 @@ public class MusicService extends Service implements Parcelable {
                         } catch (Exception e) {
                         }
                     }  //for loop closed
+                    sortingArrayList(arrayList);
                 }
             });
         }
@@ -569,6 +637,25 @@ public class MusicService extends Service implements Parcelable {
         }
 //    Log.d("HHELO",bitmap1.toString());
         return bitmap1;
+    }
+
+    public void sortingArrayList(ArrayList<Songs> songsLIST)
+    {
+        try {
+            if (!songsLIST.isEmpty()) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    songsLIST.sort(new Comparator<Songs>() {
+                        @Override
+                        public int compare(Songs lhs, Songs rhs) {
+
+                            return rhs.getDuration().compareTo((lhs.getDuration()));
+
+                        }
+                    });
+                }
+            }
+        } catch (Exception e) {}
     }
 
 }

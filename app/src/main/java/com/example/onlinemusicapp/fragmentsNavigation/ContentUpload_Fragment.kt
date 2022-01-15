@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.onlinemusicapp.MusicRecylerView.Songs
@@ -33,7 +34,9 @@ import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
 import com.example.onlinemusicapp.StorageReferenceSingleton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
+import java.util.Comparator
 
 
 class ContentUpload_Fragment : Fragment() {
@@ -54,8 +57,7 @@ class ContentUpload_Fragment : Fragment() {
     var mRefernce: StorageReference? = null
 
     //using RegisterForActivityResult
-    var contract: ActivityResultContract<Intent, Uri> =
-        object : ActivityResultContract<Intent, Uri>() {
+    var contract: ActivityResultContract<Intent, Uri> = object : ActivityResultContract<Intent, Uri>() {
             override fun createIntent(context: Context, input: Intent?): Intent {
                 return input!!
             }
@@ -71,88 +73,93 @@ class ContentUpload_Fragment : Fragment() {
             }
         } //ActivityForResultContract finish here
 
+
     @RequiresApi(Build.VERSION_CODES.Q)
     var luancher: ActivityResultLauncher<Intent> = registerForActivityResult(contract,
         ActivityResultCallback
-        {
-            Log.d("HOLOLOPOLO", it.toString())
-            //FOR  ABOVE OR EQUAL ANDROID Q
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                var resolver = activity?.contentResolver
-                var cursor = resolver?.query(it, null, null, null, null, null)
-                if (cursor!!.moveToFirst()) {
-                    songName =
-                        cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
-                    artistName =
-                        cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
-                    songUri = it  //uri
-                    duration =
-                        cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
-                    songSize = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
+        {    //if block runs when the song is picked from activity
+            if(it!=null) {
+                Log.d("HOLOLOPOLO", it.toString())
+                //FOR  ABOVE OR EQUAL ANDROID Q
+                //using Mediastore to get metadata of song only using uri
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    var resolver = activity?.contentResolver
+                    var cursor = resolver?.query(it, null, null, null, null, null)
+                    if (cursor!!.moveToFirst()) {
+                        songName =
+                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
+                        artistName =
+                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+                        songUri = it  //uri
+                        duration =
+                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
+                        songSize =
+                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
 
-                    try {
-                        var bitmap1 = resolver?.loadThumbnail(it, Size(180, 180), null)
-                        bitmap = bitmap1
-                        Log.d("kdfhj", bitmap.toString() + "ui")
+                        binding?.songNameUpload?.setText(songName)
+                        binding?.songArtistNameUpload?.setText(artistName)
+                        try {
+                            var bitmap1 = resolver?.loadThumbnail(it, Size(180, 180), null)
+                            if (bitmap1 != null) {
+                                bitmap = bitmap1
+                                Log.d("kdfhj", bitmap.toString() + "ui")
 
-                        binding?.songImageUpload?.setImageBitmap(bitmap)
+                                binding?.songImageUpload?.setImageBitmap(bitmap)
+                            }
 
-                    } catch (e: Exception) {
-                        if (e.javaClass.name.equals("java.io.FileNotFoundException"))
-                            Log.d("occur", e.javaClass.name)
-                        bitmap = BitmapFactory.decodeResource(resources, R.drawable.circle_top)
-                        Log.d("ojdo", bitmap.toString() + "\nj")
-                        binding?.songImageUpload?.setImageBitmap(bitmap)
-
-
+                        } catch (e: Exception) {
+                            if (e.javaClass.name.equals("java.io.FileNotFoundException"))
+                                Log.d("occur", e.javaClass.name)
+                            bitmap = BitmapFactory.decodeResource(resources, R.drawable.circle_top)
+                            Log.d("ojdo", bitmap.toString() + "\nj")
+                            binding?.songImageUpload?.setImageBitmap(bitmap)
+                        }
                     }
                 }
+                //FOR  BELOW ANDROID Q
+                else {
+                    var retriever: MediaMetadataRetriever = MediaMetadataRetriever()
+                    retriever.setDataSource(requireContext(), it)
+                    songName =
+                        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)!!
+                    artistName =
+                        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)!!
+                    songUri = it
+                    //TODO duration and songSize isnot getting correct Long datatype form.Correct it..
+                    duration =
+                        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
+                            .toLong()
+                    songSize =
+                        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!
+                            .toLong()
+
+                    Log.d("hello",
+                        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
+                            .toLong().toString()
+                    )
+                    Log.d("hello",
+                        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!
+                            .toLong().toString()
+                    )
+                    // duration=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
+                    // songSize=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong()
+                }
+                binding?.uploadImage?.visibility = View.GONE
+                binding?.clickPlus?.visibility = View.GONE
+
+
+                binding?.cardViewForHidenView?.visibility = View.VISIBLE
+                binding?.smallUploadImage?.visibility = View.VISIBLE
+            } //else block runs when song is not picked form activity
+            else{
+                Snackbar.make(binding?.contrsaintLayout!!,"No Song picked",2000).show()
             }
-            //FOR  BELOW ANDROID Q
-            else {
-                var retriever: MediaMetadataRetriever = MediaMetadataRetriever()
-                retriever.setDataSource(requireContext(), it)
-                songName = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)!!
-                artistName = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)!!
-                songUri = it
-                //TODO duration and songSize isnot getting correct Long datatype form.Correct it..
-                duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
-                    .toLong()
-                songSize =
-                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!
-                        .toLong()
-
-                Log.d(
-                    "hello",
-                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
-                        .toLong().toString()
-                )
-                Log.d(
-                    "hello",
-                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!
-                        .toLong().toString()
-                )
-
-                // duration=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
-                // songSize=retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_EXIF_LENGTH)!!.toLong()
-            }
-            binding?.uploadImage?.visibility = View.GONE
-            binding?.clickPlus?.visibility = View.GONE
-
-
-            binding?.cardViewForHidenView?.visibility = View.VISIBLE
-            binding?.smallUploadImage?.visibility = View.VISIBLE
-
 
         })
 
     //.............................
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding = FragmentContentUploadBinding.inflate(inflater, container, false)
         storage = FirebaseStorage.getInstance()
@@ -166,7 +173,6 @@ class ContentUpload_Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             activity?.window?.statusBarColor = resources.getColor(R.color.Orangee, null)
             activity?.window?.navigationBarColor = resources.getColor(R.color.Orangee, null)
@@ -177,10 +183,23 @@ class ContentUpload_Fragment : Fragment() {
         }
 
         var arraylist = MusicService.songsList
-        CoroutineScope(Dispatchers.Main).launch {
-            uploadSongs("Trending_Playlist", "English", arraylist)
+        try {
+            if (arraylist.isEmpty()) {
+                arraylist.sortedWith(object : Comparator<Songs?> {
+                    override fun compare(lhs: Songs?, rhs: Songs?): Int {
+                        // return rhs?.dateModified?.compareTo(lhs?.dateModified!!)!!
+                        return rhs?.dateModified?.compareTo(lhs?.dateModified!!)!!
+
+                    }
+                })
+            }
+        } catch (e: java.lang.Exception) {
         }
-//if(Build.VERSION.SDK_INT<Build.VERSION_CODES.P) {
+
+      /*  CoroutineScope(Dispatchers.Main).launch {
+            uploadSongs("Trending_Playlist", "English", arraylist)
+        }*/
+          //for picking song from local device to upload on firebase BY CLICK BIG BUTTON
         binding?.uploadImage?.setOnClickListener {
 
             var i = Intent()
@@ -194,8 +213,7 @@ class ContentUpload_Fragment : Fragment() {
             //startActivityForResult(i, 100)
 
         }
-//}
-
+//}          //for picking song from local device to upload on firebase BY CLICK SMALL BUTTON
         binding?.smallUploadImage?.setOnClickListener {
             var i = Intent()
             i.setType("audio/*")
@@ -211,7 +229,7 @@ class ContentUpload_Fragment : Fragment() {
             showBottomSheetDialog()
         }
 
-        gettingSongsfromFireBase("Trending_Playlist", "English")
+       // gettingSongsfromFireBase("Trending_Playlist", "English")
 
 
     }  //onViewCreated finshes
@@ -220,6 +238,8 @@ class ContentUpload_Fragment : Fragment() {
     //for Uploading songs in bunch to firebase Storage
      suspend fun uploadSongs(playlist:String,folder:String,songsList:ArrayList<Songs>)= withContext(Dispatchers.Default)
       {
+
+
           for(i in 0..songsList.size)
           {
               if(i>=15)
@@ -260,6 +280,7 @@ class ContentUpload_Fragment : Fragment() {
                     var metaData = metaDataBuilder.build()
 
                     mRefernce?.child(playlist)?.child(folder)?.child(songsList.get(i).songName)?.putFile(songUri, metaData)?.addOnProgressListener {
+                       Log.d("uploading","uploading$i")
                         var double=(100*it.bytesTransferred)/it.totalByteCount
 
                         binding?.progressBarUpload?.visibility=View.VISIBLE
@@ -307,40 +328,43 @@ class ContentUpload_Fragment : Fragment() {
 
     suspend fun uploadASong(playlist: String, folder: String) = withContext(Dispatchers.Default)
     {
-        var metaDataBuilder = StorageMetadata.Builder()
-        metaDataBuilder.setCustomMetadata("SongName", songName)
-        metaDataBuilder.setCustomMetadata("Artist", artistName)
-        metaDataBuilder.setCustomMetadata("Bitmap", encodeBitmapToString(bitmap!!))
-        metaDataBuilder.setCustomMetadata("Duration", duration.toString())
-        metaDataBuilder.setCustomMetadata("Size", songSize.toString())
-        metaDataBuilder.setCustomMetadata("Uri", songUri.toString())
-        val metaData = metaDataBuilder.build()
+        try {
 
 
-        mRefernce?.child(playlist)?.child(folder)?.child(songName)?.putFile(songUri!!, metaData)
-            ?.addOnSuccessListener {
-                Log.d("YoPo", it.toString() + "HOGYA")
-            }?.addOnProgressListener {
-                binding?.cardViewForHidenView?.visibility = View.VISIBLE
-
-                var doublee = (100 * it.bytesTransferred) / it.totalByteCount
-                binding?.progressTextViewUpload?.setText("${doublee.toInt()}%")
-                binding?.progressBarUpload?.setProgress(doublee.toInt())
-
-                binding?.uploadButton?.visibility = View.GONE
-                binding?.progressBarUpload?.visibility = View.VISIBLE
-                binding?.progressTextViewUpload?.visibility = View.VISIBLE
-
-            }?.addOnSuccessListener {
-                binding?.uploadButton?.visibility = View.VISIBLE
-                binding?.cardViewForHidenView?.visibility = View.VISIBLE
-
-                binding?.progressBarUpload?.visibility = View.VISIBLE
-                binding?.progressTextViewUpload?.visibility = View.VISIBLE
+            var metaDataBuilder = StorageMetadata.Builder()
+            metaDataBuilder.setCustomMetadata("SongName", songName)
+            metaDataBuilder.setCustomMetadata("Artist", artistName)
+            metaDataBuilder.setCustomMetadata("Bitmap", encodeBitmapToString(bitmap!!))
+            metaDataBuilder.setCustomMetadata("Duration", duration.toString())
+            metaDataBuilder.setCustomMetadata("Size", songSize.toString())
+            metaDataBuilder.setCustomMetadata("Uri", songUri.toString())
+            val metaData = metaDataBuilder.build()
 
 
-            }
+            mRefernce?.child(playlist)?.child(folder)?.child(songName)?.putFile(songUri!!, metaData)
+                ?.addOnSuccessListener {
+                    Log.d("YoPo", it.toString() + "HOGYA")
+                }?.addOnProgressListener {
+                    binding?.cardViewForHidenView?.visibility = View.VISIBLE
 
+                    var doublee = (100 * it.bytesTransferred) / it.totalByteCount
+                    binding?.progressTextViewUpload?.setText("${doublee.toInt()}%")
+                    binding?.progressBarUpload?.setProgress(doublee.toInt())
+
+                    binding?.uploadButton?.visibility = View.GONE
+                    binding?.progressBarUpload?.visibility = View.VISIBLE
+                    binding?.progressTextViewUpload?.visibility = View.VISIBLE
+
+                }?.addOnSuccessListener {
+                    binding?.uploadButton?.visibility = View.VISIBLE
+                    binding?.cardViewForHidenView?.visibility = View.VISIBLE
+
+                    binding?.progressBarUpload?.visibility = View.VISIBLE
+                    binding?.progressTextViewUpload?.visibility = View.VISIBLE
+
+
+                }
+        }catch (e:java.lang.Exception){}
 
     } //function finished
 
@@ -364,11 +388,7 @@ class ContentUpload_Fragment : Fragment() {
 
     fun showBottomSheetDialog() {
         bottomDialog = BottomSheetDialog(requireContext(), R.style.Theme_Design_BottomSheetDialog)
-        val bottomview = layoutInflater.inflate(
-            R.layout.bottom_sheet_for_contentupload,
-            activity?.findViewById(R.id.mainConstraintLayout),
-            false
-        )
+        val bottomview = layoutInflater.inflate(R.layout.bottom_sheet_for_contentupload, activity?.findViewById(R.id.mainConstraintLayout), false)
         bottomDialog.setContentView(bottomview)
 
         bottomDialog.show()
@@ -384,14 +404,9 @@ class ContentUpload_Fragment : Fragment() {
     fun uploadOnItemSelected(bottomSheetDialog: BottomSheetDialog, playlist: String) {
         when (playlist) {
             "Trending_Playlist" -> {
-
-                val trendingspinner =
-                    bottomSheetDialog.findViewById<Spinner>(R.id.TrendingSpinner)
-                trendingspinner?.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?, view: View?, position: Int, id: Long
-                        ) {
+                val trendingspinner = bottomSheetDialog.findViewById<Spinner>(R.id.TrendingSpinner)
+                trendingspinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             Log.d("hello", parent?.selectedItem.toString())
                             if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
                             // sheet then default selected item will be 1st mean Trending
@@ -536,23 +551,17 @@ class ContentUpload_Fragment : Fragment() {
                 }
             }
             "Featured_Artists" -> {
-                val featuredArtistSpinner =
-                    bottomSheetDialog.findViewById<Spinner>(R.id.featuredArtistSpinner)
-                featuredArtistSpinner?.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
+                val featuredArtistSpinner = bottomSheetDialog.findViewById<Spinner>(R.id.featuredArtistSpinner)
+                      featuredArtistSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
                             Log.d("hello", parent?.selectedItem.toString())
                             if (parent?.selectedItem?.equals(playlist) == true)  //whenever we open bottom
-                            // sheet then default selected item will be 1st mean Trending
-                            {
-                            } else {
-                                if (parent?.selectedItem?.equals(playlist) == true) {
-                                } else {
+                            // sheet then default selected item will be 1st means Trending
+                            { }
+                            else {
+                                if (parent?.selectedItem?.equals(playlist) == true) { }
+                                else {
                                     CoroutineScope(Dispatchers.Main).launch {
                                         uploadASong(playlist, parent?.selectedItem.toString())
                                     }

@@ -1,12 +1,15 @@
 package com.example.onlinemusicapp.fragmentsNavigation
 
+import android.app.DownloadManager
 import android.content.*
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.IBinder
+import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.*
@@ -25,6 +28,7 @@ import androidx.palette.graphics.Palette.PaletteAsyncListener
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.example.onlinemusicapp.DownloadImplementation.DownloadImplementation
 import com.example.onlinemusicapp.MusicRecylerView.MyAdapter
 import com.example.onlinemusicapp.MusicRecylerView.MyAdapter2
 import com.example.onlinemusicapp.MusicRecylerView.Songs
@@ -174,11 +178,7 @@ class SongsFragment : Fragment() {
         localBroadcastManager = LocalBroadcastManager.getInstance(requireContext())
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         // songsList = ArrayList<Songs>()
         songsFireList = ArrayList()
@@ -302,8 +302,7 @@ class SongsFragment : Fragment() {
             }
         }
         //register LocalBroadcastManager to receive data from MusicService.
-        LocalBroadcastManager.getInstance(requireContext())
-            .registerReceiver(receiver, IntentFilter("ACTION_SEND_ONLINE"))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter("ACTION_SEND_ONLINE"))
 
         var animation = AnimationUtils.loadAnimation(context, R.anim.opening_anim)
         binding?.songFragmentRootLay?.animation = animation
@@ -329,6 +328,15 @@ class SongsFragment : Fragment() {
         } else {
             binding?.toolbarSongsFragment?.setTitle("Music")
         }
+
+        //To control song on play pause button
+
+
+        //To set duration of song to motion layout textview
+
+        //To control song on play pause button
+        playPauseButton!!.setOnClickListener { playPauseButton() }
+
     } //onViewCreated Finished
 
 
@@ -460,6 +468,13 @@ class SongsFragment : Fragment() {
                                 localBroadcastManager?.sendBroadcast(i2)
                                 Log.d("namedddddd", songsList!![position].getSongName() + "__POSTION="+position)
                                 //changeMusic(songsList?.get(position)?.songuri!!)
+
+                               // DownloadImplementation.downloadSong(context!!,position)
+
+                                try {
+                                   playPauseButton!!.setImageResource(R.drawable.ic_baseline_pause_24)
+
+                               }catch(e:java.lang.Exception){}
                                 //intenttttt is to sending "STOP KAR" String to MusicService
                                 //to stop Local/offline song so that online song can play without disturbance
                                 var intentttt = Intent("STOP KAR_OFFLINE")
@@ -623,5 +638,26 @@ class SongsFragment : Fragment() {
         var intent = Intent(context, MusicServiceOnline::class.java)
         activity?.bindService(intent, serviceConnectionOnline, Context.BIND_AUTO_CREATE)
     }
+
+
+    //motion playPause button
+    fun playPauseButton() {
+        if (musicServiceOnline != null) {
+            if (musicServiceOnline.isPlaying()) {
+                musicServiceOnline.pause()
+               // playPauseButton!!.startAnimation(buttonanimation)
+                playPauseButton!!.setImageResource(R.drawable.ic_baseline_play_arrow_24)
+            } else {
+                musicServiceOnline.start()
+             //   playPauseButton!!.startAnimation(buttonanimation)
+                playPauseButton!!.setImageResource(R.drawable.ic_baseline_pause_24)
+            }
+        } else {
+            Toast.makeText(context, "Music is not playing", Toast.LENGTH_SHORT).show()
+        }
+    } // playPauseButton() closed
+
+
+
 }
 

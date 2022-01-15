@@ -18,9 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.onlinemusicapp.DownloadImplementation.DownloadImplementation;
 import com.example.onlinemusicapp.R;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageMetadata;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +46,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
         this.arrayList=arrayList;
         this.context=context;
     }*/
+    //this MyAdapter2 is used for both
    public MyAdapter2(Context context, ArrayList<Songs> arrayList)
    {
        super();
@@ -58,7 +58,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
     @Override
     public MyAdapter2.MyViewHolder2 onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         Log.d("SIIZE",arrayList.size()+"SIZE");
-        View view=LayoutInflater.from(context).inflate(R.layout.list_items_for_songsfragment,parent,false);
+        View view=LayoutInflater.from(context).inflate(R.layout.list_items_for_songsfragment_online_list,parent,false);
         MyViewHolder2 viewHolder=new MyViewHolder2(view);
         return viewHolder;
     }
@@ -76,6 +76,12 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
         }
         holder.songArtist.setText(songs.getArtist());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DownloadImplementation.downloadSong(context,songs.getSonguri());
+            }
+        });
 
     }
     public Bitmap convertToBitmap(String bitmapstr)
@@ -115,7 +121,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder2>
             Animation animation= AnimationUtils.loadAnimation(context,R.anim.opening_anim);
             itemView.setAnimation(animation);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+                itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     customItemClickListener2.customOnItemClick(getAdapterPosition());

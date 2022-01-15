@@ -11,10 +11,12 @@
         motion:duration="250">
        <KeyFrameSet>
 
-
        </KeyFrameSet>
-        <OnClick motion:targetId="@+id/cardview"
+        <OnClick
+            motion:targetId="@+id/cardview"
+            motion:clickAction="toggle"
             />
+
 
 
     </Transition>
@@ -178,6 +180,15 @@ motion:layout_constraintBottom_toTopOf="@id/bottomNavigation"
             motion:layout_constraintRight_toRightOf="@id/album_art_image_view"
             motion:layout_constraintTop_toTopOf="@id/song_name"
             android:visibility="gone" />
+        <Constraint
+            android:id="@+id/lastspace"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            android:alpha="0"
+            android:visibility="gone" />
 
     </ConstraintSet>
 
@@ -205,7 +216,7 @@ motion:layout_constraintBottom_toTopOf="@id/bottomNavigation"
             android:id="@+id/album_art_image_view"
             android:elevation="10dp"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_height="270dp"
+            android:layout_height="230dp"
             motion:layout_constraintTop_toBottomOf="@id/position"
             motion:layout_constraintHeight_percent=".3"
             motion:layout_constraintDimensionRatio="1:1"
@@ -271,7 +282,7 @@ motion:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         <Constraint
             android:id="@+id/lastspace"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="200dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintLeft_toLeftOf="parent"
             motion:layout_constraintRight_toRightOf="parent" />
@@ -315,6 +326,12 @@ motion:layout_constraintBottom_toTopOf="@id/bottomNavigation"
             motion:layout_constraintLeft_toLeftOf="parent"
             motion:layout_constraintRight_toRightOf="parent"
             motion:layout_constraintTop_toBottomOf="parent" />
+        <Constraint
+            android:id="@+id/loveimage"
+            android:layout_width="30dp"
+            android:layout_height="25dp"
+            motion:layout_constraintRight_toRightOf="@id/album_art_image_view"
+            motion:layout_constraintTop_toTopOf="@id/artist_name_text_view" />
 
     </ConstraintSet>
 

@@ -41,9 +41,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.onlinemusicapp.ExecutorSingleton;
 import com.example.onlinemusicapp.Handler_Looper_Thread.MyThread;
 import com.example.onlinemusicapp.MusicRecylerView.MyAdapter;
+import com.example.onlinemusicapp.MusicRecylerView.MyAdapter2;
 import com.example.onlinemusicapp.MusicRecylerView.Songs;
 import com.example.onlinemusicapp.MusicServices.MusicService;
 import com.example.onlinemusicapp.R;
+import com.example.onlinemusicapp.databinding.FragmentSongsBinding;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -89,6 +91,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     TextView positionTextview;
     SeekBar seekBar;
     BottomNavigationView bottomNavigationView;
+    RecyclerView motionRecyclerView;
 
     //bottom sheet dialog views..
     BottomSheetDialog bottomSheetDialog;
@@ -100,8 +103,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     TextView shareSong;
     View bottomSHEET;
 
-
-
+    com.example.onlinemusicapp.databinding.FragmentSongsBinding binding;
 
 
     AlphaAnimation buttonanimation;
@@ -118,7 +120,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     BroadcastReceiver receiver;
     Bitmap recievedBitmap = null;
 
-    RecyclerView recyclerView;
+    // RecyclerView recyclerView;
 
     Intent i = new Intent("ACTION_POSITION");
     Window window;
@@ -133,10 +135,9 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
             MusicService.MyBinder myBinder = (MusicService.MyBinder) binder;
             musicService = myBinder.getService();
 
-            Intent serviceIntent=new Intent("musicservice_instance");
+            Intent serviceIntent = new Intent("musicservice_instance");
             serviceIntent.putExtra("musicService", new MusicService());
             broadcastManager.sendBroadcast(serviceIntent);
-
 
 
             //setting total duration to motion total duration textview
@@ -158,9 +159,12 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         songsArrayList2 = new ArrayList<>();
 
 
-        View view = inflater.inflate(R.layout.fragment_offline_music, container, false);
-        recyclerView = view.findViewById(R.id.rexcylerviewMusic);
-        return view;
+        // View view = inflater.inflate(R.layout.fragment_offline_music, container, false);
+        View view = inflater.inflate(R.layout.fragment_songs, container, false);
+        binding = FragmentSongsBinding.inflate(inflater, container, false);
+
+        // recyclerView = view.findViewById(R.id.songsRecyclerView);
+        return binding.getRoot();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -170,13 +174,14 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
         //TO START MusicService check this start Sevice code later
         //bcoz this code may be useless because MusicService already started from SplashSecreen
-        Log.d("offFragment","OFFLINEFRAGMENT");
+        Log.d("offFragment", "OFFLINEFRAGMENT");
         Intent intenttt = new Intent(getActivity(), MusicService.class);
         intenttt.setAction("ACTION_START_FROM_MUSICFRAGMENT");
         getActivity().startService(intenttt);
 
         //getting arraylist from service but after starting the service
         songsArrayList2 = MusicService.songsList;
+
 
         //this block is for Fullscreen,color the status bar.
         if (Build.VERSION.SDK_INT >= 21) {
@@ -186,17 +191,14 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
             window.setStatusBarColor(getResources().getColor(R.color.Green));
         }
 
-        Log.d("YAYA", "ONVIEWCREATE");
-        Log.d("KPKPKP", "onViewCreated 164");
+        //setting Bitmap from songArrayList2 to 4 images on Toolbar
+        settingBitmapOnToolbarImages();
 
-
-        //getting motion layout from <include/> navigationActivity.
+        //initialize  motionLayout views from <include/> navigationActivity.
         motionlayoutViews();
 
-        //getting bottomSheetLayout views
+        //getting\Initialize bottomSheetLayout views
         bottomSheetViews();
-
-        // seekBar = getActivity().findViewById(R.id.seekbar);
 
 
         //On 3 dots button clicked then bottom sheet dialog will open
@@ -210,12 +212,10 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
             }
         });
-
         //In this Receiver we r getting song position, currentduration position aftr evry 1 second
         receiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent)
-            {
+            public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals("ACTION_SEND")) {
                     try {
                         Log.d("PPOOK", String.valueOf(intent.getIntExtra("receivedPosition", 1)));
@@ -260,7 +260,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                                         try {
                                             setPaletteColor(p);
                                             motionCardView.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
-                                            lastSpace.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
+                                            //  lastSpace.setBackgroundColor(p.getMutedColor(getActivity().getResources().getColor(R.color.paletteDEFAULT)));
                                         } catch (Exception e) {
                                             //Toast.makeText(context,e.getCause().toString(),Toast.LENGTH_SHORT).show();
                                         }
@@ -285,16 +285,14 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         buttonanimation = new AlphaAnimation(1F, 0.5F);
 
         //recyclerView = view.findViewById(R.id.rexcylerviewMusic);
-        progressBar = view.findViewById(R.id.progressbar);
+        //  progressBar = view.findViewById(R.id.progressbar);
 
         // songsArrayList = new ArrayList<>();
         myThread = new MyThread();
         myThread.start();
 
 
-
-        //To set duration of song to motion layout textviews
-
+        //To set duration of song to motion layout textview
 
         //To control song on play pause button
         playPauseButton.setOnClickListener(new View.OnClickListener() {
@@ -308,6 +306,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         prev_Next_Button();
         //when music stoped from notification then change this play button to pause
 
+        //  sortingArrayList()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
             ExecutorSingleton.getInstance().execute(new Runnable() {
@@ -351,7 +350,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
 
                     }*/ //while loop closed
 
-                    try {
+                   /* try {
                         if (!songsArrayList2.isEmpty()) {
                             songsArrayList2.sort(new Comparator<Songs>() {
                                 @Override
@@ -362,31 +361,36 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                                     byte[] rhsByteArray = rhsName.getBytes();
 
                                     Log.d("compsuyrtddys", lhsName.compareTo(rhsName) + "djfkd");
-                                    return rhs.getDateModified().compareTo(lhs.getDateModified());
+                                    return rhs.getDuration().compareTo(lhs.getDuration());
 
                                 }
                             });
                         }
-                    } catch (Exception e) {}
+                    } catch (Exception e) {}*/
 
-                    MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
+                    MyAdapter2 myAdapter = new MyAdapter2(getContext(), songsArrayList2);
                     try {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ImageView imageOnToolbar = view.findViewById(R.id.imageOnToolBar);
-                                recyclerView.setVisibility(View.VISIBLE);
-                                progressBar.setVisibility(View.GONE);
-                                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                                recyclerView.setAdapter(myAdapter);
+                                // ImageView imageOnToolbar = view.findViewById(R.id.imageOnToolBar);
+                                binding.songsRecyclerView.setVisibility(View.VISIBLE);
+                                //   progressBar.setVisibility(View.GONE);
+                                binding.lottieSongsFragment.setVisibility(View.GONE);
+
+                                binding.songsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                                binding.songsRecyclerView.setAdapter(myAdapter);
+
+                                motionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                                motionRecyclerView.setAdapter(myAdapter);
                                 //To give different view look to recyleview list
-                                imageOnToolbar.setOnClickListener(new View.OnClickListener() {
+                              /*  imageOnToolbar.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
 
                                     }
-                                });
+                                });*/
                             }
                         });
 
@@ -394,21 +398,21 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                         Log.d("djkh", e.getMessage());
                     }
                     //user defined setOnItemClickListener Method and Interface in MyAdapter.
-                    myAdapter.setOnItemClickListener(new MyAdapter.CustomItemClickListener() {
+                    myAdapter.setOnClickListener(new MyAdapter2.CustomItemClickListener2() {
                         @Override
-                        public void onItemClick(int position, View v) {
+                        public void customOnItemClick(int position) {
                             Log.d("KPKPKP", "onItemClick 275");
 
                             mposition = position;
-                            Log.d("clickOffFragmnetSong","clickedOfflineSong");
+                            Log.d("clickOffFragmnetSong", "clickedOfflineSong");
                             //SENDING POSITION TO MUSIC SERVICE THROUGH BROADCAST MANAGER.
                             // Intent i2=new Intent("ACTION_POSITION");
                             i.putExtra("Position", position);
-                            i.putExtra("OFFLINE_CONDITION","OFFLINE");
+                            i.putExtra("OFFLINE_CONDITION", "OFFLINE");
                             broadcastManager.sendBroadcast(i);
                             playPauseButton.setImageResource(R.drawable.ic_baseline_pause_24);
 
-                            Intent intentttt=new Intent("STOP KAR_ONLINE");
+                            Intent intentttt = new Intent("STOP KAR_ONLINE");
                             broadcastManager.sendBroadcast(intentttt);
                             //  changeMusic(position);
 
@@ -430,10 +434,10 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            progressBar.setVisibility(View.VISIBLE);
+                            //  progressBar.setVisibility(View.VISIBLE);
                         }
                     });
-                    songsArrayList2.sort(new Comparator<Songs>() {
+                   /* songsArrayList2.sort(new Comparator<Songs>() {
                         @Override
                         public int compare(Songs lhs, Songs rhs) {
                             String lhsName = lhs.getSongName();
@@ -442,32 +446,37 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                             byte[] rhsByteArray = rhsName.getBytes();
 
                             Log.d("compsuyrtddys", lhsName.compareTo(rhsName) + "djfkd");
-                            return rhs.getDateModified().compareTo(lhs.getDateModified());
+                            return rhs.getDuration().compareTo(lhs.getDuration());
 
                         }
-                    });
+                    });*/
                     MyAdapter myAdapter = new MyAdapter(getContext(), songsArrayList2);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            recyclerView.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
-                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                            recyclerView.setAdapter(myAdapter);
+                            binding.songsRecyclerView.setVisibility(View.VISIBLE);
+                            binding.lottieSongsFragment.setVisibility(View.GONE);
+
+                            //    progressBar.setVisibility(View.GONE);
+                            binding.songsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                            binding.songsRecyclerView.setAdapter(myAdapter);
+
+                            motionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                            motionRecyclerView.setAdapter(myAdapter);
                         }
                     });
                     myAdapter.setOnItemClickListener(new MyAdapter.CustomItemClickListener() {
                         @Override
                         public void onItemClick(int position, View imageview) {
-                            Log.d("clickedPosition",position+"position clicked");
+                            Log.d("clickedPosition", position + "position clicked");
                             motionLayoutt.setVisibility(View.VISIBLE);
                             mposition = position;
                             // Intent i=new Intent("ACTION_POSITION");  //setting this globally..
 
                             i.putExtra("Position", position);
-                            i.putExtra("OFFLINE_CONDITION","OFFLINE");
+                            i.putExtra("OFFLINE_CONDITION", "OFFLINE");
 
-                            Intent intentttt=new Intent("STOP KAR_ONLINE");
+                            Intent intentttt = new Intent("STOP KAR_ONLINE");
                             broadcastManager.sendBroadcast(intentttt);
 
                             broadcastManager.sendBroadcast(i);
@@ -480,12 +489,14 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            progressBar.setVisibility(View.GONE);
+                            //   progressBar.setVisibility(View.GONE);
                         }
                     });
                 }
             });
         }
+
+        //binding
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -512,12 +523,12 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
             }
         });*/
 
-        lastSpace.setOnClickListener(new View.OnClickListener() {
+      /*  lastSpace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Lastspace", "lastSpace view clicked");
             }
-        });
+        });*/
     }    //onViewCreated closed
 
 
@@ -760,7 +771,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
     public void setPaletteColor(Palette p) {
         try {
             motionCardView.setBackgroundColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
-            lastSpace.setBackgroundColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
+            //   lastSpace.setBackgroundColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 window.setStatusBarColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
                 window.setNavigationBarColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.Green)));
@@ -778,8 +789,8 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         songSizeSheet = bottomSHEET.findViewById(R.id.songSize_textview);
         shareSong = bottomSHEET.findViewById(R.id.share_textview);
     }
-    public void motionlayoutViews()
-    {
+
+    public void motionlayoutViews() {
         //getting motion layout from <include/> navigationActivity.
         motionLayoutt = getActivity().findViewById(R.id.inccluddeMotion);
         motionCardView = motionLayoutt.findViewById(R.id.cardview);
@@ -793,10 +804,11 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         next_Button = motionLayoutt.findViewById(R.id.next_image_view);
         motionLayoutt.findViewById(R.id.collapse_image_view);
         positionTextview = motionLayoutt.findViewById(R.id.position);
-        lastSpace = motionLayoutt.findViewById(R.id.lastspace);
+        // lastSpace = motionLayoutt.findViewById(R.id.lastspace);
         dotsButton = motionLayoutt.findViewById(R.id.DotsButton);
         bottomNavigationView = motionLayoutt.findViewById(R.id.bottomNavigation);
         seekBar = getActivity().findViewById(R.id.seekbar);
+        motionRecyclerView = motionLayoutt.findViewById(R.id.lastspace);
 
     }
 
@@ -811,8 +823,7 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         return mbsstr;
     }
 
-    public void shareSongUri(int receivedPosition)
-    {
+    public void shareSongUri(int receivedPosition) {
         shareSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -843,5 +854,74 @@ public class OfflineMusicFragment extends Fragment implements MediaPlayer.OnComp
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void sortingArrayList() {
+        try {
+            if (!songsArrayList2.isEmpty()) {
+                songsArrayList2.sort(new Comparator<Songs>() {
+                    @Override
+                    public int compare(Songs lhs, Songs rhs) {
+                        String lhsName = lhs.getSongName();
+                        String rhsName = rhs.getSongName();
+                        byte[] lhsByteArray = lhsName.getBytes();
+                        byte[] rhsByteArray = rhsName.getBytes();
+
+                        Log.d("compsuyrtddys", lhsName.compareTo(rhsName) + "djfkd");
+                        return rhs.getDuration().compareTo(lhs.getDuration());
+
+                    }
+                });
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public void settingBitmapOnToolbarImages() {
+        try {
+            {
+                Bitmap bitmap1 = songsArrayList2.get(0).getBitmap();
+                Bitmap bitmap2 = songsArrayList2.get(1).getBitmap();
+                Bitmap bitmap3 = songsArrayList2.get(2).getBitmap();
+                Bitmap bitmap4 = songsArrayList2.get(3).getBitmap();
+
+                if (bitmap1 != null) {
+                    //    Log.d("NOT_NULL",bitmap1.toString());
+                    binding.songImageOnToolbar1.setImageBitmap(bitmap1);
+                } else {
+                    // Log.d("NOT_NULL","bitmap1 is null");
+                    binding.songImageOnToolbar1.setScaleType(ImageView.ScaleType.CENTER);
+                    binding.songImageOnToolbar1.setImageResource(R.drawable.ic_baseline_music_note_24);
+
+                }
+
+                if (bitmap2 != null) {
+                    binding.songImageOnToolbar2.setImageBitmap(bitmap2);
+                    // Log.d("NOT_NULL",bitmap2.toString());
+                } else {
+                    // Log.d("NOT_NULL","bitmap2 is null");
+                    binding.songImageOnToolbar1.setScaleType(ImageView.ScaleType.CENTER);
+                    binding.songImageOnToolbar1.setImageResource(R.drawable.ic_baseline_music_note_24);
+                }
+
+                if (bitmap3 != null) {
+                    // Log.d("NOT_NULL",bitmap3.toString());
+                    binding.songImageOnToolbar3.setImageBitmap(bitmap3);
+                } else {
+                    // Log.d("NOT_NULL","bitmap3 is null");
+                    binding.songImageOnToolbar1.setScaleType(ImageView.ScaleType.CENTER);
+                    binding.songImageOnToolbar1.setImageResource(R.drawable.ic_baseline_music_note_24);
+                }
+
+                if (bitmap4 != null) {
+                    //  Log.d("NOT_NULL",bitmap4.toString());
+                    binding.songImageOnToolbar4.setImageBitmap(bitmap4);
+                } else {
+                    // Log.d("NOT_NULL","bitmap4 is null");
+                    binding.songImageOnToolbar1.setScaleType(ImageView.ScaleType.CENTER);
+                    binding.songImageOnToolbar1.setImageResource(R.drawable.ic_baseline_music_note_24);
+                }
+            }
+        }catch (Exception e){}
+    }
 
 }

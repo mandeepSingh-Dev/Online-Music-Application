@@ -45,25 +45,27 @@ public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.MyViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
-        if(arrayList!=null) {
-            com.example.onlinemusicapp.MusicRecylerView.Songs song = arrayList.get(position);
+        try {
+            if (arrayList != null) {
+                com.example.onlinemusicapp.MusicRecylerView.Songs song = arrayList.get(position);
 
-            String name = song.getSongName();
+                String name = song.getSongName();
 
-            Bitmap bitmap = song.getBitmap();
-            Uri uri = song.getSonguri();
+                Bitmap bitmap = song.getBitmap();
+                Uri uri = song.getSonguri();
 
-            if (!(bitmap == null)) {
-                Glide.with(context).asBitmap().load(bitmap).into(holder.imageView);
-                holder.imageView.setImageBitmap(bitmap);
-            } else {
-                holder.imageView.setBackgroundResource(R.drawable.musictwo_ton);
+                if (!(bitmap == null)) {
+                    Glide.with(context).asBitmap().load(bitmap).into(holder.imageView);
+                    holder.imageView.setImageBitmap(bitmap);
+                } else {
+                    holder.imageView.setBackgroundResource(R.drawable.musictwo_ton);
+
+                }
+
+                holder.songName.setText(name);
 
             }
-
-            holder.songName.setText(name);
-
-        }
+        }catch (Exception e){}
     }
 
 

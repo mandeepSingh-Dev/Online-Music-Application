@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ArrayList<Songs> arrayList=new ArrayList<>();
+    public static ArrayList<Songs> arrayList=new ArrayList();
     ActivityMainBinding binder;
     FirebaseAuth firebaseAuth;
     EditText editTextEmail;
@@ -60,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         binder = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binder.getRoot();
         setContentView(view);
+
+
+        
 
 
 
@@ -265,7 +269,17 @@ public class MainActivity extends AppCompatActivity {
                 firstBackPressed=false;
             }
         },2000);
+    }
 
-
+    //this method is for testing only
+    public static  int helloTESTING(String hello)
+    {
+        if(hello.equals("HELLO"))
+        {
+            return 1;
+        }
+        else{
+            return 0;
+        }
     }
 }

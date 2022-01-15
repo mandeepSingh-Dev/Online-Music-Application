@@ -4,6 +4,7 @@ import com.example.onlinemusicapp.MusicRecylerView.Songs
 
 class Folders_dataClass()
 {
+
     var folderNamee:String?=null
     var arraylist:ArrayList<Songs>?=null
     //this constructor for Trending layout folders

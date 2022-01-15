@@ -92,10 +92,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>
 
         public MyViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            imageView=itemView.findViewById(R.id.thumbnailimageview);
-            songName=itemView.findViewById(R.id.songNametext);
-            artist=itemView.findViewById(R.id.artistNametext);
-            view=itemView;
+            imageView = itemView.findViewById(R.id.thumbnailimageview);
+            songName = itemView.findViewById(R.id.songNametext);
+            artist = itemView.findViewById(R.id.artistNametext);
+            view = itemView;
 
 
 

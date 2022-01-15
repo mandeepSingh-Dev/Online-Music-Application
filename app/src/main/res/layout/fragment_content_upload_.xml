@@ -132,7 +132,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/songNameUpload" />
 
-                    <androidx.appcompat.widget.AppCompatButton
+                    <Button
                         android:id="@+id/uploadButton"
                         android:layout_width="220dp"
                         android:layout_height="wrap_content"
@@ -140,7 +140,6 @@
                         android:layout_marginBottom="140dp"
                         android:background="@drawable/outline_button"
                         android:text="Upload "
-
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         app:layout_constraintLeft_toLeftOf="parent"

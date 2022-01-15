@@ -260,7 +260,7 @@ public class MusicServiceOnline extends Service {
 
     public void changeMusic(int positionn/*, ArrayList<Songs> songsListttt*/) {
          position=positionn;
-         Log.d("LOLO",position+"_+");
+        // Log.d("LOLO",position+"_+");
    /* if(!songsList.isEmpty())
     {*/
 //        Log.d("changeMusicPOSITION",positionn+"\n"+songsListttt.size()+songsListttt.get(positionn).getSongName());
@@ -283,27 +283,25 @@ public class MusicServiceOnline extends Service {
             broadcastmanager.sendBroadcast(intent);
             player.reset();
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            showNotification(position, play_pause_notification,songslistextra);
 
 
             try {
                 // Log.d("SONGUURRII", songsList.get(positionn).getSonguri().toString());
                 Log.d("ONNLINECHNAGEMUSIC","ONNlineChangemUSIC()");
                 Log.d("nameee",/*songsFireList*/songslistextra.get(position).getSongName()+"__POSTION="+positionn);
-                player.setDataSource(getApplicationContext(), /*songsFireList*/songslistextra.get(positionn).getSonguri());
+                player.setDataSource(getApplicationContext(), songslistextra.get(positionn).getSonguri());
                 player.prepare();
                 player.start();
-              /*  player.setDataSource(this,songsFireList.get(positionn).getSonguri());
-                player.prepareAsync();
+               /* player.setDataSource(getApplicationContext(),songslistextra.get(positionn).getSonguri());
                 player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
                         player.start();
                     }
-                });*/
+                });
+                player.prepareAsync();*/
                 Log.d("helssdslo","play");
-
-                showNotification(position, play_pause_notification,songslistextra);
-
 
                 getCurrentPosiotnnn();
             } catch (Exception e) {
@@ -311,7 +309,7 @@ public class MusicServiceOnline extends Service {
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    Log.d("CCOOMPL", "COMPJGKFG");
+                    Log.d("CsssCOOMPL", "COMmediaaaPJGKFG");
                     changeMusic(++position);
 
                 }
@@ -404,6 +402,7 @@ public class MusicServiceOnline extends Service {
                 .setLargeIcon(songsList.get(possition).getBitmap())
                 .setSilent(true)
                 .setOnlyAlertOnce(true)
+               // .setProgress(songslistextra.get(position).getDuration())
                 //.setShowWhen(false)
                 .addAction(R.drawable.ic_baseline_navigate_before_24, "Previous", pendingIntentPrevious)
                 .addAction(play_pauseICON, "Play", pendingIntentPlay)
