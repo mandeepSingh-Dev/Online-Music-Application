@@ -7,5 +7,5 @@ etc)
 Navigations, Interactive GUI, Controlling Notification(Play/Pause, Next/Previous, Trackbar).
 
 
-![Alt text]("C:\Users\mandeep singh\Pictures\Picture2.jpg"?raw=true "Optional Title")
+![Alt text]("C:\Users\mandeep singh\Pictures\Picture2.jpg"?raw=true&sanitize=true)
 
