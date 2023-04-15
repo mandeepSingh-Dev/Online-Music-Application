@@ -6,11 +6,7 @@ etc)
 ● Features: Music Live Streaming, Uploads, Downloading, Access to offline music, Easy
 Navigations, Interactive GUI, Controlling Notification(Play/Pause, Next/Previous, Trackbar).
 
-<img
-  src="C:\Users\mandeep singh\Pictures\Picture2.jpg"
-  alt="Alt text"
-  title="Optional title"
-  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
 
 ![Picture2](https://user-images.githubusercontent.com/72296970/232227150-2b6fb4e4-3a6f-410e-890d-0ffed28e5e57.jpg)
 ![Picture3](https://user-images.githubusercontent.com/72296970/232227199-909acca8-ebc6-4946-9e08-eb45d0a4eb81.jpg)
