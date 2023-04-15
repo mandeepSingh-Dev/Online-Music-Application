@@ -5,3 +5,7 @@ Foreground Service, Broadcast Receiver, Coroutines (Background Work), Animations
 etc)
 ● Features: Music Live Streaming, Uploads, Downloading, Access to offline music, Easy
 Navigations, Interactive GUI, Controlling Notification(Play/Pause, Next/Previous, Trackbar).
+
+
+![Alt text]("C:\Users\mandeep singh\Pictures\Picture2.jpg"?raw=true "Optional Title")
+
