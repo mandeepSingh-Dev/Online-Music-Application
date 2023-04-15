@@ -7,4 +7,4 @@ etc)
 Navigations, Interactive GUI, Controlling Notification(Play/Pause, Next/Previous, Trackbar).
 
 
-<img src="C:\Users\mandeep singh\Pictures\Picture2.jpg" alt="Girl in a jacket" width="100" height="200">
+<img src="C:\Users\mandeep singh\Pictures\Picture2.png" alt="Splash Screen" width="100" height="200">
