@@ -7,5 +7,4 @@ etc)
 Navigations, Interactive GUI, Controlling Notification(Play/Pause, Next/Previous, Trackbar).
 
 
-![Alt text]("C:\Users\mandeep singh\Pictures\Picture2.jpg"?raw=true&sanitize=true)
-
+<img src=""C:\Users\mandeep singh\Pictures\Picture2.jpg"" alt="Girl in a jacket" width="100" height="200">
