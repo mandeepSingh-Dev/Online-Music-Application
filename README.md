@@ -7,4 +7,5 @@ etc)
 Navigations, Interactive GUI, Controlling Notification(Play/Pause, Next/Previous, Trackbar).
 
 
-<img src="C:\Users\mandeep singh\Pictures\Picture2.png" alt="Splash Screen" width="100" height="200">
+
+![Picture2](https://user-images.githubusercontent.com/72296970/232227150-2b6fb4e4-3a6f-410e-890d-0ffed28e5e57.jpg)
